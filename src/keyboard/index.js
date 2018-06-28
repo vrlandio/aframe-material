@@ -21,21 +21,30 @@ AFRAME.registerComponent('keyboard', {
 
     // Init keyboard UI
     let numericalUI = Draw.numericalUI(),
-        mainUI      = Draw.mainUI(),
+        mainAlphaUI = Draw.mainUI(),
+        mainSymbolUI = Draw.mainUI(),
         actionsUI   = Draw.actionsUI();
 
     // Create layout
-    this.el.alphabeticalLayout = Draw.alphabeticalLayout();
-    this.el.symbolsLayout = Draw.symbolsLayout();
+
+    // this.el.alphabeticalLayout = Draw.alphabeticalLayout();
+    // this.el.symbolsLayout = Draw.symbolsLayout();
+    mainAlphaUI.setAttribute("position", "0.312 0 0");
+    mainSymbolUI.setAttribute("position", "-10000 -10000 -10000");
 
     // Append layouts to UI
     numericalUI.appendChild( Draw.numericalLayout() );
-    mainUI.appendChild( this.el.alphabeticalLayout );
+    mainAlphaUI.appendChild( Draw.alphabeticalLayout() );
+    mainSymbolUI.appendChild( Draw.symbolsLayout() );
     actionsUI.appendChild( Draw.actionsLayout() );
 
     this.el.appendChild( numericalUI );
-    this.el.appendChild( mainUI );
+    this.el.appendChild( mainAlphaUI );
+    this.el.appendChild( mainSymbolUI );
     this.el.appendChild( actionsUI );
+
+    this.el.mainAlphaUI = mainAlphaUI;
+    this.el.mainSymbolUI = mainSymbolUI;
 
     // Inject methods in elements..
     this.el.show = function() { Behaviors.showKeyboard(that.el); }

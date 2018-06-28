@@ -248,7 +248,7 @@ Draw.key = (id, type, value)=> {
     var letter_el = document.createElement('a-text');
     letter_el.setAttribute('value', value);
     letter_el.setAttribute('color', '#dbddde');
-    letter_el.setAttribute('position', Config.KEY_WIDTH/2+' '+Config.KEY_WIDTH/2+' 0.01');
+    letter_el.setAttribute('position', Config.KEY_WIDTH/2+' '+Config.KEY_WIDTH/2+' 0.02');
     letter_el.setAttribute('scale', '0.16 0.16 0.16');
     letter_el.setAttribute('align', 'center');
     letter_el.setAttribute('baseline', 'center');

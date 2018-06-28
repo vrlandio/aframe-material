@@ -122,9 +122,9 @@ Behaviors.keyClick = function() {
       value = value.toUpperCase();
       Behaviors.shiftToggle();
     }
-    else if (Behaviors.isSymbols) {
-      Behaviors.symbolsToggle();
-    }
+    // else if (Behaviors.isSymbols) {
+    //   Behaviors.symbolsToggle();
+    // }
     Event.emit(Behaviors.el, 'input', value);
   }
   else if (type === 'shift') {
@@ -216,23 +216,73 @@ Behaviors.shiftToggle = function() {
 // -----------------------------------------------------------------------------
 // SYMBOLS
 
+// Behaviors.isSymbols = false;
+// Behaviors.symbolsToggle = function() {
+//   Behaviors.isSymbols = !Behaviors.isSymbols;
+//   if (!Behaviors.isSymbols) {
+//     let parent = Behaviors.el.symbolsLayout.parentNode;
+//     parent.removeChild(Behaviors.el.symbolsLayout);
+//     parent.appendChild(Behaviors.el.alphabeticalLayout);
+//     setTimeout(function() {
+//       Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 1);
+//     }, 0)
+//   } else {
+//     let parent = Behaviors.el.alphabeticalLayout.parentNode;
+//     parent.removeChild(Behaviors.el.alphabeticalLayout);
+//     parent.appendChild(Behaviors.el.symbolsLayout);
+//   }
+// }
+//
+// Behaviors.isSymbols = false;
+// Behaviors.symbolsToggle = function() {
+//   Behaviors.isSymbols = !Behaviors.isSymbols;
+//   if (!Behaviors.isSymbols) {
+//     Behaviors.el.alphabeticalLayout.object3D.position.set(0.02, 0.26, 0.001);
+//     Behaviors.el.symbolsLayout.object3D.position.set(-10000, -10000, -10000);
+//     setTimeout(function() {
+//       Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 1);
+//       Utils.updateOpacity(Behaviors.el.symboLayout, 0);
+//     }, 0)
+//     // Behaviors.el.alphabeticalLayout.setAttribute("position", "0.02 0.26 0.001");
+//     // Behaviors.el.symbolsLayout.setAttribute("position", "-10000 -10000 -10000");
+//   } else {
+//     Behaviors.el.symbolsLayout.object3D.position.set(0.02, 0.26, 0.001);
+//     Behaviors.el.alphabeticalLayout.object3D.position.set(-10000, -10000, -10000);
+//     setTimeout(function() {
+//       Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 0);
+//       Utils.updateOpacity(Behaviors.el.symboLayout, 1);
+//     }, 0)
+//     // Behaviors.el.alphabeticalLayout.setAttribute("position", "-10000 -10000 -10000");
+//     // Behaviors.el.symbolsLayout.setAttribute("position", "0.02 0.26 0.001");
+//   }
+// }
+
+// Behaviors.isSymbols = true;
+// Behaviors.symbolsToggle = function() {
+//   Behaviors.isSymbols = !Behaviors.isSymbols;
+//   if (!Behaviors.isSymbols) {
+//     let parent = Behaviors.el.mainSymbolUI.parentNode;
+//     parent.removeChild( Behaviors.el.mainSymbolUI);
+//     parent.appendChild(Behaviors.el.mainAlphaUI);
+//   } else {
+//     let parent = Behaviors.el.mainAlphaUI.parentNode;
+//     parent.removeChild( Behaviors.el.mainAlphaUI);
+//     parent.appendChild(Behaviors.el.mainSymbolUI);
+//   }
+// }
 Behaviors.isSymbols = false;
 Behaviors.symbolsToggle = function() {
   Behaviors.isSymbols = !Behaviors.isSymbols;
   if (!Behaviors.isSymbols) {
-    let parent = Behaviors.el.symbolsLayout.parentNode;
-    parent.removeChild(Behaviors.el.symbolsLayout);
-    parent.appendChild(Behaviors.el.alphabeticalLayout);
-    setTimeout(function() {
-      Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 1);
-    }, 0)
+    Behaviors.el.mainAlphaUI.object3D.position.set(0.312, 0, 0);
+    Behaviors.el.mainSymbolUI.object3D.position.set(-10000, -10000, -10000);
+    // Behaviors.el.alphabeticalLayout.setAttribute("position", "0.02 0.26 0.001");
+    // Behaviors.el.symbolsLayout.setAttribute("position", "-10000 -10000 -10000");
   } else {
-    let parent = Behaviors.el.alphabeticalLayout.parentNode;
-    parent.removeChild(Behaviors.el.alphabeticalLayout);
-    parent.appendChild(Behaviors.el.symbolsLayout);
+    Behaviors.el.mainSymbolUI.object3D.position.set(0.312, 0, 0);
+    Behaviors.el.mainAlphaUI.object3D.position.set(-10000, -10000, -10000);
+    // Behaviors.el.alphabeticalLayout.setAttribute("position", "-10000 -10000 -10000");
+    // Behaviors.el.symbolsLayout.setAttribute("position", "0.02 0.26 0.001");
   }
 }
-
-
-
 module.exports = Behaviors;
