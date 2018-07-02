@@ -98,23 +98,21 @@ Behaviors.dismissKeyboard = function(el) {
 // KEY EVENTS
 
 Behaviors.addKeyEvents = (el)=>{
-  el.addEventListener('click', Behaviors.keyClick);
-  el.addEventListener('mousedown', Behaviors.keyDown);
-  el.addEventListener('mouseup', Behaviors.keyOut);
-  el.addEventListener('raycaster-intersected', Behaviors.keyIn );
-  el.addEventListener('raycaster-intersected-cleared', Behaviors.keyOut );
-  //triggerdown
-  // https://aframe.io/docs/0.6.0/components/hand-controls.html
+  el.addEventListener('click', (e)=>{if(e instanceof CustomEvent && Behaviors.el.isOpen) {Behaviors.keyClick(el);}});
+  el.addEventListener('mousedown', (e)=>{if(e instanceof CustomEvent && Behaviors.el.isOpen) {Behaviors.keyDown(el);}});
+  el.addEventListener('mouseup', (e)=>{if(e instanceof CustomEvent && Behaviors.el.isOpen) {Behaviors.keyOut(el);}});
+  el.addEventListener('raycaster-intersected', (e)=>{if(e instanceof CustomEvent && Behaviors.el.isOpen) {Behaviors.keyIn(el);}});
+  el.addEventListener('raycaster-intersected-cleared', (e)=>{if(e instanceof CustomEvent && Behaviors.el.isOpen) {Behaviors.keyOut(el);}} );
 };
 
 // -----------------------------------------------------------------------------
 // KEYCLICK
 
-Behaviors.keyClick = function() {
+Behaviors.keyClick = function(keyEl) {
   SFX.keyDown(Behaviors.el);
 
-  let type = this.getAttribute('key-type');
-  let value = this.getAttribute('key-value');
+  let type = keyEl.getAttribute('key-type');
+  let value = keyEl.getAttribute('key-value');
 
   if (type === 'text' || type === 'spacebar') {
     if (type === 'spacebar') { value = ' '; }
@@ -148,41 +146,41 @@ Behaviors.keyClick = function() {
 // -----------------------------------------------------------------------------
 // KEYDOWN
 
-Behaviors.keyDown = function() {
+Behaviors.keyDown = function(keyEl) {
   if (Behaviors.el._transitioning) { return; }
-  this.object3D.position.z = 0.003;
-  if (this.getAttribute('key-type') === 'spacebar') {
-    this.setAttribute('color', Config.SPACEBAR_COLOR_ACTIVE);
+  keyEl.object3D.position.z = 0.003;
+  if (keyEl.getAttribute('key-type') === 'spacebar') {
+    keyEl.setAttribute('color', Config.SPACEBAR_COLOR_ACTIVE);
   } else {
-    this.setAttribute('color', Config.KEY_COLOR_ACTIVE);
+    keyEl.setAttribute('color', Config.KEY_COLOR_ACTIVE);
   }
 };
 
 // -----------------------------------------------------------------------------
 // KEYIN
 
-Behaviors.keyIn = function() {
+Behaviors.keyIn = function(keyEl) {
   if (Behaviors.el._transitioning) { return; }
-  if (this.object3D.children[2] && this.object3D.children[2].material && !this.object3D.children[2].material.opacity) {
+  if (keyEl.object3D.children[2] && keyEl.object3D.children[2].material && !keyEl.object3D.children[2].material.opacity) {
     return
   }
   SFX.keyIn(Behaviors.el);
-  if (this.getAttribute('key-type') === 'spacebar') {
-    this.setAttribute('color', Config.SPACEBAR_COLOR_HIGHLIGHT);
+  if (keyEl.getAttribute('key-type') === 'spacebar') {
+    keyEl.setAttribute('color', Config.SPACEBAR_COLOR_HIGHLIGHT);
   } else {
-    this.setAttribute('color', Config.KEY_COLOR_HIGHLIGHT);
+    keyEl.setAttribute('color', Config.KEY_COLOR_HIGHLIGHT);
   }
 };
 
 // -----------------------------------------------------------------------------
 // KEYOUT
 
-Behaviors.keyOut = function() {
-  this.object3D.position.z = 0;
-  if (this.getAttribute('key-type') === 'spacebar') {
-    this.setAttribute('color', Config.KEY_COLOR_ACTIVE);
+Behaviors.keyOut = function(keyEl) {
+  keyEl.object3D.position.z = 0;
+  if (keyEl.getAttribute('key-type') === 'spacebar') {
+    keyEl.setAttribute('color', Config.KEY_COLOR_ACTIVE);
   } else {
-    this.setAttribute('color', Config.KEYBOARD_COLOR);
+    keyEl.setAttribute('color', Config.KEYBOARD_COLOR);
   }
 }
 
