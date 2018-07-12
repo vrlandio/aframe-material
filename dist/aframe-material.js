@@ -1067,7 +1067,9 @@
 	  }
 	  el.isOpen = false;
 	  el.setAttribute("position", "-10000 -10000 -10000");
-	  el.setAttribute('fadeout', { duration: 1 });
+	  el.setAttribute('fadeout', {
+	    duration: 1
+	  });
 	};
 	
 	Behaviors.destroyKeyboard = function (el) {
@@ -1123,12 +1125,16 @@
 	      function animationend() {
 	        item.children[0].removeEventListener('animationend', animationend);
 	        setTimeout(function () {
-	          item.children[1].setAttribute('fadein', { duration: 160 });
+	          item.children[1].setAttribute('fadein', {
+	            duration: 160
+	          });
 	          Event.emit(Behaviors.el, 'didopen');
 	          el._transitioning = false;
 	        }, 10);
 	      }
-	      item.children[0].setAttribute('fadein', { duration: 160 });
+	      item.children[0].setAttribute('fadein', {
+	        duration: 160
+	      });
 	      item.children[0].addEventListener('animationend', animationend);
 	    };
 	
@@ -1186,6 +1192,7 @@
 	      }
 	
 	      el.isOpen = false;
+	
 	      function animationend() {
 	        item.children[1].removeEventListener('animationend', animationend);
 	        setTimeout(function () {
@@ -1195,11 +1202,15 @@
 	            Event.emit(Behaviors.el, 'diddismiss');
 	            el._transitioning = false;
 	          }
-	          item.children[0].setAttribute('fadeout', { duration: 160 });
+	          item.children[0].setAttribute('fadeout', {
+	            duration: 160
+	          });
 	          item.children[0].addEventListener('animationend', animationend);
 	        }, 10);
 	      }
-	      item.children[1].setAttribute('fadeout', { duration: 160 });
+	      item.children[1].setAttribute('fadeout', {
+	        duration: 160
+	      });
 	      item.children[1].addEventListener('animationend', animationend);
 	    };
 	
@@ -1227,27 +1238,27 @@
 	
 	Behaviors.addKeyEvents = function (el) {
 	  el.addEventListener('click', function (e) {
-	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
+	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyClick(el);
 	    }
 	  });
 	  el.addEventListener('mousedown', function (e) {
-	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
+	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyDown(el);
 	    }
 	  });
 	  el.addEventListener('mouseup', function (e) {
-	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
+	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyOut(el);
 	    }
 	  });
 	  el.addEventListener('raycaster-intersected', function (e) {
-	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
+	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyIn(el);
 	    }
 	  });
 	  el.addEventListener('raycaster-intersected-cleared', function (e) {
-	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
+	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyOut(el);
 	    }
 	  });
@@ -1384,76 +1395,15 @@
 	  }
 	};
 	
-	// -----------------------------------------------------------------------------
-	// SYMBOLS
-	
-	// Behaviors.isSymbols = false;
-	// Behaviors.symbolsToggle = function() {
-	//   Behaviors.isSymbols = !Behaviors.isSymbols;
-	//   if (!Behaviors.isSymbols) {
-	//     let parent = Behaviors.el.symbolsLayout.parentNode;
-	//     parent.removeChild(Behaviors.el.symbolsLayout);
-	//     parent.appendChild(Behaviors.el.alphabeticalLayout);
-	//     setTimeout(function() {
-	//       Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 1);
-	//     }, 0)
-	//   } else {
-	//     let parent = Behaviors.el.alphabeticalLayout.parentNode;
-	//     parent.removeChild(Behaviors.el.alphabeticalLayout);
-	//     parent.appendChild(Behaviors.el.symbolsLayout);
-	//   }
-	// }
-	//
-	// Behaviors.isSymbols = false;
-	// Behaviors.symbolsToggle = function() {
-	//   Behaviors.isSymbols = !Behaviors.isSymbols;
-	//   if (!Behaviors.isSymbols) {
-	//     Behaviors.el.alphabeticalLayout.object3D.position.set(0.02, 0.26, 0.001);
-	//     Behaviors.el.symbolsLayout.object3D.position.set(-10000, -10000, -10000);
-	//     setTimeout(function() {
-	//       Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 1);
-	//       Utils.updateOpacity(Behaviors.el.symboLayout, 0);
-	//     }, 0)
-	//     // Behaviors.el.alphabeticalLayout.setAttribute("position", "0.02 0.26 0.001");
-	//     // Behaviors.el.symbolsLayout.setAttribute("position", "-10000 -10000 -10000");
-	//   } else {
-	//     Behaviors.el.symbolsLayout.object3D.position.set(0.02, 0.26, 0.001);
-	//     Behaviors.el.alphabeticalLayout.object3D.position.set(-10000, -10000, -10000);
-	//     setTimeout(function() {
-	//       Utils.updateOpacity(Behaviors.el.alphabeticalLayout, 0);
-	//       Utils.updateOpacity(Behaviors.el.symboLayout, 1);
-	//     }, 0)
-	//     // Behaviors.el.alphabeticalLayout.setAttribute("position", "-10000 -10000 -10000");
-	//     // Behaviors.el.symbolsLayout.setAttribute("position", "0.02 0.26 0.001");
-	//   }
-	// }
-	
-	// Behaviors.isSymbols = true;
-	// Behaviors.symbolsToggle = function() {
-	//   Behaviors.isSymbols = !Behaviors.isSymbols;
-	//   if (!Behaviors.isSymbols) {
-	//     let parent = Behaviors.el.mainSymbolUI.parentNode;
-	//     parent.removeChild( Behaviors.el.mainSymbolUI);
-	//     parent.appendChild(Behaviors.el.mainAlphaUI);
-	//   } else {
-	//     let parent = Behaviors.el.mainAlphaUI.parentNode;
-	//     parent.removeChild( Behaviors.el.mainAlphaUI);
-	//     parent.appendChild(Behaviors.el.mainSymbolUI);
-	//   }
-	// }
 	Behaviors.isSymbols = false;
 	Behaviors.symbolsToggle = function () {
 	  Behaviors.isSymbols = !Behaviors.isSymbols;
 	  if (!Behaviors.isSymbols) {
 	    Behaviors.el.mainAlphaUI.object3D.position.set(0.312, 0, 0);
 	    Behaviors.el.mainSymbolUI.object3D.position.set(-10000, -10000, -10000);
-	    // Behaviors.el.alphabeticalLayout.setAttribute("position", "0.02 0.26 0.001");
-	    // Behaviors.el.symbolsLayout.setAttribute("position", "-10000 -10000 -10000");
 	  } else {
 	    Behaviors.el.mainSymbolUI.object3D.position.set(0.312, 0, 0);
 	    Behaviors.el.mainAlphaUI.object3D.position.set(-10000, -10000, -10000);
-	    // Behaviors.el.alphabeticalLayout.setAttribute("position", "-10000 -10000 -10000");
-	    // Behaviors.el.symbolsLayout.setAttribute("position", "0.02 0.26 0.001");
 	  }
 	};
 	module.exports = Behaviors;
