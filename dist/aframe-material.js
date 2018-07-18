@@ -1248,17 +1248,17 @@
 	    }
 	  });
 	  el.addEventListener('mouseup', function (e) {
-	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
+	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyOut(el);
 	    }
 	  });
 	  el.addEventListener('raycaster-intersected', function (e) {
-	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
+	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyIn(el);
 	    }
 	  });
 	  el.addEventListener('raycaster-intersected-cleared', function (e) {
-	    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
+	    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
 	      Behaviors.keyOut(el);
 	    }
 	  });

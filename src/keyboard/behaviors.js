@@ -127,17 +127,17 @@ Behaviors.addKeyEvents = (el) => {
     }
   });
   el.addEventListener('mouseup', (e) => {
-    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
+    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
       Behaviors.keyOut(el);
     }
   });
   el.addEventListener('raycaster-intersected', (e) => {
-    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
+    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
       Behaviors.keyIn(el);
     }
   });
   el.addEventListener('raycaster-intersected-cleared', (e) => {
-    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
+    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
       Behaviors.keyOut(el);
     }
   });
