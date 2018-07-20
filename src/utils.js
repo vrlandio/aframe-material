@@ -4,8 +4,9 @@ const Utils = {};
   Utils.preloadAssets([])
   Add assets to Assets managment system.
 */
-Utils.preloadAssets = (assets_arr)=>{
-  let assets = document.querySelector('a-assets'), already_exists;
+Utils.preloadAssets = (assets_arr) => {
+  let assets = document.querySelector('a-assets'),
+    already_exists;
 
   if (!assets) {
     var scene = document.querySelector('a-scene');
@@ -37,37 +38,37 @@ Utils.preloadAssets = (assets_arr)=>{
   Utils.extend(a, b)
   Assign object to other object.
 */
-Utils.extend = function(a, b) {
-	for (let key in b) {
-		if (b.hasOwnProperty(key)) {
-			a[key] = b[key];
-		}
-	}
-	return a;
+Utils.extend = function (a, b) {
+  for (let key in b) {
+    if (b.hasOwnProperty(key)) {
+      a[key] = b[key];
+    }
+  }
+  return a;
 };
 
 
-Utils.clone = function(original) {
-	if (Array.isArray(original)) {
-		return original.slice(0);
-	}
+Utils.clone = function (original) {
+  if (Array.isArray(original)) {
+    return original.slice(0);
+  }
 
-	// First create an empty object with
-	// same prototype of our original source
-	const clone = Object.create(Object.getPrototypeOf(original));
-	let i = undefined;
-	const keys = Object.getOwnPropertyNames(original);
-	i = 0;
-	while (i < keys.length) {
-		// copy each property into the clone
-		Object.defineProperty(clone, keys[i], Object.getOwnPropertyDescriptor(original, keys[i]));
-		i++;
-	}
-	return clone;
+  // First create an empty object with
+  // same prototype of our original source
+  const clone = Object.create(Object.getPrototypeOf(original));
+  let i = undefined;
+  const keys = Object.getOwnPropertyNames(original);
+  i = 0;
+  while (i < keys.length) {
+    // copy each property into the clone
+    Object.defineProperty(clone, keys[i], Object.getOwnPropertyDescriptor(original, keys[i]));
+    i++;
+  }
+  return clone;
 };
 
 
-Utils.updateOpacity = function(el, opacity) {
+Utils.updateOpacity = function (el, opacity) {
   if (el.hasAttribute('text')) {
     let props = el.getAttribute('text');
     if (props) {
@@ -88,7 +89,7 @@ Utils.updateOpacity = function(el, opacity) {
 
 
 // Calculate the width factor
-Utils.getWidthFactor = function(el, wrapCount) {
+Utils.getWidthFactor = function (el, wrapCount) {
   let widthFactor = 0.00001;
   if (el.components.text && el.components.text.currentFont) {
     widthFactor = el.components.text.currentFont.widthFactor

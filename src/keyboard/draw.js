@@ -1,4 +1,3 @@
-const Assets = require('./assets');
 const Layouts = require('./layouts');
 const Config = require('./config');
 const Behaviors = require('./behaviors');
@@ -6,7 +5,7 @@ const Draw = {};
 
 Draw.el = null;
 
-Draw.init = (el)=>{
+Draw.init = (el) => {
   Draw.el = el;
   Behaviors.el = el;
   Behaviors.SFX = el.SFX;
@@ -15,7 +14,7 @@ Draw.init = (el)=>{
 // -----------------------------------------------------------------------------
 // DRAW NUMERICAL UI
 
-Draw.numericalUI = ()=> {
+Draw.numericalUI = () => {
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '0.025 0 0.12');
   wrapper.setAttribute('rotation', '0 25 0');
@@ -34,7 +33,7 @@ Draw.numericalUI = ()=> {
 // -----------------------------------------------------------------------------
 // DRAW MAIN UI
 
-Draw.mainUI = ()=>{
+Draw.mainUI = () => {
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '0.312 0 0');
   wrapper.setAttribute('data-ui', true);
@@ -52,7 +51,7 @@ Draw.mainUI = ()=>{
 // -----------------------------------------------------------------------------
 // DRAW ACTION UI
 
-Draw.actionsUI = ()=> {
+Draw.actionsUI = () => {
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '1.180 0 0.01');
   wrapper.setAttribute('rotation', '0 -25 0');
@@ -71,20 +70,22 @@ Draw.actionsUI = ()=> {
 // -----------------------------------------------------------------------------
 // DRAW NUMERICAL LAYOUT
 
-Draw.numericalLayout = ()=> {
+Draw.numericalLayout = () => {
   var data = Layouts.numerical;
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '0.02 0.26 0.001');
 
   let index_y = 0;
   for (var i in data) {
-    let key_id = 'num-'+i;
+    let key_id = 'num-' + i;
     let key = Draw.key(key_id, data[i].type, data[i].value);
-    let index_x = i%3;
-    let x = Config.KEY_WIDTH*index_x;
-    let y = Config.KEY_WIDTH*index_y;
+    let index_x = i % 3;
+    let x = Config.KEY_WIDTH * index_x;
+    let y = Config.KEY_WIDTH * index_y;
     key.setAttribute('position', `${x} -${y} 0`);
-    if (index_x === 2) { index_y++; }
+    if (index_x === 2) {
+      index_y++;
+    }
     wrapper.appendChild(key);
   }
 
@@ -94,35 +95,37 @@ Draw.numericalLayout = ()=> {
 // -----------------------------------------------------------------------------
 // DRAW ALPHABETICAL LAYOUT
 
-Draw.alphabeticalLayout = ()=> {
+Draw.alphabeticalLayout = () => {
   var data = Layouts.alphabetical;
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '0.02 0.26 0.001');
 
-  let index_y = 0, index_x = 0, prev_was_space = false;
+  let index_y = 0,
+    index_x = 0,
+    prev_was_space = false;
 
   for (var i in data) {
-    let key_id = 'main-'+i;
+    let key_id = 'main-' + i;
     let key = Draw.key(key_id, data[i].type, data[i].value);
 
-    let x = Config.KEY_WIDTH*index_x;
-    let y = Config.KEY_WIDTH*index_y;
+    let x = Config.KEY_WIDTH * index_x;
+    let y = Config.KEY_WIDTH * index_y;
 
     // Add left padding on the second line
     if (index_y === 1) {
-      x = x + Config.KEY_WIDTH/2;
+      x = x + Config.KEY_WIDTH / 2;
     }
 
     // Add margin on the key next to the spacebar key
     if (prev_was_space) {
-      x = x + Config.SPACE_KEY_WIDTH - Config.KEY_WIDTH + (0.055*2);
+      x = x + Config.SPACE_KEY_WIDTH - Config.KEY_WIDTH + (0.055 * 2);
     }
 
     // Add margin to the spacebar key
     if (data[i].type === 'spacebar') {
       prev_was_space = true;
-      x = x+0.055;
-      y = Config.KEY_WIDTH*index_y -  0.01;
+      x = x + 0.055;
+      y = Config.KEY_WIDTH * index_y - 0.01;
     }
 
     key.setAttribute('position', `${x} -${y} 0`);
@@ -145,30 +148,32 @@ Draw.alphabeticalLayout = ()=> {
 // -----------------------------------------------------------------------------
 // DRAW SYMBOLS LAYOUT
 
-Draw.symbolsLayout = ()=> {
+Draw.symbolsLayout = () => {
   var data = Layouts.symbols;
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '0.02 0.26 0.001');
 
-  let index_y = 0, index_x = 0, prev_was_space = false;
+  let index_y = 0,
+    index_x = 0,
+    prev_was_space = false;
 
   for (var i in data) {
 
-    let key_id = 'symbols-'+i;
+    let key_id = 'symbols-' + i;
     let key = Draw.key(key_id, data[i].type, data[i].value);
-    let x = Config.KEY_WIDTH*index_x;
-    let y = Config.KEY_WIDTH*index_y;
+    let x = Config.KEY_WIDTH * index_x;
+    let y = Config.KEY_WIDTH * index_y;
 
     // Add margin on the key next to the spacebar key
     if (prev_was_space) {
-      x = x + Config.SPACE_KEY_WIDTH - Config.KEY_WIDTH + (0.055*2);
+      x = x + Config.SPACE_KEY_WIDTH - Config.KEY_WIDTH + (0.055 * 2);
     }
 
     // Add margin to the spacebar key
     if (data[i].type === 'spacebar') {
       prev_was_space = true;
-      x = x+0.055;
-      y = Config.KEY_WIDTH*index_y -  0.01;
+      x = x + 0.055;
+      y = Config.KEY_WIDTH * index_y - 0.01;
     }
 
     key.setAttribute('position', `${x} -${y} 0`);
@@ -187,22 +192,21 @@ Draw.symbolsLayout = ()=> {
 // -----------------------------------------------------------------------------
 // DRAW ACTIONS LAYOUT
 
-Draw.actionsLayout = ()=> {
+Draw.actionsLayout = () => {
   var data = Layouts.actions;
   var wrapper = document.createElement('a-entity');
   wrapper.setAttribute('position', '0.02 0.26 0.001');
 
   let val_y = 0;
   for (var i in data) {
-    let key_id = 'action-'+i;
+    let key_id = 'action-' + i;
     let key = Draw.key(key_id, data[i].type, data[i].value);
 
     key.setAttribute('position', `0 -${val_y} 0`);
     if (i == 0) {
-      val_y += Config.ACTION_WIDTH+0.01;
-    }
-    else if (i == 1) {
-      val_y += Config.KEY_WIDTH+0.01;
+      val_y += Config.ACTION_WIDTH + 0.01;
+    } else if (i == 1) {
+      val_y += Config.KEY_WIDTH + 0.01;
     }
     wrapper.appendChild(key);
   }
@@ -213,7 +217,7 @@ Draw.actionsLayout = ()=> {
 // -----------------------------------------------------------------------------
 // DRAW KEY
 
-Draw.key = (id, type, value)=> {
+Draw.key = (id, type, value) => {
   var that = this;
 
   var el = document.createElement('a-rounded');
@@ -235,20 +239,20 @@ Draw.key = (id, type, value)=> {
   // SHADOW
 
   el.shadow_el = document.createElement('a-image');
-  el.shadow_el.setAttribute('width', Config.KEY_WIDTH*1.25);
-  el.shadow_el.setAttribute('height', Config.KEY_WIDTH*1.25);
-  el.shadow_el.setAttribute('position', Config.KEY_WIDTH/2+' '+Config.KEY_WIDTH/2+' -0.002');
-  el.shadow_el.setAttribute('src', Assets.aframeKeyboardShadow);
+  el.shadow_el.setAttribute('width', Config.KEY_WIDTH * 1.25);
+  el.shadow_el.setAttribute('height', Config.KEY_WIDTH * 1.25);
+  el.shadow_el.setAttribute('position', Config.KEY_WIDTH / 2 + ' ' + Config.KEY_WIDTH / 2 + ' -0.002');
+  el.shadow_el.setAttribute('src', '#aframeKeyboardShadow');
   el.appendChild(el.shadow_el);
 
   // ---------------------------------------------------------------------------
   // TEXT KEY
 
-  if (type === 'text' || type === 'spacebar' || type ===  'symbol') {
+  if (type === 'text' || type === 'spacebar' || type === 'symbol') {
     var letter_el = document.createElement('a-text');
     letter_el.setAttribute('value', value);
     letter_el.setAttribute('color', '#dbddde');
-    letter_el.setAttribute('position', Config.KEY_WIDTH/2+' '+Config.KEY_WIDTH/2+' 0.02');
+    letter_el.setAttribute('position', Config.KEY_WIDTH / 2 + ' ' + Config.KEY_WIDTH / 2 + ' 0.02');
     letter_el.setAttribute('scale', '0.16 0.16 0.16');
     letter_el.setAttribute('align', 'center');
     letter_el.setAttribute('baseline', 'center');
@@ -262,17 +266,16 @@ Draw.key = (id, type, value)=> {
     el.setAttribute('width', Config.SPACE_KEY_WIDTH);
     el.setAttribute('height', Config.SPACE_KEY_HEIGHT);
     el.setAttribute('color', '#404b50');
-    el.shadow_el.setAttribute('width', Config.SPACE_KEY_WIDTH*1.12);
-    el.shadow_el.setAttribute('height', Config.SPACE_KEY_HEIGHT*1.2);
-    el.shadow_el.setAttribute('position', Config.SPACE_KEY_WIDTH/2+' '+Config.SPACE_KEY_HEIGHT/2+' -0.02');
+    el.shadow_el.setAttribute('width', Config.SPACE_KEY_WIDTH * 1.12);
+    el.shadow_el.setAttribute('height', Config.SPACE_KEY_HEIGHT * 1.2);
+    el.shadow_el.setAttribute('position', Config.SPACE_KEY_WIDTH / 2 + ' ' + Config.SPACE_KEY_HEIGHT / 2 + ' -0.02');
     letter_el.setAttribute('color', '#adb1b3');
     letter_el.setAttribute('scale', '0.12 0.12 0.12');
-    letter_el.setAttribute('position', Config.SPACE_KEY_WIDTH/2+' '+Config.SPACE_KEY_HEIGHT/2+' 0');
+    letter_el.setAttribute('position', Config.SPACE_KEY_WIDTH / 2 + ' ' + Config.SPACE_KEY_HEIGHT / 2 + ' 0');
   }
 
   // ---------------------------------------------------------------------------
   // SYMBOL KEY
-
   else if (type === 'symbol') {
     letter_el.setAttribute('scale', '0.12 0.12 0.12');
   }
@@ -282,8 +285,8 @@ Draw.key = (id, type, value)=> {
 
   if (type === 'backspace' || type === 'enter' || type === 'dismiss') {
     el.setAttribute('width', Config.ACTION_WIDTH);
-    el.shadow_el.setAttribute('width', Config.ACTION_WIDTH*1.25);
-    el.shadow_el.setAttribute('position', Config.ACTION_WIDTH/2+' '+Config.KEY_WIDTH/2+' -0.02');
+    el.shadow_el.setAttribute('width', Config.ACTION_WIDTH * 1.25);
+    el.shadow_el.setAttribute('position', Config.ACTION_WIDTH / 2 + ' ' + Config.KEY_WIDTH / 2 + ' -0.02');
   }
 
   // ---------------------------------------------------------------------------
@@ -295,42 +298,39 @@ Draw.key = (id, type, value)=> {
     icon_el.setAttribute('width', '0.032');
     icon_el.setAttribute('height', '0.032');
     icon_el.setAttribute('position', '0.04 0.04 0.01')
-    icon_el.setAttribute('src', Assets.aframeKeyboardShift);
+    icon_el.setAttribute('src', '#aframeKeyboardShift');
     el.appendChild(icon_el);
     Draw.el.shiftKey = el;
   }
 
   // ---------------------------------------------------------------------------
   // GLOBAL
-
   else if (type === 'global') {
     var icon_el = document.createElement('a-image');
     icon_el.setAttribute('width', '0.032');
     icon_el.setAttribute('height', '0.032');
     icon_el.setAttribute('position', '0.04 0.04 0.01')
-    icon_el.setAttribute('src', Assets.aframeKeyboardGlobal);
+    icon_el.setAttribute('src', '#aframeKeyboardGlobal');
     el.appendChild(icon_el);
   }
 
   // ---------------------------------------------------------------------------
   // BACKSPACE
-
   else if (type === 'backspace') {
     var icon_el = document.createElement('a-image');
     icon_el.setAttribute('width', '0.046');
     icon_el.setAttribute('height', '0.046');
     icon_el.setAttribute('position', '0.07 0.04 0.01')
-    icon_el.setAttribute('src', Assets.aframeKeyboardBackspace);
+    icon_el.setAttribute('src', '#aframeKeyboardBackspace');
     el.appendChild(icon_el);
   }
 
   // ---------------------------------------------------------------------------
   // ENTER
-
   else if (type === 'enter') {
     el.setAttribute('height', Config.ACTION_WIDTH);
-    el.shadow_el.setAttribute('height', Config.ACTION_WIDTH*1.25);
-    el.shadow_el.setAttribute('position', Config.ACTION_WIDTH/2+' '+Config.ACTION_WIDTH/2+' -0.02');
+    el.shadow_el.setAttribute('height', Config.ACTION_WIDTH * 1.25);
+    el.shadow_el.setAttribute('position', Config.ACTION_WIDTH / 2 + ' ' + Config.ACTION_WIDTH / 2 + ' -0.02');
 
     var circle_el = document.createElement('a-circle');
     circle_el.setAttribute('color', '#4285f4');
@@ -342,19 +342,18 @@ Draw.key = (id, type, value)=> {
     icon_el.setAttribute('width', '0.034');
     icon_el.setAttribute('height', '0.034');
     icon_el.setAttribute('position', '0.07 0.07 0.011')
-    icon_el.setAttribute('src', Assets.aframeKeyboardEnter);
+    icon_el.setAttribute('src', '#aframeKeyboardEnter');
     el.appendChild(icon_el);
   }
 
   // ---------------------------------------------------------------------------
   // DISMISS
-
   else if (type === 'dismiss') {
     var icon_el = document.createElement('a-image');
     icon_el.setAttribute('width', '0.046');
     icon_el.setAttribute('height', '0.046');
     icon_el.setAttribute('position', '0.07 0.04 0.01')
-    icon_el.setAttribute('src', Assets.aframeKeyboardDismiss);
+    icon_el.setAttribute('src', '#aframeKeyboardDismiss');
     el.appendChild(icon_el);
   }
 
