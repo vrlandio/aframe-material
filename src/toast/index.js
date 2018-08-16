@@ -5,23 +5,56 @@ const SFX = require('./sfx');
 
 AFRAME.registerComponent('toast', {
   schema: {
-    message: { type: 'string', default: "You are cool" },
-    action: { type: 'string', default: "" },
-    backgroundColor: { type: "color", default: "#222" },//242f35
-    actionColor: { type: "color", default: "#4076fd"},
-    color: { type: "color", default: "#FFF" },
-    font: { type: "string", default: "" },
-    letterSpacing: { type: "int", default: 0 },
-    lineHeight: { type: "string", default: "" },
-    width: { type: "number", default: 3 },
-    duration: { type: 'number', default: 2000 },
-    autoshow: { type: 'boolean', default: true }
+    message: {
+      type: 'string',
+      default: "You are cool"
+    },
+    action: {
+      type: 'string',
+      default: ""
+    },
+    backgroundColor: {
+      type: "color",
+      default: "#222"
+    }, //242f35
+    actionColor: {
+      type: "color",
+      default: "#4076fd"
+    },
+    color: {
+      type: "color",
+      default: "#FFF"
+    },
+    font: {
+      type: "string",
+      default: ""
+    },
+    letterSpacing: {
+      type: "int",
+      default: 0
+    },
+    lineHeight: {
+      type: "string",
+      default: ""
+    },
+    width: {
+      type: "number",
+      default: 3
+    },
+    duration: {
+      type: 'number',
+      default: 2000
+    },
+    autoshow: {
+      type: 'boolean',
+      default: true
+    }
   },
   init: function () {
     var that = this;
 
     // Assets
-    Utils.preloadAssets( Assets );
+    Utils.preloadAssets(Assets);
 
     // SFX
     SFX.init(this.el);
@@ -44,30 +77,31 @@ AFRAME.registerComponent('toast', {
 
     // LABEL
     this.action = document.createElement('a-button');
-    that.action.setAttribute('button-color', '#222')
     this.el.appendChild(this.action);
 
-    function changeWidth(e){
+    function changeWidth(e) {
       let attr = that.label.getAttribute('text');
-      attr.width = that.data.width-e.detail;
-      attr.wrapCount = 10*attr.width;
+      attr.width = that.data.width - e.detail;
+      attr.wrapCount = 10 * attr.width;
       that.label.setAttribute('text', attr);
-      that.label.setAttribute('position', attr.width/2+0.14+' 0.04 0.001');
+      that.label.setAttribute('position', attr.width / 2 + 0.14 + ' 0.04 0.001');
 
       this.setAttribute('position', `${that.data.width-e.detail} ${(0.44-0.36)/2} 0.001`)
     }
     this.action.addEventListener('change:width', changeWidth);
-    this.action.addEventListener('click', function() {
+    this.action.addEventListener('click', function () {
       Event.emit(that.el, 'actionclick');
     });
 
-    let timer = setInterval(function() {
+    let timer = setInterval(function () {
       if (that.action.object3D && that.action.object3D.children[0]) {
         clearInterval(timer);
         Utils.updateOpacity(that.el, 0);
         Utils.updateOpacity(that.label, 0);
         Utils.updateOpacity(that.action, 0);
-        if (that.data.autoshow) { that.show(); }
+        if (that.data.autoshow) {
+          that.show();
+        }
       }
     }, 10);
 
@@ -75,7 +109,7 @@ AFRAME.registerComponent('toast', {
     this.el.show = this.show.bind(this);
     this.el.hide = this.hide.bind(this);
   },
-  show: function() {
+  show: function () {
     if (this.hideTimer) {
       clearTimeout(this.hideTimer);
     }
@@ -84,27 +118,31 @@ AFRAME.registerComponent('toast', {
     /*if (!this.el.parentNode && this.el._parentNode) {
       this.el._parentNode.appendChild(this.el);
     }*/
-    setTimeout(function() {
-      that.el.setAttribute('fadein', {duration: 160});
-      setTimeout(function() {
+    setTimeout(function () {
+      that.el.setAttribute('fadein', {
+        duration: 160
+      });
+      setTimeout(function () {
         Utils.updateOpacity(that.label, 1);
         that.action.components.button.shadow.setAttribute('visible', false);
       }, 10)
     }, 0)
-    this.hideTimer = setTimeout(function() {
+    this.hideTimer = setTimeout(function () {
       that.hide();
     }, this.data.duration);
 
     SFX.show(this.el);
   },
-  hide: function() {
+  hide: function () {
     let that = this;
-    setTimeout(function() {
+    setTimeout(function () {
       Utils.updateOpacity(that.label, 0);
       that.action.components.button.shadow.setAttribute('visible', false);
-      setTimeout(function() {
-        that.el.setAttribute('fadeout', {duration: 160});
-        setTimeout(function() {
+      setTimeout(function () {
+        that.el.setAttribute('fadeout', {
+          duration: 160
+        });
+        setTimeout(function () {
           /*if (that.el.parentNode) {
             that.el._parentNode = that.el.parentNode;
             that.el.parentNode.removeChild(that.el);
@@ -124,11 +162,13 @@ AFRAME.registerComponent('toast', {
     let props = {
       color: this.data.color,
       align: 'left',
-      wrapCount: 10*this.data.width,
+      wrapCount: 10 * this.data.width,
       width: this.data.width,
       lineHeight: 64
     }
-    if (this.data.font) { props.font = this.data.font; }
+    if (this.data.font) {
+      props.font = this.data.font;
+    }
 
     if (this.data.type === "flat") {
       props.color = this.data.buttonColor;
@@ -137,10 +177,11 @@ AFRAME.registerComponent('toast', {
     // MESSAGE
     props.value = this.data.message
     this.label.setAttribute('text', props);
-    this.label.setAttribute('position', this.data.width/2+0.14+' 0 0.001');
+    this.label.setAttribute('position', this.data.width / 2 + 0.14 + ' 0 0.001');
 
     // ACTION
     this.action.setAttribute('value', this.data.action.toUpperCase());
+    this.action.setAttribute('button-color', this.data.backgroundColor);
     this.action.setAttribute('color', this.data.actionColor);
   },
   tick: function () {},

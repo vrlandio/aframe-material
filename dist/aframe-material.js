@@ -70,7 +70,10 @@
 	  __webpack_require__(18);
 	  __webpack_require__(21);
 	  __webpack_require__(24);
-	  __webpack_require__(27);
+	  __webpack_require__(28);
+	  __webpack_require__(32);
+	  __webpack_require__(36);
+	  __webpack_require__(39);
 	})();
 
 /***/ }),
@@ -1831,15 +1834,46 @@
 	
 	AFRAME.registerComponent('switch', {
 	  schema: {
-	    name: { type: "string", default: "" },
-	    enabled: { type: 'boolean', default: false },
-	    disabled: { type: 'boolean', default: false },
-	    fillColor: { type: "color", default: "#bababa" },
-	    knobColor: { type: "color", default: "#f5f5f5" },
-	    fillColorEnabled: { type: "color", default: "#80a8ff" },
-	    knobColorEnabled: { type: "color", default: "#4076fd" },
-	    fillColorDisabled: { type: "color", default: "#939393" },
-	    knobColorDisabled: { type: "color", default: "#a2a2a2" }
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    enabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    disabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    fillColor: {
+	      type: "color",
+	      default: "#bababa"
+	    },
+	    knobColor: {
+	      type: "color",
+	      default: "#f5f5f5"
+	    },
+	    fillColorEnabled: {
+	      type: "color",
+	      default: "#80a8ff"
+	    },
+	    knobColorEnabled: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    fillColorDisabled: {
+	      type: "color",
+	      default: "#939393"
+	    },
+	    knobColorDisabled: {
+	      type: "color",
+	      default: "#a2a2a2"
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    }
 	  },
 	  init: function init() {
 	    var that = this;
@@ -1922,6 +1956,7 @@
 	    if (this.data.disabled) {
 	      this.disable();
 	    }
+	    Utils.updateOpacity(this.el, this.data.opacity);
 	  },
 	  tick: function tick() {},
 	  remove: function remove() {},
@@ -1942,7 +1977,8 @@
 	    'fill-color-enabled': 'switch.fillColorEnabled',
 	    'knob-color-enabled': 'switch.knobColorEnabled',
 	    'fill-color-disabled': 'switch.fillColorDisabled',
-	    'knob-color-disabled': 'switch.knobColorDisabled'
+	    'knob-color-disabled': 'switch.knobColorDisabled',
+	    opacity: 'switch.opacity'
 	  }
 	});
 
@@ -2362,19 +2398,58 @@
 	
 	AFRAME.registerComponent('checkbox', {
 	  schema: {
-	    checked: { type: 'boolean', default: false },
-	    disabled: { type: 'boolean', default: false },
-	    name: { type: "string", default: "" },
-	    value: { type: "string", default: "" },
-	    label: { type: "string", default: "" },
-	    checkboxColor: { type: "color", default: "#757575" },
-	    checkboxColorChecked: { type: "color", default: "#4076fd" },
-	    color: { type: "color", default: "#757575" },
-	    font: { type: "string", default: "" },
-	    letterSpacing: { type: "int", default: 0 },
-	    lineHeight: { type: "string", default: "" },
-	    opacity: { type: "number", default: 1 },
-	    width: { type: "number", default: 1 }
+	    checked: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    disabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    value: {
+	      type: "string",
+	      default: ""
+	    },
+	    label: {
+	      type: "string",
+	      default: ""
+	    },
+	    checkboxColor: {
+	      type: "color",
+	      default: "#757575"
+	    },
+	    checkboxColorChecked: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    color: {
+	      type: "color",
+	      default: "#757575"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    }
 	  },
 	  init: function init() {
 	    var that = this;
@@ -2533,6 +2608,8 @@
 	      return v;
 	    }
 	    setTimeout(function () {
+	      Utils.updateOpacity(that.el, that.data.opacity);
+	
 	      if (that.data.label.length) {
 	        getTextWidth(that.label);
 	      }
@@ -2643,23 +2720,57 @@
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
+	var THEME = __webpack_require__(25);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(25);
-	var SFX = __webpack_require__(26);
+	var Assets = __webpack_require__(26);
+	var SFX = __webpack_require__(27);
 	
 	AFRAME.registerComponent('button', {
 	  schema: {
-	    disabled: { type: 'boolean', default: false },
-	    type: { type: "string", default: "raised" },
-	    name: { type: "string", default: "" },
-	    value: { type: "string", default: "Button" },
-	    buttonColor: { type: "color", default: "#4076fd" },
-	    color: { type: "color", default: "#FFF" },
-	    font: { type: "string", default: "" },
-	    letterSpacing: { type: "int", default: 0 },
-	    lineHeight: { type: "string", default: "" },
-	    opacity: { type: "number", default: 1 },
-	    width: { type: "number", default: 1 }
+	    disabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    type: {
+	      type: "string",
+	      default: "raised"
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    value: {
+	      type: "string",
+	      default: "Button"
+	    },
+	    buttonColor: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    color: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    }
 	  },
 	  init: function init() {
 	    var that = this;
@@ -2686,6 +2797,13 @@
 	    this.outline.setAttribute('position', '0 -' + 0.36 / 2 + ' 0.01');
 	    this.wrapper.appendChild(this.outline);
 	
+	    // OVERLAY
+	    this.overlay = document.createElement('a-rounded');
+	    this.overlay.setAttribute('height', 0.36);
+	    this.overlay.setAttribute('radius', 0.10);
+	    this.overlay.setAttribute('position', '0 -' + 0.36 / 2 + ' 0.01');
+	    // this.wrapper.appendChild(this.overlay);
+	
 	    // LABEL
 	    this.label = document.createElement('a-entity');
 	    this.outline.appendChild(this.label);
@@ -2695,13 +2813,27 @@
 	      if (this.components.button && this.components.button.data.disabled) {
 	        return;
 	      }
+	      // that.wrapper.appendChild(that.overlay);
 	      that.onClick();
+	    });
+	    this.el.addEventListener('mouseenter', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.outline, 0.92);
+	    });
+	    this.el.addEventListener('mouseleave', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      Utils.updateOpacity(that.outline, 1);
 	    });
 	    this.el.addEventListener('mousedown', function () {
 	      if (this.components.button && this.components.button.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0.036');
+	      Utils.updateOpacity(that.outline, 0.84);
 	      SFX.click(this);
 	    });
 	    this.el.addEventListener('mouseup', function () {
@@ -2709,6 +2841,7 @@
 	        return;
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0');
+	      Utils.updateOpacity(that.outline, 1);
 	    });
 	
 	    this.el.getWidth = this.getWidth.bind(this);
@@ -2732,6 +2865,7 @@
 	  update: function update() {
 	    var that = this;
 	    this.outline.setAttribute('color', this.data.buttonColor);
+	    // this.overlay.setAttribute('color', this.data.color);
 	
 	    var props = {
 	      color: this.data.color,
@@ -2788,43 +2922,53 @@
 	      return callback(v);
 	    }
 	    setTimeout(function () {
+	      Utils.updateOpacity(that.el, that.data.opacity);
+	
 	      if (that.data.value.length) {
 	        getTextWidth(that.label, function (width) {
 	          that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + 0.36 / 2 + ' 0.02'); //
 	          width = width + 0.28;
 	          that.outline.setAttribute('width', width);
+	          // that.overlay.setAttribute('width', width);
 	          that.__width = width;
 	          that.shadow.setAttribute('width', width * 1.17);
 	          that.shadow.setAttribute('position', width / 2 + ' 0 0');
+	          // that.overlay.setAttribute('position', width / 2 + ' 0 0');
 	          Event.emit(that.el, 'change:width', width);
 	        });
 	      }
 	
+	      // Utils.updateOpacity(that.overlay, 0);
+	
 	      if (that.data.disabled) {
 	        that.shadow.setAttribute('visible', false);
+	        that.outline.setAttribute('color', '#C4C4C4');
+	        that.label.setAttribute('text', 'color', '#B0B0B0');
+	        // let timer = setInterval(function () {
+	        //   if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
+	        //     clearInterval(timer);
+	        //     Utils.updateOpacity(that.outline, 0.62);
+	        //   }
+	        // }, 10)
+	      } else {
 	        var timer = setInterval(function () {
 	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(timer);
-	            Utils.updateOpacity(that.el, 0.4);
-	          }
-	        }, 10);
-	      } else {
-	        var _timer = setInterval(function () {
-	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(_timer);
-	            Utils.updateOpacity(that.el, 1);
+	            Utils.updateOpacity(that.outline, 1);
 	          }
 	        }, 10);
 	      }
 	
 	      if (that.data.type === "flat") {
 	        that.shadow.setAttribute('visible', false);
-	        var _timer2 = setInterval(function () {
+	        var _timer = setInterval(function () {
 	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(_timer2);
+	            clearInterval(_timer);
 	            Utils.updateOpacity(that.outline, 0);
 	            if (that.data.disabled) {
-	              Utils.updateOpacity(that.label, 0.4);
+	              // Utils.updateOpacity(that.label, 0.62);
+	              that.outline.setAttribute('color', '#C4C4C4');
+	              that.label.setAttribute('text', 'color', '#B0B0B0');
 	            }
 	          }
 	        }, 10);
@@ -2862,10 +3006,33 @@
 
 	'use strict';
 	
-	module.exports = [{ type: 'img', id: 'aframeButtonShadow', src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png' }, { type: 'audio', id: 'aframeButtonClick', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClick.mp3' }, { type: 'audio', id: 'aframeButtonClickDisabled', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3' }];
+	var THEME = {
+	  primary: '#6200EE',
+	  primaryVariant: '#3700B3',
+	  secondary: '#03DAC6',
+	  secondaryVariant: '#018786',
+	  backgroundd: '#FFFFFF',
+	  surface: '#FFFFFF',
+	  error: '#C51162',
+	  onPrimary: '#FFFFFF',
+	  onSecondary: '#000000',
+	  onBackground: '#000000',
+	  onSurface: '#000000',
+	  onError: '#FFFFFF'
+	};
+	
+	module.exports = THEME;
 
 /***/ }),
 /* 26 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	module.exports = [{ type: 'img', id: 'aframeButtonShadow', src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png' }, { type: 'audio', id: 'aframeButtonClick', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClick.mp3' }, { type: 'audio', id: 'aframeButtonClickDisabled', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3' }];
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2910,29 +3077,680 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 27 */
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Utils = __webpack_require__(6);
+	var Theme = __webpack_require__(25);
+	var Config = __webpack_require__(29);
+	var Event = __webpack_require__(4);
+	var Assets = __webpack_require__(30);
+	var SFX = __webpack_require__(31);
+	
+	AFRAME.registerComponent('iconbutton', {
+	  schema: {
+	    disabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    type: {
+	      type: "string",
+	      default: "raised"
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    value: {
+	      type: "string",
+	      default: "Button"
+	    },
+	    buttonColor: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    color: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    },
+	    src: {
+	      type: "string",
+	      default: "#aframeButtonIcon"
+	    }
+	  },
+	  init: function init() {
+	    var that = this;
+	
+	    // Assets
+	    Utils.preloadAssets(Assets);
+	
+	    // SFX
+	    SFX.init(this.el);
+	
+	    // WRAPPER
+	    this.wrapper = document.createElement('a-entity');
+	    this.wrapper.setAttribute('position', '0 0 0.01');
+	    this.el.appendChild(this.wrapper);
+	
+	    // SHADOW
+	    this.shadow = document.createElement('a-image');
+	    this.shadow.setAttribute('width', Config.KEY_WIDTH * 1.25);
+	    this.shadow.setAttribute('height', Config.KEY_WIDTH * 1.25);
+	    this.shadow.setAttribute('position', '0 0 -0.002');
+	    this.shadow.setAttribute('src', '#aframeButtonShadow');
+	    this.wrapper.appendChild(this.shadow);
+	
+	    // OUTLINE
+	    this.outline = document.createElement('a-rounded');
+	    this.outline.setAttribute('width', Config.KEY_WIDTH);
+	    this.outline.setAttribute('height', Config.KEY_WIDTH);
+	    this.outline.setAttribute('radius', '0.008');
+	    this.outline.setAttribute('position', -Config.KEY_WIDTH / 2 + ' ' + -Config.KEY_WIDTH / 2 + ' 0');
+	    this.wrapper.appendChild(this.outline);
+	
+	    // ICON
+	    this.icon = document.createElement('a-image');
+	    this.icon.setAttribute('width', Config.KEY_WIDTH * 0.75);
+	    this.icon.setAttribute('height', Config.KEY_WIDTH * 0.75);
+	    this.icon.setAttribute('position', '0 0 0.01');
+	    this.icon.setAttribute('src', this.data.src);
+	    this.wrapper.appendChild(this.icon);
+	
+	    // EVENTS
+	    this.el.addEventListener('click', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      // that.wrapper.appendChild(that.overlay);
+	      that.onClick();
+	    });
+	    this.el.addEventListener('mouseenter', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.outline, 0.92);
+	    });
+	    this.el.addEventListener('mouseleave', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      Utils.updateOpacity(that.outline, 1);
+	    });
+	    this.el.addEventListener('mousedown', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      that.wrapper.setAttribute('position', '0 0 0.036');
+	      Utils.updateOpacity(that.outline, 0.84);
+	      SFX.click(this);
+	    });
+	    this.el.addEventListener('mouseup', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      that.wrapper.setAttribute('position', '0 0 0');
+	      Utils.updateOpacity(that.outline, 1);
+	    });
+	
+	    this.el.getWidth = this.getWidth.bind(this);
+	    Object.defineProperty(this.el, 'value', {
+	      get: function get() {
+	        return this.getAttribute('value');
+	      },
+	      set: function set(value) {
+	        this.setAttribute('value', value);
+	      },
+	      enumerable: true,
+	      configurable: true
+	    });
+	  },
+	  onClick: function onClick() {
+	    //Event.emit(this.el, 'click');
+	  },
+	  getWidth: function getWidth() {
+	    return this.__width;
+	  },
+	  update: function update() {
+	    var that = this;
+	    this.outline.setAttribute('color', this.data.buttonColor);
+	    this.icon.setAttribute('color', this.data.color);
+	    // this.overlay.setAttribute('color', this.data.color);
+	
+	    setTimeout(function () {
+	      Utils.updateOpacity(that.el, that.data.opacity);
+	
+	      if (that.data.disabled) {
+	        that.shadow.setAttribute('visible', false);
+	        that.outline.setAttribute('color', '#C4C4C4');
+	        that.icon.setAttribute('color', '#B0B0B0');
+	      } else {
+	        var timer = setInterval(function () {
+	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	            clearInterval(timer);
+	            Utils.updateOpacity(that.outline, 1);
+	          }
+	        }, 10);
+	      }
+	
+	      if (that.data.type === "flat") {
+	        that.shadow.setAttribute('visible', false);
+	        var _timer = setInterval(function () {
+	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	            clearInterval(_timer);
+	            Utils.updateOpacity(that.outline, 0);
+	            if (that.data.disabled) {
+	              that.outline.setAttribute('color', '#C4C4C4');
+	              that.icon.setAttribute('text', 'color', '#B0B0B0');
+	            }
+	          }
+	        }, 10);
+	      }
+	    }, 0);
+	  },
+	  tick: function tick() {},
+	  remove: function remove() {},
+	  pause: function pause() {},
+	  play: function play() {}
+	});
+	
+	AFRAME.registerPrimitive('a-iconbutton', {
+	  defaultComponents: {
+	    iconbutton: {}
+	  },
+	  mappings: {
+	    disabled: 'iconbutton.disabled',
+	    type: 'iconbutton.type',
+	    name: 'iconbutton.name',
+	    value: 'iconbutton.value',
+	    'button-color': 'iconbutton.buttonColor',
+	    color: 'iconbutton.color',
+	    font: 'iconbutton.font',
+	    'letter-spacing': 'iconbutton.letterSpacing',
+	    'line-height': 'iconbutton.lineHeight',
+	    'opacity': 'iconbutton.opacity',
+	    'width': 'iconbutton.width',
+	    src: 'iconbutton.src'
+	  }
+	});
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	var Config = {
+	  KEYBOARD_COLOR: "#263238",
+	  KEY_COLOR_HIGHLIGHT: "#29363c",
+	  KEY_COLOR_ACTIVE: "#404b50",
+	  SPACEBAR_COLOR_ACTIVE: "#3c464b",
+	  SPACEBAR_COLOR_HIGHLIGHT: "#445055",
+	  KEY_WIDTH: 0.08,
+	  SPACE_KEY_WIDTH: 0.368,
+	  SPACE_KEY_HEIGHT: 0.05,
+	  ACTION_WIDTH: 0.140
+	};
+	
+	module.exports = Config;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	module.exports = [{
+	  type: 'img',
+	  id: 'aframeButtonShadow',
+	  src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png'
+	}, {
+	  type: 'img',
+	  id: 'aframeButtonIcon',
+	  src: AFRAME.ASSETS_PATH + '/images/CheckboxIcon.png'
+	}, {
+	  type: 'audio',
+	  id: 'aframeButtonClick',
+	  src: AFRAME.ASSETS_PATH + '/sounds/ButtonClick.mp3'
+	}, {
+	  type: 'audio',
+	  id: 'aframeButtonClickDisabled',
+	  src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3'
+	}];
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var SFX = {
+	
+	  init: function init(parent) {
+	    var el = document.createElement('a-sound');
+	    el.setAttribute('key', 'aframeButtonClickSound');
+	    el.setAttribute('sfx', true);
+	    el.setAttribute('src', '#aframeButtonClick');
+	    // el.setAttribute('position', '0 2 5');
+	    parent.appendChild(el);
+	
+	    el = document.createElement('a-sound');
+	    el.setAttribute('key', 'aframeButtonClickDisabledSound');
+	    el.setAttribute('sfx', true);
+	    el.setAttribute('src', '#aframeButtonClickDisabled');
+	    // el.setAttribute('position', '0 2 5');
+	    parent.appendChild(el);
+	  },
+	
+	  click: function click(parent) {
+	    var el = parent.querySelector('[key=aframeButtonClickSound]');
+	    if (!el) {
+	      return;
+	    }
+	    el.components.sound.stopSound();
+	    el.components.sound.playSound();
+	  },
+	
+	  clickDisabled: function clickDisabled(parent) {
+	    var el = parent.querySelector('[key=aframeButtonClickDisabledSound]');
+	    if (!el) {
+	      return;
+	    }
+	    el.components.sound.stopSound();
+	    el.components.sound.playSound();
+	  }
+	};
+	
+	module.exports = SFX;
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Utils = __webpack_require__(6);
+	var Theme = __webpack_require__(25);
+	var Config = __webpack_require__(33);
+	var Event = __webpack_require__(4);
+	var Assets = __webpack_require__(34);
+	var SFX = __webpack_require__(35);
+	
+	AFRAME.registerComponent('circlebutton', {
+	  schema: {
+	    disabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    type: {
+	      type: "string",
+	      default: "raised"
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    value: {
+	      type: "string",
+	      default: "Button"
+	    },
+	    buttonColor: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    color: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    },
+	    src: {
+	      type: "string",
+	      default: "#aframeButtonIcon"
+	    }
+	  },
+	  init: function init() {
+	    var that = this;
+	
+	    // Assets
+	    Utils.preloadAssets(Assets);
+	
+	    // SFX
+	    SFX.init(this.el);
+	
+	    // WRAPPER
+	    this.wrapper = document.createElement('a-entity');
+	    this.wrapper.setAttribute('position', '0 0 0.01');
+	    this.el.appendChild(this.wrapper);
+	
+	    // SHADOW
+	    this.shadow = document.createElement('a-image');
+	    this.shadow.setAttribute('width', Config.KEY_WIDTH * 1.25);
+	    this.shadow.setAttribute('height', Config.KEY_WIDTH * 1.25);
+	    this.shadow.setAttribute('position', '0 0 -0.002');
+	    this.shadow.setAttribute('src', '#aframeSwitchShadow');
+	    this.wrapper.appendChild(this.shadow);
+	
+	    // OUTLINE
+	    this.outline = document.createElement('a-circle');
+	    this.outline.setAttribute('radius', Config.KEY_WIDTH / 2);
+	    this.outline.setAttribute('position', '0 0 0');
+	    this.wrapper.appendChild(this.outline);
+	
+	    // ICON
+	    this.icon = document.createElement('a-image');
+	    this.icon.setAttribute('width', Config.KEY_WIDTH * 0.75);
+	    this.icon.setAttribute('height', Config.KEY_WIDTH * 0.75);
+	    this.icon.setAttribute('position', '0 0 0.01');
+	    this.icon.setAttribute('src', this.data.src);
+	    this.wrapper.appendChild(this.icon);
+	
+	    // EVENTS
+	    this.el.addEventListener('click', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      // that.wrapper.appendChild(that.overlay);
+	      that.onClick();
+	    });
+	    this.el.addEventListener('mouseenter', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.outline, 0.92);
+	    });
+	    this.el.addEventListener('mouseleave', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      Utils.updateOpacity(that.outline, 1);
+	    });
+	    this.el.addEventListener('mousedown', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      that.wrapper.setAttribute('position', '0 0 0.036');
+	      Utils.updateOpacity(that.outline, 0.84);
+	      SFX.click(this);
+	    });
+	    this.el.addEventListener('mouseup', function () {
+	      if (this.components.button && this.components.button.data.disabled) {
+	        return;
+	      }
+	      that.wrapper.setAttribute('position', '0 0 0');
+	      Utils.updateOpacity(that.outline, 1);
+	    });
+	
+	    this.el.getWidth = this.getWidth.bind(this);
+	    Object.defineProperty(this.el, 'value', {
+	      get: function get() {
+	        return this.getAttribute('value');
+	      },
+	      set: function set(value) {
+	        this.setAttribute('value', value);
+	      },
+	      enumerable: true,
+	      configurable: true
+	    });
+	  },
+	  onClick: function onClick() {
+	    //Event.emit(this.el, 'click');
+	  },
+	  getWidth: function getWidth() {
+	    return this.__width;
+	  },
+	  update: function update() {
+	    var that = this;
+	    this.outline.setAttribute('color', this.data.buttonColor);
+	    this.icon.setAttribute('color', this.data.color);
+	    // this.overlay.setAttribute('color', this.data.color);
+	
+	    setTimeout(function () {
+	      Utils.updateOpacity(that.el, that.data.opacity);
+	
+	      if (that.data.disabled) {
+	        that.shadow.setAttribute('visible', false);
+	        that.outline.setAttribute('color', '#C4C4C4');
+	        that.icon.setAttribute('color', '#B0B0B0');
+	      } else {
+	        var timer = setInterval(function () {
+	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	            clearInterval(timer);
+	            Utils.updateOpacity(that.outline, 1);
+	          }
+	        }, 10);
+	      }
+	
+	      if (that.data.type === "flat") {
+	        that.shadow.setAttribute('visible', false);
+	        var _timer = setInterval(function () {
+	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	            clearInterval(_timer);
+	            Utils.updateOpacity(that.outline, 0);
+	            if (that.data.disabled) {
+	              that.outline.setAttribute('color', '#C4C4C4');
+	              that.icon.setAttribute('text', 'color', '#B0B0B0');
+	            }
+	          }
+	        }, 10);
+	      }
+	    }, 0);
+	  },
+	  tick: function tick() {},
+	  remove: function remove() {},
+	  pause: function pause() {},
+	  play: function play() {}
+	});
+	
+	AFRAME.registerPrimitive('a-circlebutton', {
+	  defaultComponents: {
+	    circlebutton: {}
+	  },
+	  mappings: {
+	    disabled: 'circlebutton.disabled',
+	    type: 'circlebutton.type',
+	    name: 'circlebutton.name',
+	    value: 'circlebutton.value',
+	    'button-color': 'circlebutton.buttonColor',
+	    color: 'circlebutton.color',
+	    font: 'circlebutton.font',
+	    'letter-spacing': 'circlebutton.letterSpacing',
+	    'line-height': 'circlebutton.lineHeight',
+	    'opacity': 'circlebutton.opacity',
+	    'width': 'circle.width',
+	    src: 'circlebutton.src'
+	  }
+	});
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	var Config = {
+	  KEYBOARD_COLOR: "#263238",
+	  KEY_COLOR_HIGHLIGHT: "#29363c",
+	  KEY_COLOR_ACTIVE: "#404b50",
+	  SPACEBAR_COLOR_ACTIVE: "#3c464b",
+	  SPACEBAR_COLOR_HIGHLIGHT: "#445055",
+	  KEY_WIDTH: 0.08,
+	  SPACE_KEY_WIDTH: 0.368,
+	  SPACE_KEY_HEIGHT: 0.05,
+	  ACTION_WIDTH: 0.140
+	};
+	
+	module.exports = Config;
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	module.exports = [{
+	  type: 'img',
+	  id: 'aframeButtonShadow',
+	  src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png'
+	}, {
+	  type: 'img',
+	  id: 'aframeSwitchShadow',
+	  src: AFRAME.ASSETS_PATH + '/images/SwitchShadow.png'
+	}, {
+	  type: 'img',
+	  id: 'aframeButtonIcon',
+	  src: AFRAME.ASSETS_PATH + '/images/CheckboxIcon.png'
+	}, {
+	  type: 'audio',
+	  id: 'aframeButtonClick',
+	  src: AFRAME.ASSETS_PATH + '/sounds/ButtonClick.mp3'
+	}, {
+	  type: 'audio',
+	  id: 'aframeButtonClickDisabled',
+	  src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3'
+	}];
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var SFX = {
+	
+	  init: function init(parent) {
+	    var el = document.createElement('a-sound');
+	    el.setAttribute('key', 'aframeButtonClickSound');
+	    el.setAttribute('sfx', true);
+	    el.setAttribute('src', '#aframeButtonClick');
+	    // el.setAttribute('position', '0 2 5');
+	    parent.appendChild(el);
+	
+	    el = document.createElement('a-sound');
+	    el.setAttribute('key', 'aframeButtonClickDisabledSound');
+	    el.setAttribute('sfx', true);
+	    el.setAttribute('src', '#aframeButtonClickDisabled');
+	    // el.setAttribute('position', '0 2 5');
+	    parent.appendChild(el);
+	  },
+	
+	  click: function click(parent) {
+	    var el = parent.querySelector('[key=aframeButtonClickSound]');
+	    if (!el) {
+	      return;
+	    }
+	    el.components.sound.stopSound();
+	    el.components.sound.playSound();
+	  },
+	
+	  clickDisabled: function clickDisabled(parent) {
+	    var el = parent.querySelector('[key=aframeButtonClickDisabledSound]');
+	    if (!el) {
+	      return;
+	    }
+	    el.components.sound.stopSound();
+	    el.components.sound.playSound();
+	  }
+	};
+	
+	module.exports = SFX;
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(28);
-	var SFX = __webpack_require__(29);
+	var Assets = __webpack_require__(37);
+	var SFX = __webpack_require__(38);
 	
 	AFRAME.registerComponent('toast', {
 	  schema: {
-	    message: { type: 'string', default: "You are cool" },
-	    action: { type: 'string', default: "" },
-	    backgroundColor: { type: "color", default: "#222" }, //242f35
-	    actionColor: { type: "color", default: "#4076fd" },
-	    color: { type: "color", default: "#FFF" },
-	    font: { type: "string", default: "" },
-	    letterSpacing: { type: "int", default: 0 },
-	    lineHeight: { type: "string", default: "" },
-	    width: { type: "number", default: 3 },
-	    duration: { type: 'number', default: 2000 },
-	    autoshow: { type: 'boolean', default: true }
+	    message: {
+	      type: 'string',
+	      default: "You are cool"
+	    },
+	    action: {
+	      type: 'string',
+	      default: ""
+	    },
+	    backgroundColor: {
+	      type: "color",
+	      default: "#222"
+	    }, //242f35
+	    actionColor: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    color: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    width: {
+	      type: "number",
+	      default: 3
+	    },
+	    duration: {
+	      type: 'number',
+	      default: 2000
+	    },
+	    autoshow: {
+	      type: 'boolean',
+	      default: true
+	    }
 	  },
 	  init: function init() {
 	    var that = this;
@@ -2961,7 +3779,6 @@
 	
 	    // LABEL
 	    this.action = document.createElement('a-button');
-	    that.action.setAttribute('button-color', '#222');
 	    this.el.appendChild(this.action);
 	
 	    function changeWidth(e) {
@@ -3004,7 +3821,9 @@
 	      this.el._parentNode.appendChild(this.el);
 	    }*/
 	    setTimeout(function () {
-	      that.el.setAttribute('fadein', { duration: 160 });
+	      that.el.setAttribute('fadein', {
+	        duration: 160
+	      });
 	      setTimeout(function () {
 	        Utils.updateOpacity(that.label, 1);
 	        that.action.components.button.shadow.setAttribute('visible', false);
@@ -3022,7 +3841,9 @@
 	      Utils.updateOpacity(that.label, 0);
 	      that.action.components.button.shadow.setAttribute('visible', false);
 	      setTimeout(function () {
-	        that.el.setAttribute('fadeout', { duration: 160 });
+	        that.el.setAttribute('fadeout', {
+	          duration: 160
+	        });
 	        setTimeout(function () {
 	          /*if (that.el.parentNode) {
 	            that.el._parentNode = that.el.parentNode;
@@ -3062,6 +3883,7 @@
 	
 	    // ACTION
 	    this.action.setAttribute('value', this.data.action.toUpperCase());
+	    this.action.setAttribute('button-color', this.data.backgroundColor);
 	    this.action.setAttribute('color', this.data.actionColor);
 	  },
 	  tick: function tick() {},
@@ -3090,7 +3912,7 @@
 	});
 
 /***/ }),
-/* 28 */
+/* 37 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3098,7 +3920,7 @@
 	module.exports = [{ type: 'audio', id: 'aframeToastShow', src: AFRAME.ASSETS_PATH + '/sounds/ToastShow.mp3' }];
 
 /***/ }),
-/* 29 */
+/* 38 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3124,6 +3946,77 @@
 	};
 	
 	module.exports = SFX;
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Utils = __webpack_require__(6);
+	var Event = __webpack_require__(4);
+	
+	AFRAME.registerComponent('card', {
+	  schema: {
+	    width: {
+	      type: "number",
+	      default: 1
+	    },
+	    height: {
+	      type: "number",
+	      default: 1
+	    },
+	    radius: {
+	      type: "number",
+	      default: 0.05
+	    },
+	    color: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    shift: {
+	      type: "boolean",
+	      default: true
+	    }
+	  },
+	  init: function init() {
+	    this.card = document.createElement('a-rounded');
+	    this.card.setAttribute('height', this.data.height);
+	    this.card.setAttribute('width', this.data.width);
+	    this.card.setAttribute('radius', this.data.radius);
+	    if (this.data.shift) {
+	      this.card.setAttribute('position', '0 0 -0.01');
+	    } else {
+	      this.card.setAttribute('position', -this.data.width / 2 + ' ' + -this.data.height / 2 + ' -0.01');
+	    }
+	    this.el.append(this.card);
+	  },
+	  update: function update() {
+	    this.card.setAttribute('color', this.data.color);
+	    this.card.setAttribute('opacity', this.data.opacity);
+	  },
+	  tick: function tick() {},
+	  remove: function remove() {},
+	  pause: function pause() {},
+	  play: function play() {}
+	});
+	
+	AFRAME.registerPrimitive('a-card', {
+	  defaultComponents: {
+	    card: {}
+	  },
+	  mappings: {
+	    width: "card.width",
+	    height: "card.height",
+	    radius: "card.radius",
+	    color: "card.color",
+	    opacity: "card.opacity"
+	  }
+	});
 
 /***/ })
 /******/ ]);

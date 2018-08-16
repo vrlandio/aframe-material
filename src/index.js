@@ -1,6 +1,10 @@
-(()=>{
-  if (!AFRAME) { return console.error('AFRAME is required!'); }
-  if (!AFRAME.ASSETS_PATH) { AFRAME.ASSETS_PATH = "./assets"; }
+(() => {
+  if (!AFRAME) {
+    return console.error('AFRAME is required!');
+  }
+  if (!AFRAME.ASSETS_PATH) {
+    AFRAME.ASSETS_PATH = "./assets";
+  }
   require('aframe-rounded');
   require("./fade");
   //require("./alert"); @TODO ;)
@@ -11,5 +15,8 @@
   require("./radio");
   require("./checkbox");
   require("./button");
+  require("./icon-button");
+  require("./circle-button");
   require("./toast");
+  require("./card");
 })();

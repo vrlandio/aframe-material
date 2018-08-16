@@ -19,6 +19,11 @@
       <img id="boxTexture" src="https://i.imgur.com/mYmmbrp.jpg" crossorigin="anonymous">
       <img id="skyTexture" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg" crossorigin="anonymous">
       <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="anonymous">
+      <img id="buttonIcon" src="./assets/images/FingerprintIcon.png" crossorigin="anonymous">
+      <img id="inputIcon" src="./assets/images/InputIcon.png" crossorigin="anonymous">
+      <img id="radioIcon" src="./assets/images/RadiobuttonIcon.png" crossorigin="anonymous">
+      <img id="toggleIcon" src="./assets/images/ToggleIcon.png" crossorigin="anonymous">
+      <img id="checkboxIcon" src="./assets/images/CheckboxIcon.png" crossorigin="anonymous">
     </a-assets>
 
     <a-sky src="#skyTexture"></a-sky>
@@ -34,22 +39,23 @@
     <a-keyboard physical-keyboard=true></a-keyboard>
     <a-input position="-0.7 1 -2.5" placeholder="Username" color="black" width="1"></a-input>
     <a-input position="-0.7 0.8 -2.5" type="password" placeholder="Password" color="black" width="1"></a-input>
-    <!-- END INPUTS/KEYBOARD -->
+    <a-iconbutton position="-0.7 2 -2.5" src="#buttonIcon"></a-iconbutton>
+    <a-circlebutton position="0 2 -2.5" src="#toggleIcon"></a-circlebutton>
 
-    <!-- BEGIN FORM -->
-    <a-rounded position="0.5 0.5 -2.5" width="4" height="3.1" radius="0.05" rotation="0 -20 0" scale="0.3 0.3 0.3">
+
+    <!-- END INPUTS/KEYBOARD -->
+    <a-card position="0.5 0.5 -2.5" width="4" height="3.1" radius="0.05" rotation="0 -20 0" scale="0.3 0.3 0.3">
       <a-form>
         <a-switch position="0.2 2.7 0" enabled="true"></a-switch>
         <a-radio position="0.2 2.4 0" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
         <a-radio position="0.2 2.1 0" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
         <a-radio position="0.2 1.8 0" width="3" name="food" label="Ice cream"></a-radio>
-        <a-checkbox position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
+        <a-checkbox id="check2" position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
         <a-checkbox position="0.2 1.2 0" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
         <a-button position="0.2 0.8 0" name="stuff" value="Click me" type="raised"></a-button>
         <a-button position="0.2 0.35 0" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
       </a-form>
-    </a-rounded>
-    <!-- END FORM -->
+    </a-card>
 
     <!-- BEGIN TOAST -->
     <a-toast message="This is a toast" action="Got it"></a-toast>

@@ -5,25 +5,64 @@ const SFX = require('./sfx');
 
 AFRAME.registerComponent('checkbox', {
   schema: {
-    checked: { type: 'boolean', default: false },
-    disabled: { type: 'boolean', default: false },
-    name: { type: "string", default: "" },
-    value: { type: "string", default: "" },
-    label: { type: "string", default: "" },
-    checkboxColor: { type: "color", default: "#757575"},
-    checkboxColorChecked: { type: "color", default: "#4076fd"},
-    color: { type: "color", default: "#757575" },
-    font: { type: "string", default: "" },
-    letterSpacing: { type: "int", default: 0 },
-    lineHeight: { type: "string", default: "" },
-    opacity: { type: "number", default: 1 },
-    width: { type: "number", default: 1 }
+    checked: {
+      type: 'boolean',
+      default: false
+    },
+    disabled: {
+      type: 'boolean',
+      default: false
+    },
+    name: {
+      type: "string",
+      default: ""
+    },
+    value: {
+      type: "string",
+      default: ""
+    },
+    label: {
+      type: "string",
+      default: ""
+    },
+    checkboxColor: {
+      type: "color",
+      default: "#757575"
+    },
+    checkboxColorChecked: {
+      type: "color",
+      default: "#4076fd"
+    },
+    color: {
+      type: "color",
+      default: "#757575"
+    },
+    font: {
+      type: "string",
+      default: ""
+    },
+    letterSpacing: {
+      type: "int",
+      default: 0
+    },
+    lineHeight: {
+      type: "string",
+      default: ""
+    },
+    opacity: {
+      type: "number",
+      default: 1
+    },
+    width: {
+      type: "number",
+      default: 1
+    }
   },
   init: function () {
     var that = this;
 
     // Assets
-    Utils.preloadAssets( Assets );
+    Utils.preloadAssets(Assets);
 
     // SFX
     SFX.init(this.el);
@@ -64,13 +103,15 @@ AFRAME.registerComponent('checkbox', {
     this.el.appendChild(this.label);
 
     // EVENTS
-    this.el.addEventListener('click', function() {
-      if (this.components.checkbox.data.disabled) { return; }
+    this.el.addEventListener('click', function () {
+      if (this.components.checkbox.data.disabled) {
+        return;
+      }
       this.components.checkbox.data.checked = !this.components.checkbox.data.checked;
       this.setAttribute('checked', this.components.checkbox.data.checked);
       that.onClick();
     });
-    this.el.addEventListener('mousedown', function() {
+    this.el.addEventListener('mousedown', function () {
       if (this.components.checkbox.data.disabled) {
         return SFX.clickDisabled(this);
       }
@@ -78,33 +119,43 @@ AFRAME.registerComponent('checkbox', {
     });
 
     Object.defineProperty(this.el, 'value', {
-      get: function() { return this.getAttribute('value'); },
-      set: function(value) { this.setAttribute('value', value); },
+      get: function () {
+        return this.getAttribute('value');
+      },
+      set: function (value) {
+        this.setAttribute('value', value);
+      },
       enumerable: true,
       configurable: true
     });
   },
-  onClick: function(noemit) {
+  onClick: function (noemit) {
     if (this.data.checked) {
       this.check();
     } else {
       this.uncheck();
     }
-    if (!noemit) { Event.emit(this.el, 'change', this.data.checked); }
+    if (!noemit) {
+      Event.emit(this.el, 'change', this.data.checked);
+    }
   },
-  check: function() {
+  check: function () {
     this.outline.setAttribute('color', this.data.checkboxColorChecked);
     this.inside.setAttribute('color', this.data.checkboxColorChecked);
     this.checkmark.setAttribute('visible', true);
-    if (this.data.disabled) { this.disabled(); }
+    if (this.data.disabled) {
+      this.disabled();
+    }
   },
-  uncheck: function() {
+  uncheck: function () {
     this.outline.setAttribute('color', this.data.checkboxColor);
     this.inside.setAttribute('color', "#EEE");
     this.checkmark.setAttribute('visible', false);
-    if (this.data.disabled) { this.disabled(); }
+    if (this.data.disabled) {
+      this.disabled();
+    }
   },
-  disabled: function() {
+  disabled: function () {
     this.outline.setAttribute('color', this.data.checkboxColor);
     this.inside.setAttribute('color', this.data.checkboxColor);
   },
@@ -114,36 +165,46 @@ AFRAME.registerComponent('checkbox', {
 
     // HITBOX
     this.hitbox.setAttribute('width', this.data.width)
-    this.hitbox.setAttribute('position', this.data.width/2+' 0 0.01');
+    this.hitbox.setAttribute('position', this.data.width / 2 + ' 0 0.01');
 
     let props = {
       color: this.data.color,
       align: 'left',
-      wrapCount: 10*(this.data.width+0.2),
+      wrapCount: 10 * (this.data.width + 0.2),
       width: this.data.width,
     }
-    if (this.data.font) { props.font = this.data.font; }
+    if (this.data.font) {
+      props.font = this.data.font;
+    }
 
     // TITLE
     props.value = this.data.label;
     props.color = this.data.color;
     this.label.setAttribute('text', props);
-    this.label.setAttribute('position', this.data.width/2+0.24+' 0 0.01');
+    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.01');
 
     // TRIM TEXT IF NEEDED.. @TODO: optimize this mess..
     function getTextWidth(el, _widthFactor) {
-      if (!el.object3D || !el.object3D.children || !el.object3D.children[0]) { return 0; }
+      if (!el.object3D || !el.object3D.children || !el.object3D.children[0]) {
+        return 0;
+      }
       let v = el.object3D.children[0].geometry.visibleGlyphs;
-      if (!v) { return 0; }
-      v = v[v.length-1];
-      if (!v) { return 0; }
+      if (!v) {
+        return 0;
+      }
+      v = v[v.length - 1];
+      if (!v) {
+        return 0;
+      }
       if (v.line) {
         props.value = props.value.slice(0, -1);
         el.setAttribute("text", props);
         return getTextWidth(el);
       } else {
-        if (!_widthFactor) { _widthFactor = Utils.getWidthFactor(el, props.wrapCount); }
-        v = (v.position[0] + v.data.width) / (_widthFactor/that.data.width);
+        if (!_widthFactor) {
+          _widthFactor = Utils.getWidthFactor(el, props.wrapCount);
+        }
+        v = (v.position[0] + v.data.width) / (_widthFactor / that.data.width);
         let textRatio = v / that.data.width;
         if (textRatio > 1) {
           props.value = props.value.slice(0, -1);
@@ -153,12 +214,14 @@ AFRAME.registerComponent('checkbox', {
       }
       return v;
     }
-    setTimeout(function() {
+    setTimeout(function () {
+      Utils.updateOpacity(that.el, that.data.opacity);
+
       if (that.data.label.length) {
         getTextWidth(that.label);
       }
       if (that.data.disabled) {
-        let timer = setInterval(function() {
+        let timer = setInterval(function () {
           if (that.checkmark.object3D.children[0]) {
             clearInterval(timer);
             Utils.updateOpacity(that.checkmark, 0.4);
@@ -166,7 +229,7 @@ AFRAME.registerComponent('checkbox', {
           }
         }, 10)
       } else {
-        let timer = setInterval(function() {
+        let timer = setInterval(function () {
           if (that.checkmark.object3D.children[0]) {
             clearInterval(timer);
             Utils.updateOpacity(that.checkmark, 1);
