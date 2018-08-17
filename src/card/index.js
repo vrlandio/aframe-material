@@ -35,7 +35,7 @@ AFRAME.registerComponent('card', {
     this.card = document.createElement('a-rounded');
     this.card.setAttribute('height', this.data.height);
     this.card.setAttribute('width', this.data.width);
-    this.card.setAttribute('radius', this.data.width * 0.015);
+    this.card.setAttribute('radius', this.data.height * 0.0125);
 
     this.shadow = document.createElement('a-image');
     this.shadow.setAttribute('height', this.data.height * 1.25);

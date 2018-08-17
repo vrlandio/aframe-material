@@ -3015,6 +3015,10 @@
 	      type: "number",
 	      default: 1
 	    },
+	    height: {
+	      type: "number",
+	      default: 0.36
+	    },
 	    width: {
 	      type: "number",
 	      default: 1
@@ -3034,15 +3038,15 @@
 	    this.el.appendChild(this.wrapper);
 	
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('height', 0.36 * 1.25);
+	    this.shadow.setAttribute('height', this.data.height * 1.25);
 	    this.shadow.setAttribute('src', '#aframeButtonShadow');
 	    this.wrapper.appendChild(this.shadow);
 	
 	    // OUTLINE
 	    this.outline = document.createElement('a-rounded');
-	    this.outline.setAttribute('height', 0.36);
+	    this.outline.setAttribute('height', this.data.height);
 	    this.outline.setAttribute('radius', 0.03);
-	    this.outline.setAttribute('position', '0 -' + 0.36 / 2 + ' 0.001');
+	    this.outline.setAttribute('position', '0 -' + this.data.height / 2 + ' 0.001');
 	    this.wrapper.appendChild(this.outline);
 	
 	    // OVERLAY
@@ -3243,8 +3247,9 @@
 	    font: 'button.font',
 	    'letter-spacing': 'button.letterSpacing',
 	    'line-height': 'button.lineHeight',
-	    'opacity': 'button.opacity',
-	    'width': 'button.width'
+	    opacity: 'button.opacity',
+	    width: 'button.width',
+	    height: 'button.height'
 	  }
 	});
 
@@ -4254,7 +4259,7 @@
 	    this.card = document.createElement('a-rounded');
 	    this.card.setAttribute('height', this.data.height);
 	    this.card.setAttribute('width', this.data.width);
-	    this.card.setAttribute('radius', this.data.width * 0.015);
+	    this.card.setAttribute('radius', this.data.height * 0.0125);
 	
 	    this.shadow = document.createElement('a-image');
 	    this.shadow.setAttribute('height', this.data.height * 1.25);
