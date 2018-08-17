@@ -1890,12 +1890,12 @@
 	    this.el.fill.setAttribute('height', 0.16);
 	    this.el.fill.setAttribute('radius', 0.08);
 	    this.el.fill.setAttribute('side', 'double');
-	    this.el.fill.setAttribute('position', '0 0 0.01');
+	    this.el.fill.setAttribute('position', '0 0 0.001');
 	    this.el.appendChild(this.el.fill);
 	
 	    // KNOB
 	    this.el.knob = document.createElement('a-circle');
-	    this.el.knob.setAttribute('position', '0.06 0.08 0.02');
+	    this.el.knob.setAttribute('position', '0.06 0.08 0.002');
 	    this.el.knob.setAttribute('radius', 0.12);
 	    this.el.knob.setAttribute('side', 'double');
 	    this.el.appendChild(this.el.knob);
@@ -1954,12 +1954,12 @@
 	  },
 	  on: function on() {
 	    this.el.fill.setAttribute('color', this.data.fillColorEnabled);
-	    this.el.knob.setAttribute('position', '0.32 0.08 0.02');
+	    this.el.knob.setAttribute('position', '0.32 0.08 0.002');
 	    this.el.knob.setAttribute('color', this.data.knobColorEnabled);
 	  },
 	  off: function off() {
 	    this.el.fill.setAttribute('color', this.data.fillColor);
-	    this.el.knob.setAttribute('position', '0.06 0.08 0.02');
+	    this.el.knob.setAttribute('position', '0.06 0.08 0.002');
 	    this.el.knob.setAttribute('color', this.data.knobColor);
 	  },
 	  disable: function disable() {
@@ -2548,7 +2548,7 @@
 	    this.outline.setAttribute('width', 0.2);
 	    this.outline.setAttribute('height', 0.2);
 	    this.outline.setAttribute('radius', 0.02);
-	    this.outline.setAttribute('position', '0 -' + 0.2 / 2 + ' 0.01');
+	    this.outline.setAttribute('position', '0 -' + 0.2 / 2 + ' 0.001');
 	    this.el.appendChild(this.outline);
 	
 	    // INSIDE
@@ -2557,7 +2557,7 @@
 	    this.inside.setAttribute('height', 0.156);
 	    this.inside.setAttribute('radius', 0.01);
 	    this.inside.setAttribute('color', "#EEE");
-	    this.inside.setAttribute('position', 0.156 / 8 + ' -' + 0.156 / 2 + ' 0.02');
+	    this.inside.setAttribute('position', 0.156 / 8 + ' -' + 0.156 / 2 + ' 0.002');
 	    this.el.appendChild(this.inside);
 	
 	    // CHECKMARK
@@ -2565,7 +2565,7 @@
 	    this.checkmark.setAttribute('width', 0.16);
 	    this.checkmark.setAttribute('height', 0.16);
 	    this.checkmark.setAttribute('src', "#aframeCheckboxMark");
-	    this.checkmark.setAttribute('position', '0.1 0 0.03');
+	    this.checkmark.setAttribute('position', '0.1 0 0.003');
 	    this.el.appendChild(this.checkmark);
 	
 	    // LABEL
@@ -2654,7 +2654,7 @@
 	
 	    // HITBOX
 	    this.hitbox.setAttribute('width', this.data.width);
-	    this.hitbox.setAttribute('position', this.data.width / 2 + ' 0 0.01');
+	    this.hitbox.setAttribute('position', this.data.width / 2 + ' 0 0.001');
 	
 	    var props = {
 	      color: this.data.color,
@@ -2670,7 +2670,7 @@
 	    props.value = this.data.label;
 	    props.color = this.data.color;
 	    this.label.setAttribute('text', props);
-	    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.01');
+	    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.001');
 	
 	    // TRIM TEXT IF NEEDED.. @TODO: optimize this mess..
 	    function getTextWidth(el, _widthFactor) {
@@ -2878,7 +2878,7 @@
 	    SFX.init(this.el);
 	
 	    this.wrapper = document.createElement('a-entity');
-	    this.wrapper.setAttribute('position', '0 0 0.01');
+	    this.wrapper.setAttribute('position', '0 0 0.001');
 	    this.el.appendChild(this.wrapper);
 	
 	    this.shadow = document.createElement('a-image');
@@ -2890,14 +2890,14 @@
 	    this.outline = document.createElement('a-rounded');
 	    this.outline.setAttribute('height', 0.36);
 	    this.outline.setAttribute('radius', 0.03);
-	    this.outline.setAttribute('position', '0 -' + 0.36 / 2 + ' 0.01');
+	    this.outline.setAttribute('position', '0 -' + 0.36 / 2 + ' 0.001');
 	    this.wrapper.appendChild(this.outline);
 	
 	    // OVERLAY
-	    this.overlay = document.createElement('a-rounded');
-	    this.overlay.setAttribute('height', 0.36);
-	    this.overlay.setAttribute('radius', 0.10);
-	    this.overlay.setAttribute('position', '0 -' + 0.36 / 2 + ' 0.01');
+	    // this.overlay = document.createElement('a-rounded');
+	    // this.overlay.setAttribute('height', 0.36);
+	    // this.overlay.setAttribute('radius', 0.10);
+	    // this.overlay.setAttribute('position', `0 -${0.36/2} 0.001`);
 	    // this.wrapper.appendChild(this.overlay);
 	
 	    // LABEL
@@ -2980,7 +2980,7 @@
 	    // TITLE
 	    props.value = this.data.value.toUpperCase();
 	    this.label.setAttribute('text', props);
-	    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.01');
+	    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.001');
 	
 	    // TRIM TEXT IF NEEDED.. @TODO: optimize this mess..
 	    function getTextWidth(el, callback, _widthFactor) {
@@ -3022,7 +3022,7 @@
 	
 	      if (that.data.value.length) {
 	        getTextWidth(that.label, function (width) {
-	          that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + 0.36 / 2 + ' 0.02'); //
+	          that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + 0.36 / 2 + ' 0.002'); //
 	          width = width + 0.28;
 	          that.outline.setAttribute('width', width);
 	          // that.overlay.setAttribute('width', width);
@@ -3255,7 +3255,7 @@
 	
 	    // WRAPPER
 	    this.wrapper = document.createElement('a-entity');
-	    this.wrapper.setAttribute('position', '0 0 0.01');
+	    this.wrapper.setAttribute('position', '0 0 0.001');
 	    this.el.appendChild(this.wrapper);
 	
 	    // SHADOW
@@ -3278,7 +3278,7 @@
 	    this.icon = document.createElement('a-image');
 	    this.icon.setAttribute('width', this.data.width * this.data.iconScale);
 	    this.icon.setAttribute('height', this.data.height * this.data.iconScale);
-	    this.icon.setAttribute('position', '0 0 0.01');
+	    this.icon.setAttribute('position', '0 0 0.001');
 	    this.icon.setAttribute('src', this.data.src);
 	    this.wrapper.appendChild(this.icon);
 	
@@ -3569,7 +3569,7 @@
 	
 	    // WRAPPER
 	    this.wrapper = document.createElement('a-entity');
-	    this.wrapper.setAttribute('position', '0 0 0.01');
+	    this.wrapper.setAttribute('position', '0 0 0.001');
 	    this.el.appendChild(this.wrapper);
 	
 	    // SHADOW
@@ -3590,7 +3590,7 @@
 	    this.icon = document.createElement('a-image');
 	    this.icon.setAttribute('width', this.data.radius * 2 * this.data.iconScale);
 	    this.icon.setAttribute('height', this.data.radius * 2 * this.data.iconScale);
-	    this.icon.setAttribute('position', '0 0 0.01');
+	    this.icon.setAttribute('position', '0 0 0.001');
 	    this.icon.setAttribute('src', this.data.src);
 	    this.wrapper.appendChild(this.icon);
 	

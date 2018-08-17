@@ -71,7 +71,7 @@ AFRAME.registerComponent('circlebutton', {
 
     // WRAPPER
     this.wrapper = document.createElement('a-entity');
-    this.wrapper.setAttribute('position', '0 0 0.01')
+    this.wrapper.setAttribute('position', '0 0 0.001')
     this.el.appendChild(this.wrapper);
 
     // SHADOW
@@ -92,7 +92,7 @@ AFRAME.registerComponent('circlebutton', {
     this.icon = document.createElement('a-image');
     this.icon.setAttribute('width', this.data.radius * 2 * this.data.iconScale);
     this.icon.setAttribute('height', this.data.radius * 2 * this.data.iconScale);
-    this.icon.setAttribute('position', '0 0 0.01')
+    this.icon.setAttribute('position', '0 0 0.001')
     this.icon.setAttribute('src', this.data.src);
     this.wrapper.appendChild(this.icon);
 

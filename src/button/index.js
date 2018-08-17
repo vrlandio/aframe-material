@@ -61,7 +61,7 @@ AFRAME.registerComponent('button', {
     SFX.init(this.el);
 
     this.wrapper = document.createElement('a-entity');
-    this.wrapper.setAttribute('position', '0 0 0.01')
+    this.wrapper.setAttribute('position', '0 0 0.001')
     this.el.appendChild(this.wrapper);
 
     this.shadow = document.createElement('a-image');
@@ -73,14 +73,14 @@ AFRAME.registerComponent('button', {
     this.outline = document.createElement('a-rounded');
     this.outline.setAttribute('height', 0.36);
     this.outline.setAttribute('radius', 0.03);
-    this.outline.setAttribute('position', `0 -${0.36/2} 0.01`);
+    this.outline.setAttribute('position', `0 -${0.36/2} 0.001`);
     this.wrapper.appendChild(this.outline);
 
     // OVERLAY
-    this.overlay = document.createElement('a-rounded');
-    this.overlay.setAttribute('height', 0.36);
-    this.overlay.setAttribute('radius', 0.10);
-    this.overlay.setAttribute('position', `0 -${0.36/2} 0.01`);
+    // this.overlay = document.createElement('a-rounded');
+    // this.overlay.setAttribute('height', 0.36);
+    // this.overlay.setAttribute('radius', 0.10);
+    // this.overlay.setAttribute('position', `0 -${0.36/2} 0.001`);
     // this.wrapper.appendChild(this.overlay);
 
     // LABEL
@@ -164,7 +164,7 @@ AFRAME.registerComponent('button', {
     // TITLE
     props.value = this.data.value.toUpperCase();
     this.label.setAttribute('text', props);
-    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.01');
+    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.001');
 
     // TRIM TEXT IF NEEDED.. @TODO: optimize this mess..
     function getTextWidth(el, callback, _widthFactor) {
@@ -206,7 +206,7 @@ AFRAME.registerComponent('button', {
 
       if (that.data.value.length) {
         getTextWidth(that.label, (width) => {
-          that.label.setAttribute('position', `${width/2+0.28/2} ${0.36/2} 0.02`); //
+          that.label.setAttribute('position', `${width/2+0.28/2} ${0.36/2} 0.002`); //
           width = width + 0.28;
           that.outline.setAttribute('width', width);
           // that.overlay.setAttribute('width', width);

@@ -78,7 +78,7 @@ AFRAME.registerComponent('checkbox', {
     this.outline.setAttribute('width', 0.2);
     this.outline.setAttribute('height', 0.2);
     this.outline.setAttribute('radius', 0.02);
-    this.outline.setAttribute('position', `0 -${0.2/2} 0.01`);
+    this.outline.setAttribute('position', `0 -${0.2/2} 0.001`);
     this.el.appendChild(this.outline);
 
     // INSIDE
@@ -87,7 +87,7 @@ AFRAME.registerComponent('checkbox', {
     this.inside.setAttribute('height', 0.156);
     this.inside.setAttribute('radius', 0.01);
     this.inside.setAttribute('color', "#EEE");
-    this.inside.setAttribute('position', `${0.156/8} -${0.156/2} 0.02`);
+    this.inside.setAttribute('position', `${0.156/8} -${0.156/2} 0.002`);
     this.el.appendChild(this.inside);
 
     // CHECKMARK
@@ -95,7 +95,7 @@ AFRAME.registerComponent('checkbox', {
     this.checkmark.setAttribute('width', 0.16);
     this.checkmark.setAttribute('height', 0.16);
     this.checkmark.setAttribute('src', "#aframeCheckboxMark");
-    this.checkmark.setAttribute('position', '0.1 0 0.03');
+    this.checkmark.setAttribute('position', '0.1 0 0.003');
     this.el.appendChild(this.checkmark);
 
     // LABEL
@@ -184,7 +184,7 @@ AFRAME.registerComponent('checkbox', {
 
     // HITBOX
     this.hitbox.setAttribute('width', this.data.width)
-    this.hitbox.setAttribute('position', this.data.width / 2 + ' 0 0.01');
+    this.hitbox.setAttribute('position', this.data.width / 2 + ' 0 0.001');
 
     let props = {
       color: this.data.color,
@@ -200,7 +200,7 @@ AFRAME.registerComponent('checkbox', {
     props.value = this.data.label;
     props.color = this.data.color;
     this.label.setAttribute('text', props);
-    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.01');
+    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.001');
 
     // TRIM TEXT IF NEEDED.. @TODO: optimize this mess..
     function getTextWidth(el, _widthFactor) {

@@ -75,7 +75,7 @@ AFRAME.registerComponent('iconbutton', {
 
     // WRAPPER
     this.wrapper = document.createElement('a-entity');
-    this.wrapper.setAttribute('position', '0 0 0.01')
+    this.wrapper.setAttribute('position', '0 0 0.001')
     this.el.appendChild(this.wrapper);
 
     // SHADOW
@@ -98,7 +98,7 @@ AFRAME.registerComponent('iconbutton', {
     this.icon = document.createElement('a-image');
     this.icon.setAttribute('width', this.data.width * this.data.iconScale);
     this.icon.setAttribute('height', this.data.height * this.data.iconScale);
-    this.icon.setAttribute('position', '0 0 0.01')
+    this.icon.setAttribute('position', '0 0 0.001')
     this.icon.setAttribute('src', this.data.src);
     this.wrapper.appendChild(this.icon);
 
