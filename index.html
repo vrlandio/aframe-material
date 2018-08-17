@@ -38,7 +38,7 @@
     <a-input position="-0.7 1 -2.5" placeholder="Username" color="black" width="1"></a-input>
     <a-input position="-0.7 0.8 -2.5" type="password" placeholder="Password" color="black" width="1"></a-input>
     <a-iconbutton position="-0.7 2 -2.5" disabled="true" src="#buttonIcon"></a-iconbutton>
-    <a-circlebutton position="0 2 -2.5" radius=0.04 disabled=true src="#toggleIcon"></a-circlebutton>
+    <a-circlebutton position="0 2 -2.5" radius=0.04 type="flat" src="#toggleIcon"></a-circlebutton>
 
 
     <!-- END INPUTS/KEYBOARD -->
@@ -61,6 +61,9 @@
 
     <!-- BEGIN ENVIRONEMENT -->
     <a-gradient-sky material="shader: gradient; topColor: 255 0 0; bottomColor: 0 121 255;"></a-gradient-sky>
+    <!-- Lighting -->
+    <a-light type="ambient" color="#ccc"></a-light>
+    <a-entity light="type:directional; castShadow:true; color: #EEE; intensity: 0.5" position="1 1 1 "></a-entity>
     <!-- END ENVIRONEMENT -->
   </a-scene>
   <script type="text/javascript">

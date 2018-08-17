@@ -3584,6 +3584,7 @@
 	    this.outline = document.createElement('a-circle');
 	    this.outline.setAttribute('radius', this.data.radius);
 	    this.outline.setAttribute('position', '0 0 0');
+	    this.outline.setAttribute('shadow', 'cast', true);
 	    this.wrapper.appendChild(this.outline);
 	
 	    // ICON
