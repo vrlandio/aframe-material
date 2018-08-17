@@ -3589,7 +3589,7 @@
 	}, {
 	  type: 'img',
 	  id: 'aframeButtonIcon',
-	  src: AFRAME.ASSETS_PATH + '/images/CheckboxIcon.png'
+	  src: AFRAME.ASSETS_PATH + '/images/checkbox-marked.png'
 	}, {
 	  type: 'audio',
 	  id: 'aframeButtonClick',
@@ -3905,7 +3905,7 @@
 	}, {
 	  type: 'img',
 	  id: 'aframeButtonIcon',
-	  src: AFRAME.ASSETS_PATH + '/images/CheckboxIcon.png'
+	  src: AFRAME.ASSETS_PATH + '/images/checkbox-marked.png'
 	}, {
 	  type: 'audio',
 	  id: 'aframeButtonClick',
