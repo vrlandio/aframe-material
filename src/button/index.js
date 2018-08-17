@@ -161,9 +161,7 @@ AFRAME.registerComponent('button', {
       props.font = this.data.font;
     }
 
-    if (this.data.type === "flat") {
-      props.color = this.data.buttonColor;
-    }
+    props.color = this.data.color;
 
     // TITLE
     props.value = this.data.value.toUpperCase();
