@@ -86,11 +86,30 @@ AFRAME.registerComponent('switch', {
       this.setAttribute('enabled', !this.components.switch.data.enabled);
       Event.emit(this, 'change', this.components.switch.data.enabled);
     });
+    this.el.addEventListener('mouseenter', function () {
+      if (this.components.switch && this.components.switch.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 0.92);
+    });
+    this.el.addEventListener('mouseleave', function () {
+      if (this.components.switch && this.components.switch.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 1);
+    });
     this.el.addEventListener('mousedown', function () {
-      if (this.components.switch.data.disabled) {
+      if (this.components.switch && this.components.switch.data.disabled) {
         return SFX.clickDisabled(this);
       }
+      Utils.updateOpacity(that.el, 0.84);
       SFX.click(this);
+    });
+    this.el.addEventListener('mouseup', function () {
+      if (this.components.switch && this.components.switch.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 1);
     });
 
     Object.defineProperty(this.el, 'enabled', {

@@ -100,20 +100,20 @@ AFRAME.registerComponent('button', {
       if (this.components.button && this.components.button.data.disabled) {
         return;
       }
-      Utils.updateOpacity(that.outline, 0.92);
+      Utils.updateOpacity(that.el, 0.92);
     });
     this.el.addEventListener('mouseleave', function () {
       if (this.components.button && this.components.button.data.disabled) {
         return SFX.clickDisabled(this);
       }
-      Utils.updateOpacity(that.outline, 1);
+      Utils.updateOpacity(that.el, 1);
     });
     this.el.addEventListener('mousedown', function () {
       if (this.components.button && this.components.button.data.disabled) {
         return SFX.clickDisabled(this);
       }
       that.wrapper.setAttribute('position', `0 0 0.036`);
-      Utils.updateOpacity(that.outline, 0.84);
+      Utils.updateOpacity(that.el, 0.84);
       SFX.click(this);
     });
     this.el.addEventListener('mouseup', function () {
@@ -121,7 +121,7 @@ AFRAME.registerComponent('button', {
         return;
       }
       that.wrapper.setAttribute('position', `0 0 0`);
-      Utils.updateOpacity(that.outline, 1);
+      Utils.updateOpacity(that.el, 1);
     });
 
     this.el.getWidth = this.getWidth.bind(this);
@@ -234,7 +234,7 @@ AFRAME.registerComponent('button', {
         let timer = setInterval(function () {
           if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
             clearInterval(timer);
-            Utils.updateOpacity(that.outline, 1);
+            Utils.updateOpacity(that.el, 1);
           }
         }, 10)
       }
@@ -244,7 +244,7 @@ AFRAME.registerComponent('button', {
         let timer = setInterval(function () {
           if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
             clearInterval(timer);
-            Utils.updateOpacity(that.outline, 0);
+            Utils.updateOpacity(that.el, 1);
             if (that.data.disabled) {
               // Utils.updateOpacity(that.label, 0.62);
               that.outline.setAttribute('color', '#C4C4C4');

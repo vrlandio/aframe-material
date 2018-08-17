@@ -5,25 +5,64 @@ const SFX = require('./sfx');
 
 AFRAME.registerComponent('radio', {
   schema: {
-    checked: { type: 'boolean', default: false },
-    disabled: { type: 'boolean', default: false },
-    name: { type: "string", default: "" },
-    value: { type: "string", default: "" },
-    label: { type: "string", default: "" },
-    radioColor: { type: "color", default: "#757575"},
-    radioColorChecked: { type: "color", default: "#4076fd"},
-    color: { type: "color", default: "#757575" },
-    font: { type: "string", default: "" },
-    letterSpacing: { type: "int", default: 0 },
-    lineHeight: { type: "string", default: "" },
-    opacity: { type: "number", default: 1 },
-    width: { type: "number", default: 1 }
+    checked: {
+      type: 'boolean',
+      default: false
+    },
+    disabled: {
+      type: 'boolean',
+      default: false
+    },
+    name: {
+      type: "string",
+      default: ""
+    },
+    value: {
+      type: "string",
+      default: ""
+    },
+    label: {
+      type: "string",
+      default: ""
+    },
+    radioColor: {
+      type: "color",
+      default: "#757575"
+    },
+    radioColorChecked: {
+      type: "color",
+      default: "#4076fd"
+    },
+    color: {
+      type: "color",
+      default: "#757575"
+    },
+    font: {
+      type: "string",
+      default: ""
+    },
+    letterSpacing: {
+      type: "int",
+      default: 0
+    },
+    lineHeight: {
+      type: "string",
+      default: ""
+    },
+    opacity: {
+      type: "number",
+      default: 1
+    },
+    width: {
+      type: "number",
+      default: 1
+    }
   },
   init: function () {
     var that = this;
 
     // Assets
-    Utils.preloadAssets( Assets );
+    Utils.preloadAssets(Assets);
 
     // SFX
     SFX.init(this.el);
@@ -53,26 +92,51 @@ AFRAME.registerComponent('radio', {
     this.el.appendChild(this.label);
 
     // EVENTS
-    this.el.addEventListener('click', function() {
-      if (this.components.radio.data.disabled) { return; }
+    this.el.addEventListener('click', function () {
+      if (this.components.radio.data.disabled) {
+        return;
+      }
       this.setAttribute('checked', true);
       that.onClick();
     });
-    this.el.addEventListener('mousedown', function() {
-      if (this.components.radio.data.disabled) {
+    this.el.addEventListener('mouseenter', function () {
+      if (this.components.radio && this.components.radio.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 0.92);
+    });
+    this.el.addEventListener('mouseleave', function () {
+      if (this.components.radio && this.components.radio.data.disabled) {
         return SFX.clickDisabled(this);
       }
+      Utils.updateOpacity(that.el, 1);
+    });
+    this.el.addEventListener('mousedown', function () {
+      if (this.components.radio && this.components.radio.data.disabled) {
+        return SFX.clickDisabled(this);
+      }
+      Utils.updateOpacity(that.el, 0.84);
       SFX.click(this);
+    });
+    this.el.addEventListener('mouseup', function () {
+      if (this.components.radio && this.components.radio.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 1);
     });
 
     Object.defineProperty(this.el, 'value', {
-      get: function() { return this.getAttribute('value'); },
-      set: function(value) { this.setAttribute('value', value); },
+      get: function () {
+        return this.getAttribute('value');
+      },
+      set: function (value) {
+        this.setAttribute('value', value);
+      },
       enumerable: true,
       configurable: true
     });
   },
-  onClick: function(noemit) {
+  onClick: function (noemit) {
     if (this.data.name) {
       let nearestForm = this.el.closest("a-form");
       if (nearestForm) {
@@ -81,12 +145,14 @@ AFRAME.registerComponent('radio', {
         children.reverse();
         for (let child of children) {
           // Radio + not disabled
-          if (child.components.radio ) {
+          if (child.components.radio) {
             // Currently checked
             if (child === this.el && child.hasAttribute('checked')) {
               didCheck = true;
               child.components.radio.check();
-              if (!noemit) { Event.emit(child, 'change', true); }
+              if (!noemit) {
+                Event.emit(child, 'change', true);
+              }
             } else {
               if (!didCheck && !this.data.checked && child.hasAttribute('checked')) {
                 didCheck = true;
@@ -99,25 +165,31 @@ AFRAME.registerComponent('radio', {
         }
         if (!didCheck && this.el.hasAttribute('checked')) {
           this.check();
-          if (!noemit) { Event.emit(this.el, 'change', true); }
+          if (!noemit) {
+            Event.emit(this.el, 'change', true);
+          }
         }
       }
     }
   },
-  check: function() {
+  check: function () {
     this.outline.setAttribute('color', this.data.radioColorChecked);
     this.circle.setAttribute('color', this.data.radioColorChecked);
     this.circle.setAttribute('visible', true);
-    if (this.data.disabled) { this.disabled(); }
+    if (this.data.disabled) {
+      this.disabled();
+    }
   },
-  uncheck: function() {
+  uncheck: function () {
     this.outline.setAttribute('color', this.data.radioColor);
     this.circle.setAttribute('visible', false);
-    if (this.data.disabled) { this.disabled(); }
+    if (this.data.disabled) {
+      this.disabled();
+    }
   },
-  disabled: function() {
-    this.outline.setAttribute('color', this.data.radioColor);
-    this.circle.setAttribute('color', this.data.radioColor);
+  disabled: function () {
+    this.outline.setAttribute('color', "#C4C4C4");
+    this.circle.setAttribute('color', "#B0B0B0");
   },
   update: function () {
     var that = this;
@@ -125,36 +197,46 @@ AFRAME.registerComponent('radio', {
 
     // HITBOX
     this.hitbox.setAttribute('width', this.data.width)
-    this.hitbox.setAttribute('position', this.data.width/2+' 0 0.001');
+    this.hitbox.setAttribute('position', this.data.width / 2 + ' 0 0.001');
 
     let props = {
       color: this.data.color,
       align: 'left',
-      wrapCount: 10*(this.data.width+0.2),
+      wrapCount: 10 * (this.data.width + 0.2),
       width: this.data.width,
     }
-    if (this.data.font) { props.font = this.data.font; }
+    if (this.data.font) {
+      props.font = this.data.font;
+    }
 
     // TITLE
     props.value = this.data.label;
     props.color = this.data.color;
     this.label.setAttribute('text', props);
-    this.label.setAttribute('position', this.data.width/2+0.24+' 0 0.002');
+    this.label.setAttribute('position', this.data.width / 2 + 0.24 + ' 0 0.002');
 
     // TRIM TEXT IF NEEDED.. @TODO: optimize this mess..
     function getTextWidth(el, _widthFactor) {
-      if (!el.object3D || !el.object3D.children || !el.object3D.children[0]) { return 0; }
+      if (!el.object3D || !el.object3D.children || !el.object3D.children[0]) {
+        return 0;
+      }
       let v = el.object3D.children[0].geometry.visibleGlyphs;
-      if (!v) { return 0; }
-      v = v[v.length-1];
-      if (!v) { return 0; }
+      if (!v) {
+        return 0;
+      }
+      v = v[v.length - 1];
+      if (!v) {
+        return 0;
+      }
       if (v.line) {
         props.value = props.value.slice(0, -1);
         el.setAttribute("text", props);
         return getTextWidth(el);
       } else {
-        if (!_widthFactor) { _widthFactor = Utils.getWidthFactor(el, props.wrapCount); }
-        v = (v.position[0] + v.data.width) / (_widthFactor/that.data.width);
+        if (!_widthFactor) {
+          _widthFactor = Utils.getWidthFactor(el, props.wrapCount);
+        }
+        v = (v.position[0] + v.data.width) / (_widthFactor / that.data.width);
         let textRatio = v / that.data.width;
         if (textRatio > 1) {
           props.value = props.value.slice(0, -1);
@@ -164,12 +246,12 @@ AFRAME.registerComponent('radio', {
       }
       return v;
     }
-    setTimeout(function() {
+    setTimeout(function () {
       if (that.data.label.length) {
         getTextWidth(that.label);
       }
       if (that.data.disabled) {
-        let timer = setInterval(function() {
+        let timer = setInterval(function () {
           if (that.outline.object3D.children[0]) {
             clearInterval(timer);
             Utils.updateOpacity(that.outline, 0.4);
@@ -178,7 +260,7 @@ AFRAME.registerComponent('radio', {
           }
         }, 10)
       } else {
-        let timer = setInterval(function() {
+        let timer = setInterval(function () {
           if (that.outline.object3D.children[0]) {
             clearInterval(timer);
             Utils.updateOpacity(that.outline, 1);

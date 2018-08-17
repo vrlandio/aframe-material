@@ -111,11 +111,30 @@ AFRAME.registerComponent('checkbox', {
       this.setAttribute('checked', this.components.checkbox.data.checked);
       that.onClick();
     });
-    this.el.addEventListener('mousedown', function () {
-      if (this.components.checkbox.data.disabled) {
+    this.el.addEventListener('mouseenter', function () {
+      if (this.components.checkbox && this.components.checkbox.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 0.92);
+    });
+    this.el.addEventListener('mouseleave', function () {
+      if (this.components.checkbox && this.components.checkbox.data.disabled) {
         return SFX.clickDisabled(this);
       }
+      Utils.updateOpacity(that.el, 1);
+    });
+    this.el.addEventListener('mousedown', function () {
+      if (this.components.checkbox && this.components.checkbox.data.disabled) {
+        return SFX.clickDisabled(this);
+      }
+      Utils.updateOpacity(that.el, 0.84);
       SFX.click(this);
+    });
+    this.el.addEventListener('mouseup', function () {
+      if (this.components.checkbox && this.components.checkbox.data.disabled) {
+        return;
+      }
+      Utils.updateOpacity(that.el, 1);
     });
 
     Object.defineProperty(this.el, 'value', {
@@ -156,8 +175,8 @@ AFRAME.registerComponent('checkbox', {
     }
   },
   disabled: function () {
-    this.outline.setAttribute('color', this.data.checkboxColor);
-    this.inside.setAttribute('color', this.data.checkboxColor);
+    this.outline.setAttribute('color', "#C4C4C4");
+    this.inside.setAttribute('color', "#B0B0B0");
   },
   update: function () {
     var that = this;

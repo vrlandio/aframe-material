@@ -1915,11 +1915,30 @@
 	      this.setAttribute('enabled', !this.components.switch.data.enabled);
 	      Event.emit(this, 'change', this.components.switch.data.enabled);
 	    });
+	    this.el.addEventListener('mouseenter', function () {
+	      if (this.components.switch && this.components.switch.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 0.92);
+	    });
+	    this.el.addEventListener('mouseleave', function () {
+	      if (this.components.switch && this.components.switch.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 1);
+	    });
 	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.switch.data.disabled) {
+	      if (this.components.switch && this.components.switch.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
+	      Utils.updateOpacity(that.el, 0.84);
 	      SFX.click(this);
+	    });
+	    this.el.addEventListener('mouseup', function () {
+	      if (this.components.switch && this.components.switch.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	
 	    Object.defineProperty(this.el, 'enabled', {
@@ -2074,19 +2093,58 @@
 	
 	AFRAME.registerComponent('radio', {
 	  schema: {
-	    checked: { type: 'boolean', default: false },
-	    disabled: { type: 'boolean', default: false },
-	    name: { type: "string", default: "" },
-	    value: { type: "string", default: "" },
-	    label: { type: "string", default: "" },
-	    radioColor: { type: "color", default: "#757575" },
-	    radioColorChecked: { type: "color", default: "#4076fd" },
-	    color: { type: "color", default: "#757575" },
-	    font: { type: "string", default: "" },
-	    letterSpacing: { type: "int", default: 0 },
-	    lineHeight: { type: "string", default: "" },
-	    opacity: { type: "number", default: 1 },
-	    width: { type: "number", default: 1 }
+	    checked: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    disabled: {
+	      type: 'boolean',
+	      default: false
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    value: {
+	      type: "string",
+	      default: ""
+	    },
+	    label: {
+	      type: "string",
+	      default: ""
+	    },
+	    radioColor: {
+	      type: "color",
+	      default: "#757575"
+	    },
+	    radioColorChecked: {
+	      type: "color",
+	      default: "#4076fd"
+	    },
+	    color: {
+	      type: "color",
+	      default: "#757575"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    }
 	  },
 	  init: function init() {
 	    var that = this;
@@ -2129,11 +2187,30 @@
 	      this.setAttribute('checked', true);
 	      that.onClick();
 	    });
-	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.radio.data.disabled) {
+	    this.el.addEventListener('mouseenter', function () {
+	      if (this.components.radio && this.components.radio.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 0.92);
+	    });
+	    this.el.addEventListener('mouseleave', function () {
+	      if (this.components.radio && this.components.radio.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
+	      Utils.updateOpacity(that.el, 1);
+	    });
+	    this.el.addEventListener('mousedown', function () {
+	      if (this.components.radio && this.components.radio.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      Utils.updateOpacity(that.el, 0.84);
 	      SFX.click(this);
+	    });
+	    this.el.addEventListener('mouseup', function () {
+	      if (this.components.radio && this.components.radio.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	
 	    Object.defineProperty(this.el, 'value', {
@@ -2221,8 +2298,8 @@
 	    }
 	  },
 	  disabled: function disabled() {
-	    this.outline.setAttribute('color', this.data.radioColor);
-	    this.circle.setAttribute('color', this.data.radioColor);
+	    this.outline.setAttribute('color', "#C4C4C4");
+	    this.circle.setAttribute('color', "#B0B0B0");
 	  },
 	  update: function update() {
 	    var that = this;
@@ -2504,11 +2581,30 @@
 	      this.setAttribute('checked', this.components.checkbox.data.checked);
 	      that.onClick();
 	    });
-	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.checkbox.data.disabled) {
+	    this.el.addEventListener('mouseenter', function () {
+	      if (this.components.checkbox && this.components.checkbox.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 0.92);
+	    });
+	    this.el.addEventListener('mouseleave', function () {
+	      if (this.components.checkbox && this.components.checkbox.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
+	      Utils.updateOpacity(that.el, 1);
+	    });
+	    this.el.addEventListener('mousedown', function () {
+	      if (this.components.checkbox && this.components.checkbox.data.disabled) {
+	        return SFX.clickDisabled(this);
+	      }
+	      Utils.updateOpacity(that.el, 0.84);
 	      SFX.click(this);
+	    });
+	    this.el.addEventListener('mouseup', function () {
+	      if (this.components.checkbox && this.components.checkbox.data.disabled) {
+	        return;
+	      }
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	
 	    Object.defineProperty(this.el, 'value', {
@@ -2549,8 +2645,8 @@
 	    }
 	  },
 	  disabled: function disabled() {
-	    this.outline.setAttribute('color', this.data.checkboxColor);
-	    this.inside.setAttribute('color', this.data.checkboxColor);
+	    this.outline.setAttribute('color', "#C4C4C4");
+	    this.inside.setAttribute('color', "#B0B0B0");
 	  },
 	  update: function update() {
 	    var that = this;
@@ -2820,20 +2916,20 @@
 	      if (this.components.button && this.components.button.data.disabled) {
 	        return;
 	      }
-	      Utils.updateOpacity(that.outline, 0.92);
+	      Utils.updateOpacity(that.el, 0.92);
 	    });
 	    this.el.addEventListener('mouseleave', function () {
 	      if (this.components.button && this.components.button.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
-	      Utils.updateOpacity(that.outline, 1);
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	    this.el.addEventListener('mousedown', function () {
 	      if (this.components.button && this.components.button.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0.036');
-	      Utils.updateOpacity(that.outline, 0.84);
+	      Utils.updateOpacity(that.el, 0.84);
 	      SFX.click(this);
 	    });
 	    this.el.addEventListener('mouseup', function () {
@@ -2841,7 +2937,7 @@
 	        return;
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0');
-	      Utils.updateOpacity(that.outline, 1);
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	
 	    this.el.getWidth = this.getWidth.bind(this);
@@ -2954,7 +3050,7 @@
 	        var timer = setInterval(function () {
 	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(timer);
-	            Utils.updateOpacity(that.outline, 1);
+	            Utils.updateOpacity(that.el, 1);
 	          }
 	        }, 10);
 	      }
@@ -2964,7 +3060,7 @@
 	        var _timer = setInterval(function () {
 	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(_timer);
-	            Utils.updateOpacity(that.outline, 0);
+	            Utils.updateOpacity(that.el, 1);
 	            if (that.data.disabled) {
 	              // Utils.updateOpacity(that.label, 0.62);
 	              that.outline.setAttribute('color', '#C4C4C4');
@@ -3133,7 +3229,15 @@
 	    },
 	    width: {
 	      type: "number",
-	      default: 1
+	      default: 0.08
+	    },
+	    height: {
+	      type: "number",
+	      default: 0.08
+	    },
+	    iconScale: {
+	      type: "number",
+	      default: 0.75
 	    },
 	    src: {
 	      type: "string",
@@ -3156,54 +3260,54 @@
 	
 	    // SHADOW
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('width', Config.KEY_WIDTH * 1.25);
-	    this.shadow.setAttribute('height', Config.KEY_WIDTH * 1.25);
+	    this.shadow.setAttribute('width', this.data.width * 1.25);
+	    this.shadow.setAttribute('height', this.data.height * 1.25);
 	    this.shadow.setAttribute('position', '0 0 -0.002');
 	    this.shadow.setAttribute('src', '#aframeButtonShadow');
 	    this.wrapper.appendChild(this.shadow);
 	
 	    // OUTLINE
 	    this.outline = document.createElement('a-rounded');
-	    this.outline.setAttribute('width', Config.KEY_WIDTH);
-	    this.outline.setAttribute('height', Config.KEY_WIDTH);
+	    this.outline.setAttribute('width', this.data.width);
+	    this.outline.setAttribute('height', this.data.height);
 	    this.outline.setAttribute('radius', '0.008');
-	    this.outline.setAttribute('position', -Config.KEY_WIDTH / 2 + ' ' + -Config.KEY_WIDTH / 2 + ' 0');
+	    this.outline.setAttribute('position', -this.data.width / 2 + ' ' + -this.data.height / 2 + ' 0');
 	    this.wrapper.appendChild(this.outline);
 	
 	    // ICON
 	    this.icon = document.createElement('a-image');
-	    this.icon.setAttribute('width', Config.KEY_WIDTH * 0.75);
-	    this.icon.setAttribute('height', Config.KEY_WIDTH * 0.75);
+	    this.icon.setAttribute('width', this.data.width * this.data.iconScale);
+	    this.icon.setAttribute('height', this.data.height * this.data.iconScale);
 	    this.icon.setAttribute('position', '0 0 0.01');
 	    this.icon.setAttribute('src', this.data.src);
 	    this.wrapper.appendChild(this.icon);
 	
 	    // EVENTS
 	    this.el.addEventListener('click', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
 	        return;
 	      }
 	      // that.wrapper.appendChild(that.overlay);
 	      that.onClick();
 	    });
 	    this.el.addEventListener('mouseenter', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
 	        return;
 	      }
-	      Utils.updateOpacity(that.outline, 0.92);
+	      Utils.updateOpacity(that.el, 0.92);
 	    });
 	    this.el.addEventListener('mouseleave', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
-	      Utils.updateOpacity(that.outline, 1);
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0.036');
-	      Utils.updateOpacity(that.outline, 0.84);
+	      Utils.updateOpacity(that.el, 0.84);
 	      SFX.click(this);
 	    });
 	    this.el.addEventListener('mouseup', function () {
@@ -3211,7 +3315,7 @@
 	        return;
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0');
-	      Utils.updateOpacity(that.outline, 1);
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	
 	    this.el.getWidth = this.getWidth.bind(this);
@@ -3249,7 +3353,7 @@
 	        var timer = setInterval(function () {
 	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(timer);
-	            Utils.updateOpacity(that.outline, 1);
+	            Utils.updateOpacity(that.el, 1);
 	          }
 	        }, 10);
 	      }
@@ -3259,10 +3363,10 @@
 	        var _timer = setInterval(function () {
 	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(_timer);
-	            Utils.updateOpacity(that.outline, 0);
+	            Utils.updateOpacity(that.el, 1);
 	            if (that.data.disabled) {
 	              that.outline.setAttribute('color', '#C4C4C4');
-	              that.icon.setAttribute('text', 'color', '#B0B0B0');
+	              that.icon.setAttribute('color', '#B0B0B0');
 	            }
 	          }
 	        }, 10);
@@ -3289,8 +3393,10 @@
 	    font: 'iconbutton.font',
 	    'letter-spacing': 'iconbutton.letterSpacing',
 	    'line-height': 'iconbutton.lineHeight',
-	    'opacity': 'iconbutton.opacity',
-	    'width': 'iconbutton.width',
+	    opacity: 'iconbutton.opacity',
+	    width: 'iconbutton.width',
+	    height: 'iconbutton.height',
+	    'icon-scale': 'iconbutton.iconScale',
 	    src: 'iconbutton.src'
 	  }
 	});
@@ -3439,9 +3545,13 @@
 	      type: "number",
 	      default: 1
 	    },
-	    width: {
+	    radius: {
 	      type: "number",
-	      default: 1
+	      default: 0.08
+	    },
+	    iconScale: {
+	      type: "number",
+	      default: 0.75
 	    },
 	    src: {
 	      type: "string",
@@ -3464,22 +3574,22 @@
 	
 	    // SHADOW
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('width', Config.KEY_WIDTH * 1.25);
-	    this.shadow.setAttribute('height', Config.KEY_WIDTH * 1.25);
+	    this.shadow.setAttribute('width', this.data.radius * 2 * 1.25);
+	    this.shadow.setAttribute('height', this.data.radius * 2 * 1.25);
 	    this.shadow.setAttribute('position', '0 0 -0.002');
 	    this.shadow.setAttribute('src', '#aframeSwitchShadow');
 	    this.wrapper.appendChild(this.shadow);
 	
 	    // OUTLINE
 	    this.outline = document.createElement('a-circle');
-	    this.outline.setAttribute('radius', Config.KEY_WIDTH / 2);
+	    this.outline.setAttribute('radius', this.data.radius);
 	    this.outline.setAttribute('position', '0 0 0');
 	    this.wrapper.appendChild(this.outline);
 	
 	    // ICON
 	    this.icon = document.createElement('a-image');
-	    this.icon.setAttribute('width', Config.KEY_WIDTH * 0.75);
-	    this.icon.setAttribute('height', Config.KEY_WIDTH * 0.75);
+	    this.icon.setAttribute('width', this.data.radius * 2 * this.data.iconScale);
+	    this.icon.setAttribute('height', this.data.radius * 2 * this.data.iconScale);
 	    this.icon.setAttribute('position', '0 0 0.01');
 	    this.icon.setAttribute('src', this.data.src);
 	    this.wrapper.appendChild(this.icon);
@@ -3493,31 +3603,31 @@
 	      that.onClick();
 	    });
 	    this.el.addEventListener('mouseenter', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
 	        return;
 	      }
-	      Utils.updateOpacity(that.outline, 0.92);
+	      Utils.updateOpacity(that.el, 0.92);
 	    });
 	    this.el.addEventListener('mouseleave', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
-	      Utils.updateOpacity(that.outline, 1);
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0.036');
-	      Utils.updateOpacity(that.outline, 0.84);
+	      Utils.updateOpacity(that.el, 0.84);
 	      SFX.click(this);
 	    });
 	    this.el.addEventListener('mouseup', function () {
-	      if (this.components.button && this.components.button.data.disabled) {
+	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
 	        return;
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0');
-	      Utils.updateOpacity(that.outline, 1);
+	      Utils.updateOpacity(that.el, 1);
 	    });
 	
 	    this.el.getWidth = this.getWidth.bind(this);
@@ -3555,7 +3665,7 @@
 	        var timer = setInterval(function () {
 	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(timer);
-	            Utils.updateOpacity(that.outline, 1);
+	            Utils.updateOpacity(that.el, 1);
 	          }
 	        }, 10);
 	      }
@@ -3565,7 +3675,7 @@
 	        var _timer = setInterval(function () {
 	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
 	            clearInterval(_timer);
-	            Utils.updateOpacity(that.outline, 0);
+	            Utils.updateOpacity(that.el, 0);
 	            if (that.data.disabled) {
 	              that.outline.setAttribute('color', '#C4C4C4');
 	              that.icon.setAttribute('text', 'color', '#B0B0B0');
@@ -3595,8 +3705,9 @@
 	    font: 'circlebutton.font',
 	    'letter-spacing': 'circlebutton.letterSpacing',
 	    'line-height': 'circlebutton.lineHeight',
-	    'opacity': 'circlebutton.opacity',
-	    'width': 'circle.width',
+	    opacity: 'circlebutton.opacity',
+	    radius: 'circlebutton.radius',
+	    'icon-scale': 'circlebutton.iconScale',
 	    src: 'circlebutton.src'
 	  }
 	});
