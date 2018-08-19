@@ -53,6 +53,10 @@ AFRAME.registerComponent('button', {
     width: {
       type: "number",
       default: 1
+    },
+    radiusScale: {
+      type: "number",
+      default: -1
     }
   },
   init: function () {
@@ -76,16 +80,13 @@ AFRAME.registerComponent('button', {
     // OUTLINE
     this.outline = document.createElement('a-rounded');
     this.outline.setAttribute('height', this.data.height);
-    this.outline.setAttribute('radius', 0.03);
+    if (this.data.radiusScale < 0) {
+      this.outline.setAttribute('radius', 0.03);
+    } else {
+      this.outline.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
+    }
     this.outline.setAttribute('position', `0 -${this.data.height/2} 0.001`);
     this.wrapper.appendChild(this.outline);
-
-    // OVERLAY
-    // this.overlay = document.createElement('a-rounded');
-    // this.overlay.setAttribute('height', 0.36);
-    // this.overlay.setAttribute('radius', 0.10);
-    // this.overlay.setAttribute('position', `0 -${0.36/2} 0.001`);
-    // this.wrapper.appendChild(this.overlay);
 
     // LABEL
     this.label = document.createElement('a-entity');
@@ -97,7 +98,6 @@ AFRAME.registerComponent('button', {
       if (this.components.button && this.components.button.data.disabled) {
         return;
       }
-      // that.wrapper.appendChild(that.overlay);
       that.onClick();
     });
     this.el.addEventListener('mouseenter', function () {
@@ -149,7 +149,6 @@ AFRAME.registerComponent('button', {
   update: function () {
     var that = this;
     this.outline.setAttribute('color', this.data.buttonColor);
-    // this.overlay.setAttribute('color', this.data.color);
 
     let props = {
       color: this.data.color,
@@ -160,8 +159,6 @@ AFRAME.registerComponent('button', {
     if (this.data.font) {
       props.font = this.data.font;
     }
-
-    props.color = this.data.color;
 
     // TITLE
     props.value = this.data.value.toUpperCase();
@@ -208,30 +205,20 @@ AFRAME.registerComponent('button', {
 
       if (that.data.value.length) {
         getTextWidth(that.label, (width) => {
-          that.label.setAttribute('position', `${width/2+0.28/2} ${0.36/2} 0.002`); //
+          that.label.setAttribute('position', `${width/2+0.28/2} ${that.data.height/2} 0.002`); //
           width = width + 0.28;
           that.outline.setAttribute('width', width);
-          // that.overlay.setAttribute('width', width);
           that.__width = width;
           that.shadow.setAttribute('width', width * 1.17);
           that.shadow.setAttribute('position', width / 2 + ' 0 0');
-          // that.overlay.setAttribute('position', width / 2 + ' 0 0');
           Event.emit(that.el, 'change:width', width)
         });
       }
-
-      // Utils.updateOpacity(that.overlay, 0);
 
       if (that.data.disabled) {
         that.shadow.setAttribute('visible', false);
         that.outline.setAttribute('color', '#C4C4C4');
         that.label.setAttribute('text', 'color', '#B0B0B0');
-        // let timer = setInterval(function () {
-        //   if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-        //     clearInterval(timer);
-        //     Utils.updateOpacity(that.outline, 0.62);
-        //   }
-        // }, 10)
       } else {
         let timer = setInterval(function () {
           if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
@@ -279,6 +266,7 @@ AFRAME.registerPrimitive('a-button', {
     'line-height': 'button.lineHeight',
     opacity: 'button.opacity',
     width: 'button.width',
-    height: 'button.height'
+    height: 'button.height',
+    'radius-scale': 'button.radiusScale'
   }
 });

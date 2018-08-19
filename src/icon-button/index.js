@@ -5,7 +5,7 @@ const Event = require('../core/event');
 const Assets = require('./assets');
 const SFX = require('./sfx');
 
-AFRAME.registerComponent('iconbutton', {
+AFRAME.registerComponent('icon-button', {
   schema: {
     disabled: {
       type: 'boolean',
@@ -55,6 +55,10 @@ AFRAME.registerComponent('iconbutton', {
       type: "number",
       default: 0.08
     },
+    radiusScale: {
+      type: "number",
+      default: 0.1
+    },
     iconScale: {
       type: "number",
       default: 0.75
@@ -90,7 +94,7 @@ AFRAME.registerComponent('iconbutton', {
     this.outline = document.createElement('a-rounded');
     this.outline.setAttribute('width', this.data.width);
     this.outline.setAttribute('height', this.data.height);
-    this.outline.setAttribute('radius', '0.008');
+    this.outline.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
     this.outline.setAttribute('position', `${-this.data.width/2} ${-this.data.height/2} 0`);
     this.wrapper.appendChild(this.outline);
 
@@ -105,26 +109,26 @@ AFRAME.registerComponent('iconbutton', {
 
     // EVENTS
     this.el.addEventListener('click', function () {
-      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
         return;
       }
       // that.wrapper.appendChild(that.overlay);
       that.onClick();
     });
     this.el.addEventListener('mouseenter', function () {
-      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
         return;
       }
       Utils.updateOpacity(that.el, 0.92);
     });
     this.el.addEventListener('mouseleave', function () {
-      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
         return SFX.clickDisabled(this);
       }
       Utils.updateOpacity(that.el, 1);
     });
     this.el.addEventListener('mousedown', function () {
-      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
         return SFX.clickDisabled(this);
       }
       that.wrapper.setAttribute('position', `0 0 0.036`);
@@ -200,24 +204,25 @@ AFRAME.registerComponent('iconbutton', {
   play: function () {}
 });
 
-AFRAME.registerPrimitive('a-iconbutton', {
+AFRAME.registerPrimitive('a-icon-button', {
   defaultComponents: {
-    iconbutton: {}
+    'icon-button': {}
   },
   mappings: {
-    disabled: 'iconbutton.disabled',
-    type: 'iconbutton.type',
-    name: 'iconbutton.name',
-    value: 'iconbutton.value',
-    'button-color': 'iconbutton.buttonColor',
-    color: 'iconbutton.color',
-    font: 'iconbutton.font',
-    'letter-spacing': 'iconbutton.letterSpacing',
-    'line-height': 'iconbutton.lineHeight',
-    opacity: 'iconbutton.opacity',
-    width: 'iconbutton.width',
-    height: 'iconbutton.height',
-    'icon-scale': 'iconbutton.iconScale',
-    src: 'iconbutton.src'
+    disabled: 'icon-button.disabled',
+    type: 'icon-button.type',
+    name: 'icon-button.name',
+    value: 'icon-button.value',
+    'button-color': 'icon-button.buttonColor',
+    color: 'icon-button.color',
+    font: 'icon-button.font',
+    'letter-spacing': 'icon-button.letterSpacing',
+    'line-height': 'icon-button.lineHeight',
+    opacity: 'icon-button.opacity',
+    width: 'icon-button.width',
+    height: 'icon-button.height',
+    'radius-scale': 'icon-button.radiusScale',
+    'icon-scale': 'icon-button.iconScale',
+    src: 'icon-button.src'
   }
 });

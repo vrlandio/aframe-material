@@ -1,5 +1,6 @@
 const Utils = require('../utils');
 const Event = require('../core/event');
+const Assets = require('./assets');
 
 /*
 @BUG: Space has not effect when no letter comes after.
@@ -8,35 +9,121 @@ const Event = require('../core/event');
 
 AFRAME.registerComponent('input', {
   schema: {
-    value: { type: "string", default: "" },
-    name: { type: "string", default: "" },
-    disabled: { type: "boolean", default: false },
-    color: { type: "color", default: "#000" },
-    align: { type: "string", default: "left" },
-    font: { type: "string", default: "" },
-    letterSpacing: { type: "int", default: 0 },
-    lineHeight: { type: "string", default: "" },
-    opacity: { type: "number", default: 1 },
-    side: { type: "string", default: 'front' },
-    tabSize: { type: "int", default: 4 },
-    placeholder: { type: "string", default: "" },
-    placeholderColor: { type: "color", default: "#AAA" },
-    maxLength: { type: "int", default: 0 },
-    type: { type: "string", default: "text" },
-    width: { type: "number", default: 1 },
-    cursorWidth: { type: "number", default: 0.01 },
-    cursorHeight: { type: "number", default: 0.08 },
-    cursorColor: { type: "color", default: "#007AFF" },
-    backgroundColor: { type: "color", default: "#FFF" },
-    backgroundOpacity: { type: "number", default: 1 },
+    value: {
+      type: "string",
+      default: ""
+    },
+    name: {
+      type: "string",
+      default: ""
+    },
+    disabled: {
+      type: "boolean",
+      default: false
+    },
+    color: {
+      type: "color",
+      default: "#000"
+    },
+    align: {
+      type: "string",
+      default: "left"
+    },
+    font: {
+      type: "string",
+      default: ""
+    },
+    letterSpacing: {
+      type: "int",
+      default: 0
+    },
+    lineHeight: {
+      type: "string",
+      default: ""
+    },
+    opacity: {
+      type: "number",
+      default: 1
+    },
+    side: {
+      type: "string",
+      default: 'front'
+    },
+    tabSize: {
+      type: "int",
+      default: 4
+    },
+    placeholder: {
+      type: "string",
+      default: ""
+    },
+    placeholderColor: {
+      type: "color",
+      default: "#AAA"
+    },
+    maxLength: {
+      type: "int",
+      default: 0
+    },
+    type: {
+      type: "string",
+      default: "text"
+    },
+    width: {
+      type: "number",
+      default: 1
+    },
+    height: {
+      type: "number",
+      default: 0.18
+    },
+    radiusScale: {
+      type: "number",
+      default: 0.0125
+    },
+    cursorWidth: {
+      type: "number",
+      default: 0.01
+    },
+    cursorHeight: {
+      type: "number",
+      default: 0.08
+    },
+    cursorColor: {
+      type: "color",
+      default: "#007AFF"
+    },
+    backgroundColor: {
+      type: "color",
+      default: "#FFF"
+    },
+    backgroundOpacity: {
+      type: "number",
+      default: 1
+    },
+    raised: {
+      type: "boolean",
+      default: true
+    }
   },
 
   init: function () {
     let that = this;
 
+    // Assets
+    Utils.preloadAssets(Assets);
+
+    this.shadow = document.createElement('a-image');
+    this.shadow.setAttribute('height', this.data.height * 1.25);
+    this.shadow.setAttribute('width', this.data.width * 1.25)
+    this.shadow.setAttribute('src', '#aframeButtonShadow');
+    this.shadow.setAttribute('position', `${this.data.width/2} 0 -0.001`);
+    this.el.appendChild(this.shadow);
+
     this.background = document.createElement('a-rounded');
-    this.background.setAttribute('radius', 0.01)
-    this.background.setAttribute('height', 0.18)
+    this.background.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
+    // this.background.setAttribute('radius', 0.01);
+    this.background.setAttribute('height', this.data.height);
     this.background.setAttribute('side', 'double')
     this.el.appendChild(this.background);
 
@@ -60,19 +147,25 @@ AFRAME.registerComponent('input', {
     //setTimeout(function() { that.updateText(); }, 0);
     this.blink();
 
-    this.el.addEventListener('click', function() {
-      if (this.components.input.data.disabled) { return; }
+    this.el.addEventListener('click', function () {
+      if (this.components.input.data.disabled) {
+        return;
+      }
       that.focus();
     });
 
     Object.defineProperty(this.el, 'value', {
-      get: function() { return this.getAttribute('value'); },
-      set: function(value) { this.setAttribute('value', value); },
+      get: function () {
+        return this.getAttribute('value');
+      },
+      set: function (value) {
+        this.setAttribute('value', value);
+      },
       enumerable: true,
       configurable: true
     });
   },
-  blink: function() {
+  blink: function () {
     let that = this;
     if (!this.isFocused) {
       that.cursor.setAttribute('visible', false);
@@ -80,21 +173,27 @@ AFRAME.registerComponent('input', {
       this.cursorInterval = null;
       return
     }
-    this.cursorInterval = setInterval(function(){
+    this.cursorInterval = setInterval(function () {
       that.cursor.setAttribute('visible', !that.cursor.getAttribute('visible'));
     }, 500);
   },
   isFocused: false,
-  focus: function(noemit) {
-    if (this.isFocused) { return; }
+  focus: function (noemit) {
+    if (this.isFocused) {
+      return;
+    }
     this.isFocused = true;
     this.cursor.setAttribute('visible', true);
     this.blink();
     Event.emit(this.el, 'focus');
-    if (!noemit) { Event.emit(document.body, 'didfocusinput', this.el); }
+    if (!noemit) {
+      Event.emit(document.body, 'didfocusinput', this.el);
+    }
   },
-  blur: function(noemit) {
-    if (!this.isFocused) { return; }
+  blur: function (noemit) {
+    if (!this.isFocused) {
+      return;
+    }
     this.isFocused = false;
     if (this.cursorInterval) {
       clearInterval(this.cursorInterval);
@@ -102,26 +201,32 @@ AFRAME.registerComponent('input', {
     }
     this.cursor.setAttribute('visible', false);
     Event.emit(this.el, 'blur');
-    if (!noemit) { Event.emit(document.body, 'didblurinput', this.el); }
+    if (!noemit) {
+      Event.emit(document.body, 'didblurinput', this.el);
+    }
   },
-  appendString: function(data) {
-    if(data === '\n') {
+  appendString: function (data) {
+    if (data === '\n') {
       return this.blur();
     }
     let str = this.el.getAttribute("value");
-    if (!str) { str = "" }
-    str = str+data;
+    if (!str) {
+      str = ""
+    }
+    str = str + data;
     this.el.setAttribute("value", str)
     Event.emit(this.el, 'change', str);
   },
-  deleteLast: function() {
+  deleteLast: function () {
     let str = this.el.getAttribute("value");
-    if (!str) { str = "" }
+    if (!str) {
+      str = ""
+    }
     str = str.slice(0, -1);
     this.el.setAttribute("value", str)
     Event.emit(this.el, 'change', str);
   },
-  updateText: function() {
+  updateText: function () {
     let that = this;
     let padding = {
       left: 0.021,
@@ -133,7 +238,7 @@ AFRAME.registerComponent('input', {
       align: this.data.align,
       side: this.data.side,
       tabSize: this.data.tabSize,
-      wrapCount: 24*this.data.width,
+      wrapCount: 24 * this.data.width,
       width: this.data.width
     }
 
@@ -151,7 +256,7 @@ AFRAME.registerComponent('input', {
           this.cursorTimer = null;
         }
         this.cursor.setAttribute('visible', true);
-        this.cursorTimer = setTimeout(function(){
+        this.cursorTimer = setTimeout(function () {
           that.blink();
         }, 50);
       }
@@ -169,18 +274,30 @@ AFRAME.registerComponent('input', {
       props.value = "*".repeat(this.data.value.length);
     }
 
-    if (this.data.font.length) { props.font = this.data.font }
-    if (this.data.letterSpacing) { props.letterSpacing = this.data.letterSpacing; }
-    if (this.data.lineHeight.length) { props.lineHeight = this.data.lineHeight; }
+    if (this.data.font.length) {
+      props.font = this.data.font
+    }
+    if (this.data.letterSpacing) {
+      props.letterSpacing = this.data.letterSpacing;
+    }
+    if (this.data.lineHeight.length) {
+      props.lineHeight = this.data.lineHeight;
+    }
     this.text.setAttribute('visible', false);
     this.text.setAttribute("text", props);
 
     function getTextWidth(el, data, trimFirst, _widthFactor) {
-      if (!el.object3D || !el.object3D.children || !el.object3D.children[0]) { return 0; }
+      if (!el.object3D || !el.object3D.children || !el.object3D.children[0]) {
+        return 0;
+      }
       let v = el.object3D.children[0].geometry.visibleGlyphs;
-      if (!v) { return 0; }
-      v = v[v.length-1];
-      if (!v) { return 0; }
+      if (!v) {
+        return 0;
+      }
+      v = v[v.length - 1];
+      if (!v) {
+        return 0;
+      }
       if (v.line) {
         if (trimFirst) {
           data.value = data.value.substr(1);
@@ -190,9 +307,11 @@ AFRAME.registerComponent('input', {
         el.setAttribute("text", data);
         return getTextWidth(el, data, trimFirst);
       } else {
-        if (!_widthFactor) { _widthFactor = Utils.getWidthFactor(el, data.wrapCount); }
-        v = (v.position[0] + v.data.width) / (_widthFactor/that.data.width);
-        let textRatio = (v+padding.left+padding.right) / that.data.width;
+        if (!_widthFactor) {
+          _widthFactor = Utils.getWidthFactor(el, data.wrapCount);
+        }
+        v = (v.position[0] + v.data.width) / (_widthFactor / that.data.width);
+        let textRatio = (v + padding.left + padding.right) / that.data.width;
 
         if (textRatio > 1) {
           if (trimFirst) {
@@ -219,7 +338,7 @@ AFRAME.registerComponent('input', {
     placeholder_props.color = this.data.placeholderColor;
     this.placeholder.setAttribute("text", placeholder_props);
 
-    setTimeout(function() {
+    setTimeout(function () {
       if (that.text.object3D) {
         let children = that.text.object3D.children;
         if (children[0] && children[0].geometry && children[0].geometry.visibleGlyphs) {
@@ -228,11 +347,13 @@ AFRAME.registerComponent('input', {
             v = getTextWidth(that.text, props, true);
             that.text.setAttribute('visible', true);
           }
-          that.cursor.setAttribute('position', v+padding.left+' 0 0.003');
+          that.cursor.setAttribute('position', v + padding.left + ' 0 0.003');
         } else {
-          that.cursor.setAttribute('position', padding.left+' 0 0.003');
+          that.cursor.setAttribute('position', padding.left + ' 0 0.003');
         }
-      } else {  that.cursor.setAttribute('position', padding.left+' 0 0.003'); }
+      } else {
+        that.cursor.setAttribute('position', padding.left + ' 0 0.003');
+      }
       getTextWidth(that.placeholder, placeholder_props);
     }, 0)
 
@@ -245,18 +366,21 @@ AFRAME.registerComponent('input', {
     this.background.setAttribute('width', this.data.width);
     //this.background.setAttribute('position', this.data.width/2+' 0 0');
     this.background.setAttribute('position', '0 -0.09 0.001');
-    this.text.setAttribute('position', padding.left-0.001+this.data.width/2+' 0 0.002');
-    this.placeholder.setAttribute('position', padding.left-0.001+this.data.width/2+' 0 0.002');
+    this.text.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
+    this.placeholder.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
   },
-  updateCursor: function() {
+  updateCursor: function () {
     this.cursor.setAttribute('width', this.data.cursorWidth)
     this.cursor.setAttribute('height', this.data.cursorHeight)
     this.cursor.setAttribute('color', this.data.cursorColor);
   },
   update: function () {
     let that = this;
-    setTimeout(function() {
-    //  Utils.updateOpacity(that.el, that.data.opacity);
+    setTimeout(function () {
+      //  Utils.updateOpacity(that.el, that.data.opacity);
+      if (that.data.raised) {
+        that.shadow.setAttribute('visible', false);
+      }
     }, 0)
 
     this.updateCursor();
@@ -289,6 +413,9 @@ AFRAME.registerPrimitive('a-input', {
     'max-length': 'input.maxLength',
     type: 'input.type',
     width: 'input.width',
+    height: 'input.height',
+    'radius-scale': 'input.radiusScale',
+    raised: 'input.raised',
     'cursor-width': "input.cursorWidth",
     'cursor-height': "input.cursorHeight",
     'cursor-color': "input.cursorColor",

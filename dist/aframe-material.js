@@ -65,15 +65,16 @@
 	  //require("./alert"); @TODO ;)
 	  __webpack_require__(5);
 	  __webpack_require__(13);
-	  __webpack_require__(14);
-	  __webpack_require__(17);
+	  __webpack_require__(15);
 	  __webpack_require__(18);
-	  __webpack_require__(21);
-	  __webpack_require__(24);
-	  __webpack_require__(28);
-	  __webpack_require__(32);
-	  __webpack_require__(36);
-	  __webpack_require__(39);
+	  __webpack_require__(19);
+	  __webpack_require__(22);
+	  __webpack_require__(25);
+	  __webpack_require__(29);
+	  __webpack_require__(33);
+	  __webpack_require__(37);
+	  __webpack_require__(40);
+	  __webpack_require__(42);
 	})();
 
 /***/ }),
@@ -1644,6 +1645,7 @@
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
+	var Assets = __webpack_require__(14);
 	
 	/*
 	@BUG: Space has not effect when no letter comes after.
@@ -1652,35 +1654,121 @@
 	
 	AFRAME.registerComponent('input', {
 	  schema: {
-	    value: { type: "string", default: "" },
-	    name: { type: "string", default: "" },
-	    disabled: { type: "boolean", default: false },
-	    color: { type: "color", default: "#000" },
-	    align: { type: "string", default: "left" },
-	    font: { type: "string", default: "" },
-	    letterSpacing: { type: "int", default: 0 },
-	    lineHeight: { type: "string", default: "" },
-	    opacity: { type: "number", default: 1 },
-	    side: { type: "string", default: 'front' },
-	    tabSize: { type: "int", default: 4 },
-	    placeholder: { type: "string", default: "" },
-	    placeholderColor: { type: "color", default: "#AAA" },
-	    maxLength: { type: "int", default: 0 },
-	    type: { type: "string", default: "text" },
-	    width: { type: "number", default: 1 },
-	    cursorWidth: { type: "number", default: 0.01 },
-	    cursorHeight: { type: "number", default: 0.08 },
-	    cursorColor: { type: "color", default: "#007AFF" },
-	    backgroundColor: { type: "color", default: "#FFF" },
-	    backgroundOpacity: { type: "number", default: 1 }
+	    value: {
+	      type: "string",
+	      default: ""
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    disabled: {
+	      type: "boolean",
+	      default: false
+	    },
+	    color: {
+	      type: "color",
+	      default: "#000"
+	    },
+	    align: {
+	      type: "string",
+	      default: "left"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    side: {
+	      type: "string",
+	      default: 'front'
+	    },
+	    tabSize: {
+	      type: "int",
+	      default: 4
+	    },
+	    placeholder: {
+	      type: "string",
+	      default: ""
+	    },
+	    placeholderColor: {
+	      type: "color",
+	      default: "#AAA"
+	    },
+	    maxLength: {
+	      type: "int",
+	      default: 0
+	    },
+	    type: {
+	      type: "string",
+	      default: "text"
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    },
+	    height: {
+	      type: "number",
+	      default: 0.18
+	    },
+	    radiusScale: {
+	      type: "number",
+	      default: 0.0125
+	    },
+	    cursorWidth: {
+	      type: "number",
+	      default: 0.01
+	    },
+	    cursorHeight: {
+	      type: "number",
+	      default: 0.08
+	    },
+	    cursorColor: {
+	      type: "color",
+	      default: "#007AFF"
+	    },
+	    backgroundColor: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    backgroundOpacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    raised: {
+	      type: "boolean",
+	      default: true
+	    }
 	  },
 	
 	  init: function init() {
 	    var that = this;
 	
+	    // Assets
+	    Utils.preloadAssets(Assets);
+	
+	    this.shadow = document.createElement('a-image');
+	    this.shadow.setAttribute('height', this.data.height * 1.25);
+	    this.shadow.setAttribute('width', this.data.width * 1.25);
+	    this.shadow.setAttribute('src', '#aframeButtonShadow');
+	    this.shadow.setAttribute('position', this.data.width / 2 + ' 0 -0.001');
+	    this.el.appendChild(this.shadow);
+	
 	    this.background = document.createElement('a-rounded');
-	    this.background.setAttribute('radius', 0.01);
-	    this.background.setAttribute('height', 0.18);
+	    this.background.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
+	    // this.background.setAttribute('radius', 0.01);
+	    this.background.setAttribute('height', this.data.height);
 	    this.background.setAttribute('side', 'double');
 	    this.el.appendChild(this.background);
 	
@@ -1933,6 +2021,9 @@
 	    var that = this;
 	    setTimeout(function () {
 	      //  Utils.updateOpacity(that.el, that.data.opacity);
+	      if (that.data.raised) {
+	        that.shadow.setAttribute('visible', false);
+	      }
 	    }, 0);
 	
 	    this.updateCursor();
@@ -1965,6 +2056,9 @@
 	    'max-length': 'input.maxLength',
 	    type: 'input.type',
 	    width: 'input.width',
+	    height: 'input.height',
+	    'radius-scale': 'input.radiusScale',
+	    raised: 'input.raised',
 	    'cursor-width': "input.cursorWidth",
 	    'cursor-height': "input.cursorHeight",
 	    'cursor-color': "input.cursorColor",
@@ -1975,14 +2069,26 @@
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	module.exports = [{
+	  type: 'img',
+	  id: 'aframeButtonShadow',
+	  src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png'
+	}];
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(15);
-	var SFX = __webpack_require__(16);
+	var Assets = __webpack_require__(16);
+	var SFX = __webpack_require__(17);
 	
 	AFRAME.registerComponent('switch', {
 	  schema: {
@@ -2154,7 +2260,7 @@
 	});
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2162,7 +2268,7 @@
 	module.exports = [{ type: 'img', id: 'aframeSwitchShadow', src: AFRAME.ASSETS_PATH + '/images/SwitchShadow.png' }, { type: 'audio', id: 'aframeSwitchClick', src: AFRAME.ASSETS_PATH + '/sounds/InputClick.mp3' }, { type: 'audio', id: 'aframeSwitchClickDisabled', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3' }];
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2207,7 +2313,7 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2233,15 +2339,15 @@
 	});
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(19);
-	var SFX = __webpack_require__(20);
+	var Assets = __webpack_require__(20);
+	var SFX = __webpack_require__(21);
 	
 	AFRAME.registerComponent('radio', {
 	  schema: {
@@ -2562,7 +2668,7 @@
 	});
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2570,7 +2676,7 @@
 	module.exports = [{ type: 'audio', id: 'aframeRadioClick', src: AFRAME.ASSETS_PATH + '/sounds/InputClick.mp3' }, { type: 'audio', id: 'aframeRadioClickDisabled', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3' }];
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2615,15 +2721,15 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(22);
-	var SFX = __webpack_require__(23);
+	var Assets = __webpack_require__(23);
+	var SFX = __webpack_require__(24);
 	
 	AFRAME.registerComponent('checkbox', {
 	  schema: {
@@ -2909,7 +3015,7 @@
 	});
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2917,7 +3023,7 @@
 	module.exports = [{ type: 'img', id: 'aframeCheckboxMark', src: AFRAME.ASSETS_PATH + '/images/CheckmarkIcon.png' }, { type: 'audio', id: 'aframeCheckboxClick', src: AFRAME.ASSETS_PATH + '/sounds/InputClick.mp3' }, { type: 'audio', id: 'aframeCheckboxClickDisabled', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3' }];
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2962,16 +3068,16 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
-	var THEME = __webpack_require__(25);
+	var THEME = __webpack_require__(26);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(26);
-	var SFX = __webpack_require__(27);
+	var Assets = __webpack_require__(27);
+	var SFX = __webpack_require__(28);
 	
 	AFRAME.registerComponent('button', {
 	  schema: {
@@ -3022,6 +3128,10 @@
 	    width: {
 	      type: "number",
 	      default: 1
+	    },
+	    radiusScale: {
+	      type: "number",
+	      default: -1
 	    }
 	  },
 	  init: function init() {
@@ -3045,16 +3155,13 @@
 	    // OUTLINE
 	    this.outline = document.createElement('a-rounded');
 	    this.outline.setAttribute('height', this.data.height);
-	    this.outline.setAttribute('radius', 0.03);
+	    if (this.data.radiusScale < 0) {
+	      this.outline.setAttribute('radius', 0.03);
+	    } else {
+	      this.outline.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
+	    }
 	    this.outline.setAttribute('position', '0 -' + this.data.height / 2 + ' 0.001');
 	    this.wrapper.appendChild(this.outline);
-	
-	    // OVERLAY
-	    // this.overlay = document.createElement('a-rounded');
-	    // this.overlay.setAttribute('height', 0.36);
-	    // this.overlay.setAttribute('radius', 0.10);
-	    // this.overlay.setAttribute('position', `0 -${0.36/2} 0.001`);
-	    // this.wrapper.appendChild(this.overlay);
 	
 	    // LABEL
 	    this.label = document.createElement('a-entity');
@@ -3065,7 +3172,6 @@
 	      if (this.components.button && this.components.button.data.disabled) {
 	        return;
 	      }
-	      // that.wrapper.appendChild(that.overlay);
 	      that.onClick();
 	    });
 	    this.el.addEventListener('mouseenter', function () {
@@ -3117,7 +3223,6 @@
 	  update: function update() {
 	    var that = this;
 	    this.outline.setAttribute('color', this.data.buttonColor);
-	    // this.overlay.setAttribute('color', this.data.color);
 	
 	    var props = {
 	      color: this.data.color,
@@ -3128,8 +3233,6 @@
 	    if (this.data.font) {
 	      props.font = this.data.font;
 	    }
-	
-	    props.color = this.data.color;
 	
 	    // TITLE
 	    props.value = this.data.value.toUpperCase();
@@ -3176,30 +3279,20 @@
 	
 	      if (that.data.value.length) {
 	        getTextWidth(that.label, function (width) {
-	          that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + 0.36 / 2 + ' 0.002'); //
+	          that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + that.data.height / 2 + ' 0.002'); //
 	          width = width + 0.28;
 	          that.outline.setAttribute('width', width);
-	          // that.overlay.setAttribute('width', width);
 	          that.__width = width;
 	          that.shadow.setAttribute('width', width * 1.17);
 	          that.shadow.setAttribute('position', width / 2 + ' 0 0');
-	          // that.overlay.setAttribute('position', width / 2 + ' 0 0');
 	          Event.emit(that.el, 'change:width', width);
 	        });
 	      }
-	
-	      // Utils.updateOpacity(that.overlay, 0);
 	
 	      if (that.data.disabled) {
 	        that.shadow.setAttribute('visible', false);
 	        that.outline.setAttribute('color', '#C4C4C4');
 	        that.label.setAttribute('text', 'color', '#B0B0B0');
-	        // let timer = setInterval(function () {
-	        //   if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-	        //     clearInterval(timer);
-	        //     Utils.updateOpacity(that.outline, 0.62);
-	        //   }
-	        // }, 10)
 	      } else {
 	        var timer = setInterval(function () {
 	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
@@ -3247,12 +3340,13 @@
 	    'line-height': 'button.lineHeight',
 	    opacity: 'button.opacity',
 	    width: 'button.width',
-	    height: 'button.height'
+	    height: 'button.height',
+	    'radius-scale': 'button.radiusScale'
 	  }
 	});
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3275,7 +3369,7 @@
 	module.exports = THEME;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3283,7 +3377,7 @@
 	module.exports = [{ type: 'img', id: 'aframeButtonShadow', src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png' }, { type: 'audio', id: 'aframeButtonClick', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClick.mp3' }, { type: 'audio', id: 'aframeButtonClickDisabled', src: AFRAME.ASSETS_PATH + '/sounds/ButtonClickDisabled.mp3' }];
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3328,19 +3422,19 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
-	var Theme = __webpack_require__(25);
-	var Config = __webpack_require__(29);
+	var Theme = __webpack_require__(26);
+	var Config = __webpack_require__(30);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(30);
-	var SFX = __webpack_require__(31);
+	var Assets = __webpack_require__(31);
+	var SFX = __webpack_require__(32);
 	
-	AFRAME.registerComponent('iconbutton', {
+	AFRAME.registerComponent('icon-button', {
 	  schema: {
 	    disabled: {
 	      type: 'boolean',
@@ -3390,6 +3484,10 @@
 	      type: "number",
 	      default: 0.08
 	    },
+	    radiusScale: {
+	      type: "number",
+	      default: 0.1
+	    },
 	    iconScale: {
 	      type: "number",
 	      default: 0.75
@@ -3425,7 +3523,7 @@
 	    this.outline = document.createElement('a-rounded');
 	    this.outline.setAttribute('width', this.data.width);
 	    this.outline.setAttribute('height', this.data.height);
-	    this.outline.setAttribute('radius', '0.008');
+	    this.outline.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
 	    this.outline.setAttribute('position', -this.data.width / 2 + ' ' + -this.data.height / 2 + ' 0');
 	    this.wrapper.appendChild(this.outline);
 	
@@ -3439,26 +3537,26 @@
 	
 	    // EVENTS
 	    this.el.addEventListener('click', function () {
-	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+	      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
 	        return;
 	      }
 	      // that.wrapper.appendChild(that.overlay);
 	      that.onClick();
 	    });
 	    this.el.addEventListener('mouseenter', function () {
-	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+	      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
 	        return;
 	      }
 	      Utils.updateOpacity(that.el, 0.92);
 	    });
 	    this.el.addEventListener('mouseleave', function () {
-	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+	      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      Utils.updateOpacity(that.el, 1);
 	    });
 	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.iconbutton && this.components.iconbutton.data.disabled) {
+	      if (this.components['icon-button'] && this.components['icon-button'].data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0.036');
@@ -3534,30 +3632,31 @@
 	  play: function play() {}
 	});
 	
-	AFRAME.registerPrimitive('a-iconbutton', {
+	AFRAME.registerPrimitive('a-icon-button', {
 	  defaultComponents: {
-	    iconbutton: {}
+	    'icon-button': {}
 	  },
 	  mappings: {
-	    disabled: 'iconbutton.disabled',
-	    type: 'iconbutton.type',
-	    name: 'iconbutton.name',
-	    value: 'iconbutton.value',
-	    'button-color': 'iconbutton.buttonColor',
-	    color: 'iconbutton.color',
-	    font: 'iconbutton.font',
-	    'letter-spacing': 'iconbutton.letterSpacing',
-	    'line-height': 'iconbutton.lineHeight',
-	    opacity: 'iconbutton.opacity',
-	    width: 'iconbutton.width',
-	    height: 'iconbutton.height',
-	    'icon-scale': 'iconbutton.iconScale',
-	    src: 'iconbutton.src'
+	    disabled: 'icon-button.disabled',
+	    type: 'icon-button.type',
+	    name: 'icon-button.name',
+	    value: 'icon-button.value',
+	    'button-color': 'icon-button.buttonColor',
+	    color: 'icon-button.color',
+	    font: 'icon-button.font',
+	    'letter-spacing': 'icon-button.letterSpacing',
+	    'line-height': 'icon-button.lineHeight',
+	    opacity: 'icon-button.opacity',
+	    width: 'icon-button.width',
+	    height: 'icon-button.height',
+	    'radius-scale': 'icon-button.radiusScale',
+	    'icon-scale': 'icon-button.iconScale',
+	    src: 'icon-button.src'
 	  }
 	});
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -3577,7 +3676,7 @@
 	module.exports = Config;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3601,7 +3700,7 @@
 	}];
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3646,19 +3745,19 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
-	var Theme = __webpack_require__(25);
-	var Config = __webpack_require__(33);
+	var Theme = __webpack_require__(26);
+	var Config = __webpack_require__(34);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(34);
-	var SFX = __webpack_require__(35);
+	var Assets = __webpack_require__(35);
+	var SFX = __webpack_require__(36);
 	
-	AFRAME.registerComponent('circlebutton', {
+	AFRAME.registerComponent('circle-button', {
 	  schema: {
 	    disabled: {
 	      type: 'boolean',
@@ -3759,19 +3858,19 @@
 	      that.onClick();
 	    });
 	    this.el.addEventListener('mouseenter', function () {
-	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+	      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
 	        return;
 	      }
 	      Utils.updateOpacity(that.el, 0.92);
 	    });
 	    this.el.addEventListener('mouseleave', function () {
-	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+	      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      Utils.updateOpacity(that.el, 1);
 	    });
 	    this.el.addEventListener('mousedown', function () {
-	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+	      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
 	        return SFX.clickDisabled(this);
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0.036');
@@ -3779,7 +3878,7 @@
 	      SFX.click(this);
 	    });
 	    this.el.addEventListener('mouseup', function () {
-	      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+	      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
 	        return;
 	      }
 	      that.wrapper.setAttribute('position', '0 0 0');
@@ -3847,29 +3946,29 @@
 	  play: function play() {}
 	});
 	
-	AFRAME.registerPrimitive('a-circlebutton', {
+	AFRAME.registerPrimitive('a-circle-button', {
 	  defaultComponents: {
-	    circlebutton: {}
+	    'circle-button': {}
 	  },
 	  mappings: {
-	    disabled: 'circlebutton.disabled',
-	    type: 'circlebutton.type',
-	    name: 'circlebutton.name',
-	    value: 'circlebutton.value',
-	    'button-color': 'circlebutton.buttonColor',
-	    color: 'circlebutton.color',
-	    font: 'circlebutton.font',
-	    'letter-spacing': 'circlebutton.letterSpacing',
-	    'line-height': 'circlebutton.lineHeight',
-	    opacity: 'circlebutton.opacity',
-	    radius: 'circlebutton.radius',
-	    'icon-scale': 'circlebutton.iconScale',
-	    src: 'circlebutton.src'
+	    disabled: 'circle-button.disabled',
+	    type: 'circle-button.type',
+	    name: 'circle-button.name',
+	    value: 'circle-button.value',
+	    'button-color': 'circle-button.buttonColor',
+	    color: 'circle-button.color',
+	    font: 'circle-button.font',
+	    'letter-spacing': 'circle-button.letterSpacing',
+	    'line-height': 'circle-button.lineHeight',
+	    opacity: 'circle-button.opacity',
+	    radius: 'circle-button.radius',
+	    'icon-scale': 'circle-button.iconScale',
+	    src: 'circle-button.src'
 	  }
 	});
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -3889,7 +3988,7 @@
 	module.exports = Config;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3917,7 +4016,7 @@
 	}];
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3962,15 +4061,15 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(37);
-	var SFX = __webpack_require__(38);
+	var Assets = __webpack_require__(38);
+	var SFX = __webpack_require__(39);
 	
 	AFRAME.registerComponent('toast', {
 	  schema: {
@@ -4179,7 +4278,7 @@
 	});
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -4187,7 +4286,7 @@
 	module.exports = [{ type: 'audio', id: 'aframeToastShow', src: AFRAME.ASSETS_PATH + '/sounds/ToastShow.mp3' }];
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -4215,14 +4314,14 @@
 	module.exports = SFX;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Utils = __webpack_require__(6);
 	var Event = __webpack_require__(4);
-	var Assets = __webpack_require__(40);
+	var Assets = __webpack_require__(41);
 	
 	AFRAME.registerComponent('card', {
 	  schema: {
@@ -4249,6 +4348,10 @@
 	    type: {
 	      type: "string",
 	      default: "flat"
+	    },
+	    radiusScale: {
+	      type: "number",
+	      default: 0.0125
 	    }
 	  },
 	  init: function init() {
@@ -4257,7 +4360,7 @@
 	    this.card = document.createElement('a-rounded');
 	    this.card.setAttribute('height', this.data.height);
 	    this.card.setAttribute('width', this.data.width);
-	    this.card.setAttribute('radius', this.data.height * 0.0125);
+	    this.card.setAttribute('radius', Math.max(this.data.height, this.data.width) * this.data.radiusScale);
 	
 	    this.shadow = document.createElement('a-image');
 	    this.shadow.setAttribute('height', this.data.height * 1.25);
@@ -4295,12 +4398,223 @@
 	    width: "card.width",
 	    height: "card.height",
 	    color: "card.color",
-	    opacity: "card.opacity"
+	    opacity: "card.opacity",
+	    type: "card.type",
+	    'radius-scale': "card.radiusScale"
 	  }
 	});
 
 /***/ }),
-/* 40 */
+/* 41 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	module.exports = [{
+	  type: 'img',
+	  id: 'aframeButtonShadow',
+	  src: AFRAME.ASSETS_PATH + '/images/ButtonShadow.png'
+	}];
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Utils = __webpack_require__(6);
+	var Event = __webpack_require__(4);
+	var Assets = __webpack_require__(43);
+	/*
+	@BUG: Space has not effect when no letter comes after.
+	@TODO: <progress value="70" max="100">70 %</progress>
+	*/
+	
+	AFRAME.registerComponent('text-label', {
+	  schema: {
+	    value: {
+	      type: "string",
+	      default: ""
+	    },
+	    name: {
+	      type: "string",
+	      default: ""
+	    },
+	    color: {
+	      type: "color",
+	      default: "#000"
+	    },
+	    align: {
+	      type: "string",
+	      default: "left"
+	    },
+	    font: {
+	      type: "string",
+	      default: ""
+	    },
+	    opacity: {
+	      type: "number",
+	      default: 1
+	    },
+	    side: {
+	      type: "string",
+	      default: 'front'
+	    },
+	    tabSize: {
+	      type: "int",
+	      default: 4
+	    },
+	    letterSpacing: {
+	      type: "int",
+	      default: 0
+	    },
+	    lineHeight: {
+	      type: "string",
+	      default: ""
+	    },
+	    placeholder: {
+	      type: "string",
+	      default: ""
+	    },
+	    placeholderColor: {
+	      type: "color",
+	      default: "#AAA"
+	    },
+	    maxLength: {
+	      type: "int",
+	      default: 0
+	    },
+	    type: {
+	      type: "string",
+	      default: "raised"
+	    },
+	    width: {
+	      type: "number",
+	      default: 1
+	    },
+	    height: {
+	      type: "number",
+	      default: 0.18
+	    },
+	    radiusScale: {
+	      type: "number",
+	      default: 0.0125
+	    },
+	    backgroundColor: {
+	      type: "color",
+	      default: "#FFF"
+	    },
+	    backgroundOpacity: {
+	      type: "number",
+	      default: 1
+	    }
+	  },
+	
+	  init: function init() {
+	    var that = this;
+	
+	    // Assets
+	    Utils.preloadAssets(Assets);
+	
+	    this.shadow = document.createElement('a-image');
+	    this.shadow.setAttribute('height', this.data.height * 1.25);
+	    this.shadow.setAttribute('width', this.data.width * 1.25);
+	    this.shadow.setAttribute('src', '#aframeButtonShadow');
+	    this.shadow.setAttribute('position', this.data.width / 2 + ' 0 -0.001');
+	    this.el.appendChild(this.shadow);
+	
+	    this.background = document.createElement('a-rounded');
+	    this.background.setAttribute('radius', Math.max(this.data.width, this.data.height) * this.data.radiusScale);
+	    this.background.setAttribute('height', this.data.height);
+	    this.background.setAttribute('side', 'double');
+	    this.el.appendChild(this.background);
+	
+	    this.text = document.createElement('a-entity');
+	    this.el.appendChild(this.text);
+	  },
+	  update: function update() {
+	    var that = this;
+	    var padding = {
+	      left: 0.021,
+	      right: 0.021
+	    };
+	
+	    var props = {
+	      color: this.data.color,
+	      align: this.data.align,
+	      side: this.data.side,
+	      tabSize: this.data.tabSize,
+	      wrapCount: 24 * this.data.width,
+	      width: this.data.width
+	    };
+	
+	    // Max length
+	    if (this.data.maxLength) {
+	      props.value = this.data.value.substring(0, this.data.maxLength);
+	      this.el.setAttribute('value', props.value);
+	    } else {
+	      props.value = this.data.value;
+	    }
+	
+	    if (this.data.font.length) {
+	      props.font = this.data.font;
+	    }
+	    if (this.data.letterSpacing) {
+	      props.letterSpacing = this.data.letterSpacing;
+	    }
+	    if (this.data.lineHeight.length) {
+	      props.lineHeight = this.data.lineHeight;
+	    }
+	    this.text.setAttribute("text", props);
+	    if (this.data.align === 'left') {
+	      this.text.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
+	    } else if (this.data.align === 'center') {
+	      this.text.setAttribute('position', -0.001 + this.data.width / 2 + ' 0 0.002');
+	    } else {
+	      this.text.setAttribute('position', -(padding.right - 0.001) + this.data.width / 2 + ' 0 0.002');
+	    }
+	
+	    this.background.setAttribute('color', this.data.backgroundColor);
+	    this.background.setAttribute('width', this.data.width);
+	    this.background.setAttribute('position', '0 -0.09 0.001');
+	
+	    if (this.data.type === 'flat') {
+	      this.shadow.setAttribute('visible', false);
+	    }
+	  },
+	  tick: function tick() {},
+	  remove: function remove() {},
+	  pause: function pause() {},
+	  play: function play() {}
+	});
+	
+	AFRAME.registerPrimitive('a-text-label', {
+	  defaultComponents: {
+	    'text-label': {}
+	  },
+	  mappings: {
+	    value: 'text-label.value',
+	    name: 'text-label.name',
+	    color: 'text-label.color',
+	    align: 'text-label.align',
+	    font: 'text-label.font',
+	    'opacity': 'text-label.opacity',
+	    'side': 'text-label.side',
+	    'tab-size': 'text-label.tabSize',
+	    'max-length': 'text-label.maxLength',
+	    type: 'text-label.type',
+	    width: 'text-label.width',
+	    height: 'text-label.height',
+	    'letter-spacing': 'text-label.letterSpacing',
+	    'line-height': 'text-label.lineHeight',
+	    'radius-scale': 'text-label.radiusScale',
+	    'background-color': 'text-label.backgroundColor',
+	    'background-opacity': 'text-label.backgroundOpacity'
+	  }
+	});
+
+/***/ }),
+/* 43 */
 /***/ (function(module, exports) {
 
 	'use strict';

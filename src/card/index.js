@@ -27,6 +27,10 @@ AFRAME.registerComponent('card', {
     type: {
       type: "string",
       default: "flat"
+    },
+    radiusScale: {
+      type: "number",
+      default: 0.0125
     }
   },
   init: function () {
@@ -35,7 +39,7 @@ AFRAME.registerComponent('card', {
     this.card = document.createElement('a-rounded');
     this.card.setAttribute('height', this.data.height);
     this.card.setAttribute('width', this.data.width);
-    this.card.setAttribute('radius', this.data.height * 0.0125);
+    this.card.setAttribute('radius', Math.max(this.data.height, this.data.width) * this.data.radiusScale);
 
     this.shadow = document.createElement('a-image');
     this.shadow.setAttribute('height', this.data.height * 1.25);
@@ -74,6 +78,8 @@ AFRAME.registerPrimitive('a-card', {
     width: "card.width",
     height: "card.height",
     color: "card.color",
-    opacity: "card.opacity"
+    opacity: "card.opacity",
+    type: "card.type",
+    'radius-scale': "card.radiusScale"
   }
 });

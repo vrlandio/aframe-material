@@ -19,4 +19,5 @@
   require("./circle-button");
   require("./toast");
   require("./card");
+  require("./text-label");
 })();

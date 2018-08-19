@@ -5,7 +5,7 @@ const Event = require('../core/event');
 const Assets = require('./assets');
 const SFX = require('./sfx');
 
-AFRAME.registerComponent('circlebutton', {
+AFRAME.registerComponent('circle-button', {
   schema: {
     disabled: {
       type: 'boolean',
@@ -107,19 +107,19 @@ AFRAME.registerComponent('circlebutton', {
       that.onClick();
     });
     this.el.addEventListener('mouseenter', function () {
-      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
         return;
       }
       Utils.updateOpacity(that.el, 0.92);
     });
     this.el.addEventListener('mouseleave', function () {
-      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
         return SFX.clickDisabled(this);
       }
       Utils.updateOpacity(that.el, 1);
     });
     this.el.addEventListener('mousedown', function () {
-      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
         return SFX.clickDisabled(this);
       }
       that.wrapper.setAttribute('position', `0 0 0.036`);
@@ -127,7 +127,7 @@ AFRAME.registerComponent('circlebutton', {
       SFX.click(this);
     });
     this.el.addEventListener('mouseup', function () {
-      if (this.components.circlebutton && this.components.circlebutton.data.disabled) {
+      if (this.components['circle-button'] && this.components['circle-button'].data.disabled) {
         return;
       }
       that.wrapper.setAttribute('position', `0 0 0`);
@@ -195,23 +195,23 @@ AFRAME.registerComponent('circlebutton', {
   play: function () {}
 });
 
-AFRAME.registerPrimitive('a-circlebutton', {
+AFRAME.registerPrimitive('a-circle-button', {
   defaultComponents: {
-    circlebutton: {}
+    'circle-button': {}
   },
   mappings: {
-    disabled: 'circlebutton.disabled',
-    type: 'circlebutton.type',
-    name: 'circlebutton.name',
-    value: 'circlebutton.value',
-    'button-color': 'circlebutton.buttonColor',
-    color: 'circlebutton.color',
-    font: 'circlebutton.font',
-    'letter-spacing': 'circlebutton.letterSpacing',
-    'line-height': 'circlebutton.lineHeight',
-    opacity: 'circlebutton.opacity',
-    radius: 'circlebutton.radius',
-    'icon-scale': 'circlebutton.iconScale',
-    src: 'circlebutton.src'
+    disabled: 'circle-button.disabled',
+    type: 'circle-button.type',
+    name: 'circle-button.name',
+    value: 'circle-button.value',
+    'button-color': 'circle-button.buttonColor',
+    color: 'circle-button.color',
+    font: 'circle-button.font',
+    'letter-spacing': 'circle-button.letterSpacing',
+    'line-height': 'circle-button.lineHeight',
+    opacity: 'circle-button.opacity',
+    radius: 'circle-button.radius',
+    'icon-scale': 'circle-button.iconScale',
+    src: 'circle-button.src'
   }
 });
