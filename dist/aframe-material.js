@@ -2008,7 +2008,7 @@
 	    }*/
 	    this.background.setAttribute('width', this.data.width);
 	    //this.background.setAttribute('position', this.data.width/2+' 0 0');
-	    this.background.setAttribute('position', '0 -0.09 0.001');
+	    this.background.setAttribute('position', '0 0.001');
 	    this.text.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
 	    this.placeholder.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
 	  },
