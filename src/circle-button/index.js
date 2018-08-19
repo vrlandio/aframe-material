@@ -76,8 +76,8 @@ AFRAME.registerComponent('circle-button', {
 
     // SHADOW
     this.shadow = document.createElement('a-image');
-    this.shadow.setAttribute('width', this.data.radius * 2 * 1.25);
-    this.shadow.setAttribute('height', this.data.radius * 2 * 1.25);
+    this.shadow.setAttribute('width', this.data.radius * 2 * 1.17);
+    this.shadow.setAttribute('height', this.data.radius * 2 * 1.17);
     this.shadow.setAttribute('position', '0 0 -0.002');
     this.shadow.setAttribute('src', '#aframeSwitchShadow');
     this.wrapper.appendChild(this.shadow);
@@ -158,36 +158,34 @@ AFRAME.registerComponent('circle-button', {
     this.icon.setAttribute('color', this.data.color);
     // this.overlay.setAttribute('color', this.data.color);
 
-    setTimeout(function () {
-      Utils.updateOpacity(that.el, that.data.opacity);
+    Utils.updateOpacity(that.el, that.data.opacity);
 
-      if (that.data.disabled) {
-        that.shadow.setAttribute('visible', false);
-        that.outline.setAttribute('color', '#C4C4C4');
-        that.icon.setAttribute('color', '#B0B0B0');
-      } else {
-        let timer = setInterval(function () {
-          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.el, 1);
-          }
-        }, 10)
-      }
+    if (that.data.disabled) {
+      that.shadow.setAttribute('visible', false);
+      that.outline.setAttribute('color', '#C4C4C4');
+      that.icon.setAttribute('color', '#B0B0B0');
+    } else {
+      let timer = setInterval(function () {
+        if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.el, 1);
+        }
+      }, 10)
+    }
 
-      if (that.data.type === "flat") {
-        that.shadow.setAttribute('visible', false);
-        let timer = setInterval(function () {
-          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.el, 0);
-            if (that.data.disabled) {
-              that.outline.setAttribute('color', '#C4C4C4');
-              that.icon.setAttribute('text', 'color', '#B0B0B0');
-            }
+    if (that.data.type === "flat") {
+      that.shadow.setAttribute('visible', false);
+      let timer = setInterval(function () {
+        if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.el, 0);
+          if (that.data.disabled) {
+            that.outline.setAttribute('color', '#C4C4C4');
+            that.icon.setAttribute('text', 'color', '#B0B0B0');
           }
-        }, 10)
-      }
-    }, 0);
+        }
+      }, 10)
+    }
   },
   tick: function () {},
   remove: function () {},

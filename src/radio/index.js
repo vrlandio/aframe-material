@@ -246,30 +246,28 @@ AFRAME.registerComponent('radio', {
       }
       return v;
     }
-    setTimeout(function () {
-      if (that.data.label.length) {
-        getTextWidth(that.label);
-      }
-      if (that.data.disabled) {
-        let timer = setInterval(function () {
-          if (that.outline.object3D.children[0]) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.outline, 0.4);
-            Utils.updateOpacity(that.circle, 0.4);
-            Utils.updateOpacity(that.label, 0.4);
-          }
-        }, 10)
-      } else {
-        let timer = setInterval(function () {
-          if (that.outline.object3D.children[0]) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.outline, 1);
-            Utils.updateOpacity(that.circle, 1);
-            Utils.updateOpacity(that.label, 1);
-          }
-        }, 10)
-      }
-    }, 0);
+    if (that.data.label.length) {
+      getTextWidth(that.label);
+    }
+    if (that.data.disabled) {
+      let timer = setInterval(function () {
+        if (that.outline.object3D.children[0]) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.outline, 0.4);
+          Utils.updateOpacity(that.circle, 0.4);
+          Utils.updateOpacity(that.label, 0.4);
+        }
+      }, 10)
+    } else {
+      let timer = setInterval(function () {
+        if (that.outline.object3D.children[0]) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.outline, 1);
+          Utils.updateOpacity(that.circle, 1);
+          Utils.updateOpacity(that.label, 1);
+        }
+      }, 10)
+    }
   },
   tick: function () {},
   remove: function () {},

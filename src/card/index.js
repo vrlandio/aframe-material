@@ -42,8 +42,8 @@ AFRAME.registerComponent('card', {
     this.card.setAttribute('radius', Math.max(this.data.height, this.data.width) * this.data.radiusScale);
 
     this.shadow = document.createElement('a-image');
-    this.shadow.setAttribute('height', this.data.height * 1.25);
-    this.shadow.setAttribute('width', this.data.width * 1.25)
+    this.shadow.setAttribute('height', this.data.height * 1.17);
+    this.shadow.setAttribute('width', this.data.width * 1.17)
     this.shadow.setAttribute('src', '#aframeButtonShadow');
 
     if (this.data.shift) {

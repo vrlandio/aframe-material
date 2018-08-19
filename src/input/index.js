@@ -69,6 +69,10 @@ AFRAME.registerComponent('input', {
       type: "string",
       default: "text"
     },
+    password: {
+      type: "boolean",
+      default: false
+    },
     width: {
       type: "number",
       default: 1
@@ -100,10 +104,6 @@ AFRAME.registerComponent('input', {
     backgroundOpacity: {
       type: "number",
       default: 1
-    },
-    raised: {
-      type: "boolean",
-      default: true
     }
   },
 
@@ -114,8 +114,8 @@ AFRAME.registerComponent('input', {
     Utils.preloadAssets(Assets);
 
     this.shadow = document.createElement('a-image');
-    this.shadow.setAttribute('height', this.data.height * 1.25);
-    this.shadow.setAttribute('width', this.data.width * 1.25)
+    this.shadow.setAttribute('height', this.data.height * 1.17);
+    this.shadow.setAttribute('width', this.data.width * 1.17)
     this.shadow.setAttribute('src', '#aframeButtonShadow');
     this.shadow.setAttribute('position', `${this.data.width/2} 0 -0.001`);
     this.el.appendChild(this.shadow);
@@ -270,7 +270,7 @@ AFRAME.registerComponent('input', {
       props.value = this.data.value;
     }
 
-    if (this.data.type === "password") {
+    if (this.data.password) {
       props.value = "*".repeat(this.data.value.length);
     }
 
@@ -338,33 +338,25 @@ AFRAME.registerComponent('input', {
     placeholder_props.color = this.data.placeholderColor;
     this.placeholder.setAttribute("text", placeholder_props);
 
-    setTimeout(function () {
-      if (that.text.object3D) {
-        let children = that.text.object3D.children;
-        if (children[0] && children[0].geometry && children[0].geometry.visibleGlyphs) {
-          let v = 0;
-          if (children[0].geometry.visibleGlyphs.length) {
-            v = getTextWidth(that.text, props, true);
-            that.text.setAttribute('visible', true);
-          }
-          that.cursor.setAttribute('position', v + padding.left + ' 0 0.003');
-        } else {
-          that.cursor.setAttribute('position', padding.left + ' 0 0.003');
+    if (that.text.object3D) {
+      let children = that.text.object3D.children;
+      if (children[0] && children[0].geometry && children[0].geometry.visibleGlyphs) {
+        let v = 0;
+        if (children[0].geometry.visibleGlyphs.length) {
+          v = getTextWidth(that.text, props, true);
+          that.text.setAttribute('visible', true);
         }
+        that.cursor.setAttribute('position', v + padding.left + ' 0 0.003');
       } else {
         that.cursor.setAttribute('position', padding.left + ' 0 0.003');
       }
-      getTextWidth(that.placeholder, placeholder_props);
-    }, 0)
+    } else {
+      that.cursor.setAttribute('position', padding.left + ' 0 0.003');
+    }
+    getTextWidth(that.placeholder, placeholder_props);
 
     this.background.setAttribute('color', this.data.backgroundColor)
-    /*if (this.data.backgroundOpacity) {
-      setTimeout(function() {
-        Utils.updateOpacity(that.background, that.data.backgroundOpacity);
-      }, 0);
-    }*/
     this.background.setAttribute('width', this.data.width);
-    //this.background.setAttribute('position', this.data.width/2+' 0 0');
     this.background.setAttribute('position', `0 -${this.data.height/2} 0.001`);
     this.text.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
     this.placeholder.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
@@ -376,13 +368,9 @@ AFRAME.registerComponent('input', {
   },
   update: function () {
     let that = this;
-    setTimeout(function () {
-      //  Utils.updateOpacity(that.el, that.data.opacity);
-      if (that.data.raised) {
-        that.shadow.setAttribute('visible', false);
-      }
-    }, 0)
-
+    if (that.data.type === 'flat') {
+      that.shadow.setAttribute('visible', false);
+    }
     this.updateCursor();
     this.updateText();
   },
@@ -412,6 +400,7 @@ AFRAME.registerPrimitive('a-input', {
     'placeholder-color': 'input.placeholderColor',
     'max-length': 'input.maxLength',
     type: 'input.type',
+    password: 'input.password',
     width: 'input.width',
     height: 'input.height',
     'radius-scale': 'input.radiusScale',

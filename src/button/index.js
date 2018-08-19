@@ -200,49 +200,48 @@ AFRAME.registerComponent('button', {
       }
       return callback(v);
     }
-    setTimeout(function () {
-      Utils.updateOpacity(that.el, that.data.opacity);
 
-      if (that.data.value.length) {
-        getTextWidth(that.label, (width) => {
-          that.label.setAttribute('position', `${width/2+0.28/2} ${that.data.height/2} 0.002`); //
-          width = width + 0.28;
-          that.outline.setAttribute('width', width);
-          that.__width = width;
-          that.shadow.setAttribute('width', width * 1.17);
-          that.shadow.setAttribute('position', width / 2 + ' 0 0');
-          Event.emit(that.el, 'change:width', width)
-        });
-      }
+    Utils.updateOpacity(that.el, that.data.opacity);
 
-      if (that.data.disabled) {
-        that.shadow.setAttribute('visible', false);
-        that.outline.setAttribute('color', '#C4C4C4');
-        that.label.setAttribute('text', 'color', '#B0B0B0');
-      } else {
-        let timer = setInterval(function () {
-          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.el, 1);
+    if (that.data.value.length) {
+      getTextWidth(that.label, (width) => {
+        that.label.setAttribute('position', `${width/2+0.28/2} ${that.data.height/2} 0.002`); //
+        width = width + 0.28;
+        that.outline.setAttribute('width', width);
+        that.__width = width;
+        that.shadow.setAttribute('width', width * 1.17);
+        that.shadow.setAttribute('position', width / 2 + ' 0 0');
+        Event.emit(that.el, 'change:width', width)
+      });
+    }
+
+    if (that.data.disabled) {
+      that.shadow.setAttribute('visible', false);
+      that.outline.setAttribute('color', '#C4C4C4');
+      that.label.setAttribute('text', 'color', '#B0B0B0');
+    } else {
+      let timer = setInterval(function () {
+        if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.el, 1);
+        }
+      }, 10)
+    }
+
+    if (that.data.type === "flat") {
+      that.shadow.setAttribute('visible', false);
+      let timer = setInterval(function () {
+        if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.el, 1);
+          if (that.data.disabled) {
+            // Utils.updateOpacity(that.label, 0.62);
+            that.outline.setAttribute('color', '#C4C4C4');
+            that.label.setAttribute('text', 'color', '#B0B0B0');
           }
-        }, 10)
-      }
-
-      if (that.data.type === "flat") {
-        that.shadow.setAttribute('visible', false);
-        let timer = setInterval(function () {
-          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.el, 1);
-            if (that.data.disabled) {
-              // Utils.updateOpacity(that.label, 0.62);
-              that.outline.setAttribute('color', '#C4C4C4');
-              that.label.setAttribute('text', 'color', '#B0B0B0');
-            }
-          }
-        }, 10)
-      }
-    }, 0);
+        }
+      }, 10)
+    }
   },
   tick: function () {},
   remove: function () {},

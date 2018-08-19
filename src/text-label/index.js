@@ -85,8 +85,8 @@ AFRAME.registerComponent('text-label', {
     Utils.preloadAssets(Assets);
 
     this.shadow = document.createElement('a-image');
-    this.shadow.setAttribute('height', this.data.height * 1.25);
-    this.shadow.setAttribute('width', this.data.width * 1.25)
+    this.shadow.setAttribute('height', this.data.height * 1.17);
+    this.shadow.setAttribute('width', this.data.width * 1.17)
     this.shadow.setAttribute('src', '#aframeButtonShadow');
     this.shadow.setAttribute('position', `${this.data.width/2} 0 -0.001`);
     this.el.appendChild(this.shadow);

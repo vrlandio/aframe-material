@@ -233,30 +233,29 @@ AFRAME.registerComponent('checkbox', {
       }
       return v;
     }
-    setTimeout(function () {
-      Utils.updateOpacity(that.el, that.data.opacity);
 
-      if (that.data.label.length) {
-        getTextWidth(that.label);
-      }
-      if (that.data.disabled) {
-        let timer = setInterval(function () {
-          if (that.checkmark.object3D.children[0]) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.checkmark, 0.4);
-            Utils.updateOpacity(that.label, 0.4);
-          }
-        }, 10)
-      } else {
-        let timer = setInterval(function () {
-          if (that.checkmark.object3D.children[0]) {
-            clearInterval(timer);
-            Utils.updateOpacity(that.checkmark, 1);
-            Utils.updateOpacity(that.label, 1);
-          }
-        }, 10)
-      }
-    }, 0);
+    Utils.updateOpacity(that.el, that.data.opacity);
+
+    if (that.data.label.length) {
+      getTextWidth(that.label);
+    }
+    if (that.data.disabled) {
+      let timer = setInterval(function () {
+        if (that.checkmark.object3D.children[0]) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.checkmark, 0.4);
+          Utils.updateOpacity(that.label, 0.4);
+        }
+      }, 10)
+    } else {
+      let timer = setInterval(function () {
+        if (that.checkmark.object3D.children[0]) {
+          clearInterval(timer);
+          Utils.updateOpacity(that.checkmark, 1);
+          Utils.updateOpacity(that.label, 1);
+        }
+      }, 10)
+    }
   },
   tick: function () {},
   remove: function () {},

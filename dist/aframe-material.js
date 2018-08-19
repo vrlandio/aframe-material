@@ -1714,6 +1714,10 @@
 	      type: "string",
 	      default: "text"
 	    },
+	    password: {
+	      type: "boolean",
+	      default: false
+	    },
 	    width: {
 	      type: "number",
 	      default: 1
@@ -1745,10 +1749,6 @@
 	    backgroundOpacity: {
 	      type: "number",
 	      default: 1
-	    },
-	    raised: {
-	      type: "boolean",
-	      default: true
 	    }
 	  },
 	
@@ -1759,8 +1759,8 @@
 	    Utils.preloadAssets(Assets);
 	
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('height', this.data.height * 1.25);
-	    this.shadow.setAttribute('width', this.data.width * 1.25);
+	    this.shadow.setAttribute('height', this.data.height * 1.17);
+	    this.shadow.setAttribute('width', this.data.width * 1.17);
 	    this.shadow.setAttribute('src', '#aframeButtonShadow');
 	    this.shadow.setAttribute('position', this.data.width / 2 + ' 0 -0.001');
 	    this.el.appendChild(this.shadow);
@@ -1914,7 +1914,7 @@
 	      props.value = this.data.value;
 	    }
 	
-	    if (this.data.type === "password") {
+	    if (this.data.password) {
 	      props.value = "*".repeat(this.data.value.length);
 	    }
 	
@@ -1981,33 +1981,25 @@
 	    placeholder_props.color = this.data.placeholderColor;
 	    this.placeholder.setAttribute("text", placeholder_props);
 	
-	    setTimeout(function () {
-	      if (that.text.object3D) {
-	        var children = that.text.object3D.children;
-	        if (children[0] && children[0].geometry && children[0].geometry.visibleGlyphs) {
-	          var v = 0;
-	          if (children[0].geometry.visibleGlyphs.length) {
-	            v = getTextWidth(that.text, props, true);
-	            that.text.setAttribute('visible', true);
-	          }
-	          that.cursor.setAttribute('position', v + padding.left + ' 0 0.003');
-	        } else {
-	          that.cursor.setAttribute('position', padding.left + ' 0 0.003');
+	    if (that.text.object3D) {
+	      var children = that.text.object3D.children;
+	      if (children[0] && children[0].geometry && children[0].geometry.visibleGlyphs) {
+	        var v = 0;
+	        if (children[0].geometry.visibleGlyphs.length) {
+	          v = getTextWidth(that.text, props, true);
+	          that.text.setAttribute('visible', true);
 	        }
+	        that.cursor.setAttribute('position', v + padding.left + ' 0 0.003');
 	      } else {
 	        that.cursor.setAttribute('position', padding.left + ' 0 0.003');
 	      }
-	      getTextWidth(that.placeholder, placeholder_props);
-	    }, 0);
+	    } else {
+	      that.cursor.setAttribute('position', padding.left + ' 0 0.003');
+	    }
+	    getTextWidth(that.placeholder, placeholder_props);
 	
 	    this.background.setAttribute('color', this.data.backgroundColor);
-	    /*if (this.data.backgroundOpacity) {
-	      setTimeout(function() {
-	        Utils.updateOpacity(that.background, that.data.backgroundOpacity);
-	      }, 0);
-	    }*/
 	    this.background.setAttribute('width', this.data.width);
-	    //this.background.setAttribute('position', this.data.width/2+' 0 0');
 	    this.background.setAttribute('position', '0 -' + this.data.height / 2 + ' 0.001');
 	    this.text.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
 	    this.placeholder.setAttribute('position', padding.left - 0.001 + this.data.width / 2 + ' 0 0.002');
@@ -2019,13 +2011,9 @@
 	  },
 	  update: function update() {
 	    var that = this;
-	    setTimeout(function () {
-	      //  Utils.updateOpacity(that.el, that.data.opacity);
-	      if (that.data.raised) {
-	        that.shadow.setAttribute('visible', false);
-	      }
-	    }, 0);
-	
+	    if (that.data.type === 'flat') {
+	      that.shadow.setAttribute('visible', false);
+	    }
 	    this.updateCursor();
 	    this.updateText();
 	  },
@@ -2055,6 +2043,7 @@
 	    'placeholder-color': 'input.placeholderColor',
 	    'max-length': 'input.maxLength',
 	    type: 'input.type',
+	    password: 'input.password',
 	    width: 'input.width',
 	    height: 'input.height',
 	    'radius-scale': 'input.radiusScale',
@@ -2614,30 +2603,28 @@
 	      }
 	      return v;
 	    }
-	    setTimeout(function () {
-	      if (that.data.label.length) {
-	        getTextWidth(that.label);
-	      }
-	      if (that.data.disabled) {
-	        var timer = setInterval(function () {
-	          if (that.outline.object3D.children[0]) {
-	            clearInterval(timer);
-	            Utils.updateOpacity(that.outline, 0.4);
-	            Utils.updateOpacity(that.circle, 0.4);
-	            Utils.updateOpacity(that.label, 0.4);
-	          }
-	        }, 10);
-	      } else {
-	        var _timer = setInterval(function () {
-	          if (that.outline.object3D.children[0]) {
-	            clearInterval(_timer);
-	            Utils.updateOpacity(that.outline, 1);
-	            Utils.updateOpacity(that.circle, 1);
-	            Utils.updateOpacity(that.label, 1);
-	          }
-	        }, 10);
-	      }
-	    }, 0);
+	    if (that.data.label.length) {
+	      getTextWidth(that.label);
+	    }
+	    if (that.data.disabled) {
+	      var timer = setInterval(function () {
+	        if (that.outline.object3D.children[0]) {
+	          clearInterval(timer);
+	          Utils.updateOpacity(that.outline, 0.4);
+	          Utils.updateOpacity(that.circle, 0.4);
+	          Utils.updateOpacity(that.label, 0.4);
+	        }
+	      }, 10);
+	    } else {
+	      var _timer = setInterval(function () {
+	        if (that.outline.object3D.children[0]) {
+	          clearInterval(_timer);
+	          Utils.updateOpacity(that.outline, 1);
+	          Utils.updateOpacity(that.circle, 1);
+	          Utils.updateOpacity(that.label, 1);
+	        }
+	      }, 10);
+	    }
 	  },
 	  tick: function tick() {},
 	  remove: function remove() {},
@@ -2961,30 +2948,29 @@
 	      }
 	      return v;
 	    }
-	    setTimeout(function () {
-	      Utils.updateOpacity(that.el, that.data.opacity);
 	
-	      if (that.data.label.length) {
-	        getTextWidth(that.label);
-	      }
-	      if (that.data.disabled) {
-	        var timer = setInterval(function () {
-	          if (that.checkmark.object3D.children[0]) {
-	            clearInterval(timer);
-	            Utils.updateOpacity(that.checkmark, 0.4);
-	            Utils.updateOpacity(that.label, 0.4);
-	          }
-	        }, 10);
-	      } else {
-	        var _timer = setInterval(function () {
-	          if (that.checkmark.object3D.children[0]) {
-	            clearInterval(_timer);
-	            Utils.updateOpacity(that.checkmark, 1);
-	            Utils.updateOpacity(that.label, 1);
-	          }
-	        }, 10);
-	      }
-	    }, 0);
+	    Utils.updateOpacity(that.el, that.data.opacity);
+	
+	    if (that.data.label.length) {
+	      getTextWidth(that.label);
+	    }
+	    if (that.data.disabled) {
+	      var timer = setInterval(function () {
+	        if (that.checkmark.object3D.children[0]) {
+	          clearInterval(timer);
+	          Utils.updateOpacity(that.checkmark, 0.4);
+	          Utils.updateOpacity(that.label, 0.4);
+	        }
+	      }, 10);
+	    } else {
+	      var _timer = setInterval(function () {
+	        if (that.checkmark.object3D.children[0]) {
+	          clearInterval(_timer);
+	          Utils.updateOpacity(that.checkmark, 1);
+	          Utils.updateOpacity(that.label, 1);
+	        }
+	      }, 10);
+	    }
 	  },
 	  tick: function tick() {},
 	  remove: function remove() {},
@@ -3274,49 +3260,48 @@
 	      }
 	      return callback(v);
 	    }
-	    setTimeout(function () {
-	      Utils.updateOpacity(that.el, that.data.opacity);
 	
-	      if (that.data.value.length) {
-	        getTextWidth(that.label, function (width) {
-	          that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + that.data.height / 2 + ' 0.002'); //
-	          width = width + 0.28;
-	          that.outline.setAttribute('width', width);
-	          that.__width = width;
-	          that.shadow.setAttribute('width', width * 1.17);
-	          that.shadow.setAttribute('position', width / 2 + ' 0 0');
-	          Event.emit(that.el, 'change:width', width);
-	        });
-	      }
+	    Utils.updateOpacity(that.el, that.data.opacity);
 	
-	      if (that.data.disabled) {
-	        that.shadow.setAttribute('visible', false);
-	        that.outline.setAttribute('color', '#C4C4C4');
-	        that.label.setAttribute('text', 'color', '#B0B0B0');
-	      } else {
-	        var timer = setInterval(function () {
-	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(timer);
-	            Utils.updateOpacity(that.el, 1);
+	    if (that.data.value.length) {
+	      getTextWidth(that.label, function (width) {
+	        that.label.setAttribute('position', width / 2 + 0.28 / 2 + ' ' + that.data.height / 2 + ' 0.002'); //
+	        width = width + 0.28;
+	        that.outline.setAttribute('width', width);
+	        that.__width = width;
+	        that.shadow.setAttribute('width', width * 1.17);
+	        that.shadow.setAttribute('position', width / 2 + ' 0 0');
+	        Event.emit(that.el, 'change:width', width);
+	      });
+	    }
+	
+	    if (that.data.disabled) {
+	      that.shadow.setAttribute('visible', false);
+	      that.outline.setAttribute('color', '#C4C4C4');
+	      that.label.setAttribute('text', 'color', '#B0B0B0');
+	    } else {
+	      var timer = setInterval(function () {
+	        if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
+	          clearInterval(timer);
+	          Utils.updateOpacity(that.el, 1);
+	        }
+	      }, 10);
+	    }
+	
+	    if (that.data.type === "flat") {
+	      that.shadow.setAttribute('visible', false);
+	      var _timer = setInterval(function () {
+	        if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
+	          clearInterval(_timer);
+	          Utils.updateOpacity(that.el, 1);
+	          if (that.data.disabled) {
+	            // Utils.updateOpacity(that.label, 0.62);
+	            that.outline.setAttribute('color', '#C4C4C4');
+	            that.label.setAttribute('text', 'color', '#B0B0B0');
 	          }
-	        }, 10);
-	      }
-	
-	      if (that.data.type === "flat") {
-	        that.shadow.setAttribute('visible', false);
-	        var _timer = setInterval(function () {
-	          if (that.label.object3D.children[0] && that.label.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(_timer);
-	            Utils.updateOpacity(that.el, 1);
-	            if (that.data.disabled) {
-	              // Utils.updateOpacity(that.label, 0.62);
-	              that.outline.setAttribute('color', '#C4C4C4');
-	              that.label.setAttribute('text', 'color', '#B0B0B0');
-	            }
-	          }
-	        }, 10);
-	      }
-	    }, 0);
+	        }
+	      }, 10);
+	    }
 	  },
 	  tick: function tick() {},
 	  remove: function remove() {},
@@ -3513,8 +3498,8 @@
 	
 	    // SHADOW
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('width', this.data.width * 1.25);
-	    this.shadow.setAttribute('height', this.data.height * 1.25);
+	    this.shadow.setAttribute('width', this.data.width * 1.17);
+	    this.shadow.setAttribute('height', this.data.height * 1.17);
 	    this.shadow.setAttribute('position', '0 0 -0.002');
 	    this.shadow.setAttribute('src', '#aframeButtonShadow');
 	    this.wrapper.appendChild(this.shadow);
@@ -3595,36 +3580,34 @@
 	    this.icon.setAttribute('color', this.data.color);
 	    // this.overlay.setAttribute('color', this.data.color);
 	
-	    setTimeout(function () {
-	      Utils.updateOpacity(that.el, that.data.opacity);
+	    Utils.updateOpacity(that.el, that.data.opacity);
 	
-	      if (that.data.disabled) {
-	        that.shadow.setAttribute('visible', false);
-	        that.outline.setAttribute('color', '#C4C4C4');
-	        that.icon.setAttribute('color', '#B0B0B0');
-	      } else {
-	        var timer = setInterval(function () {
-	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(timer);
-	            Utils.updateOpacity(that.el, 1);
-	          }
-	        }, 10);
-	      }
+	    if (that.data.disabled) {
+	      that.shadow.setAttribute('visible', false);
+	      that.outline.setAttribute('color', '#C4C4C4');
+	      that.icon.setAttribute('color', '#B0B0B0');
+	    } else {
+	      var timer = setInterval(function () {
+	        if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	          clearInterval(timer);
+	          Utils.updateOpacity(that.el, 1);
+	        }
+	      }, 10);
+	    }
 	
-	      if (that.data.type === "flat") {
-	        that.shadow.setAttribute('visible', false);
-	        var _timer = setInterval(function () {
-	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(_timer);
-	            Utils.updateOpacity(that.el, 1);
-	            if (that.data.disabled) {
-	              that.outline.setAttribute('color', '#C4C4C4');
-	              that.icon.setAttribute('color', '#B0B0B0');
-	            }
+	    if (that.data.type === "flat") {
+	      that.shadow.setAttribute('visible', false);
+	      var _timer = setInterval(function () {
+	        if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	          clearInterval(_timer);
+	          Utils.updateOpacity(that.el, 1);
+	          if (that.data.disabled) {
+	            that.outline.setAttribute('color', '#C4C4C4');
+	            that.icon.setAttribute('color', '#B0B0B0');
 	          }
-	        }, 10);
-	      }
-	    }, 0);
+	        }
+	      }, 10);
+	    }
 	  },
 	  tick: function tick() {},
 	  remove: function remove() {},
@@ -3828,8 +3811,8 @@
 	
 	    // SHADOW
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('width', this.data.radius * 2 * 1.25);
-	    this.shadow.setAttribute('height', this.data.radius * 2 * 1.25);
+	    this.shadow.setAttribute('width', this.data.radius * 2 * 1.17);
+	    this.shadow.setAttribute('height', this.data.radius * 2 * 1.17);
 	    this.shadow.setAttribute('position', '0 0 -0.002');
 	    this.shadow.setAttribute('src', '#aframeSwitchShadow');
 	    this.wrapper.appendChild(this.shadow);
@@ -3909,36 +3892,34 @@
 	    this.icon.setAttribute('color', this.data.color);
 	    // this.overlay.setAttribute('color', this.data.color);
 	
-	    setTimeout(function () {
-	      Utils.updateOpacity(that.el, that.data.opacity);
+	    Utils.updateOpacity(that.el, that.data.opacity);
 	
-	      if (that.data.disabled) {
-	        that.shadow.setAttribute('visible', false);
-	        that.outline.setAttribute('color', '#C4C4C4');
-	        that.icon.setAttribute('color', '#B0B0B0');
-	      } else {
-	        var timer = setInterval(function () {
-	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(timer);
-	            Utils.updateOpacity(that.el, 1);
-	          }
-	        }, 10);
-	      }
+	    if (that.data.disabled) {
+	      that.shadow.setAttribute('visible', false);
+	      that.outline.setAttribute('color', '#C4C4C4');
+	      that.icon.setAttribute('color', '#B0B0B0');
+	    } else {
+	      var timer = setInterval(function () {
+	        if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	          clearInterval(timer);
+	          Utils.updateOpacity(that.el, 1);
+	        }
+	      }, 10);
+	    }
 	
-	      if (that.data.type === "flat") {
-	        that.shadow.setAttribute('visible', false);
-	        var _timer = setInterval(function () {
-	          if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
-	            clearInterval(_timer);
-	            Utils.updateOpacity(that.el, 0);
-	            if (that.data.disabled) {
-	              that.outline.setAttribute('color', '#C4C4C4');
-	              that.icon.setAttribute('text', 'color', '#B0B0B0');
-	            }
+	    if (that.data.type === "flat") {
+	      that.shadow.setAttribute('visible', false);
+	      var _timer = setInterval(function () {
+	        if (that.icon.object3D.children[0] && that.icon.object3D.children[0].geometry.visibleGlyphs) {
+	          clearInterval(_timer);
+	          Utils.updateOpacity(that.el, 0);
+	          if (that.data.disabled) {
+	            that.outline.setAttribute('color', '#C4C4C4');
+	            that.icon.setAttribute('text', 'color', '#B0B0B0');
 	          }
-	        }, 10);
-	      }
-	    }, 0);
+	        }
+	      }, 10);
+	    }
 	  },
 	  tick: function tick() {},
 	  remove: function remove() {},
@@ -4363,8 +4344,8 @@
 	    this.card.setAttribute('radius', Math.max(this.data.height, this.data.width) * this.data.radiusScale);
 	
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('height', this.data.height * 1.25);
-	    this.shadow.setAttribute('width', this.data.width * 1.25);
+	    this.shadow.setAttribute('height', this.data.height * 1.17);
+	    this.shadow.setAttribute('width', this.data.width * 1.17);
 	    this.shadow.setAttribute('src', '#aframeButtonShadow');
 	
 	    if (this.data.shift) {
@@ -4509,8 +4490,8 @@
 	    Utils.preloadAssets(Assets);
 	
 	    this.shadow = document.createElement('a-image');
-	    this.shadow.setAttribute('height', this.data.height * 1.25);
-	    this.shadow.setAttribute('width', this.data.width * 1.25);
+	    this.shadow.setAttribute('height', this.data.height * 1.17);
+	    this.shadow.setAttribute('width', this.data.width * 1.17);
 	    this.shadow.setAttribute('src', '#aframeButtonShadow');
 	    this.shadow.setAttribute('position', this.data.width / 2 + ' 0 -0.001');
 	    this.el.appendChild(this.shadow);
