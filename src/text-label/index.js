@@ -48,14 +48,6 @@ AFRAME.registerComponent('text-label', {
       type: "string",
       default: ""
     },
-    placeholder: {
-      type: "string",
-      default: ""
-    },
-    placeholderColor: {
-      type: "color",
-      default: "#AAA"
-    },
     maxLength: {
       type: "int",
       default: 0
