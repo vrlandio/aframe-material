@@ -20,4 +20,5 @@
   require("./toast");
   require("./card");
   require("./text-label");
+  require("./slider");
 })();
