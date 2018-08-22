@@ -4158,6 +4158,17 @@
 	    // METHDOS
 	    this.el.show = this.show.bind(this);
 	    this.el.hide = this.hide.bind(this);
+	
+	    Object.defineProperty(this.el, 'message', {
+	      get: function get() {
+	        return this.getAttribute('message');
+	      },
+	      set: function set(value) {
+	        this.setAttribute('message', message);
+	      },
+	      enumerable: true,
+	      configurable: true
+	    });
 	  },
 	  show: function show() {
 	    if (this.hideTimer) {

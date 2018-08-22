@@ -108,6 +108,18 @@ AFRAME.registerComponent('toast', {
     // METHDOS
     this.el.show = this.show.bind(this);
     this.el.hide = this.hide.bind(this);
+
+
+    Object.defineProperty(this.el, 'message', {
+      get: function () {
+        return this.getAttribute('message');
+      },
+      set: function (value) {
+        this.setAttribute('message', message);
+      },
+      enumerable: true,
+      configurable: true
+    });
   },
   show: function () {
     if (this.hideTimer) {
