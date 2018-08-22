@@ -114,7 +114,7 @@ AFRAME.registerComponent('toast', {
       get: function () {
         return this.getAttribute('message');
       },
-      set: function (value) {
+      set: function (message) {
         this.setAttribute('message', message);
       },
       enumerable: true,

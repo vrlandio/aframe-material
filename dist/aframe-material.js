@@ -4163,7 +4163,7 @@
 	      get: function get() {
 	        return this.getAttribute('message');
 	      },
-	      set: function set(value) {
+	      set: function set(message) {
 	        this.setAttribute('message', message);
 	      },
 	      enumerable: true,
