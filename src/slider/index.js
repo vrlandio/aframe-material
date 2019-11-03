@@ -1,56 +1,21 @@
-const Utils = require('../utils');
-const Event = require('../core/event');
-const Assets = require('./assets');
-const SFX = require('./sfx');
+const Utils = require("../utils");
+const Event = require("../core/event");
+const Assets = require("./assets");
+const SFX = require("./sfx");
 
-AFRAME.registerComponent('slider', {
+AFRAME.registerComponent("slider", {
   schema: {
-    name: {
-      type: "string",
-      default: ""
-    },
-    value: {
-      type: "number",
-      default: 0
-    },
-    min: {
-      type: "number",
-      default: 0
-    },
-    max: {
-      type: "number",
-      default: 100
-    },
-    disabled: {
-      type: 'boolean',
-      default: false
-    },
-    trackColor: {
-      type: "color",
-      default: "#bababa"
-    },
-    knobColor: {
-      type: "color",
-      default: "#4076fd"
-    },
-    trackColorDisabled: {
-      type: "color",
-      default: "#939393"
-    },
-    knobColorDisabled: {
-      type: "color",
-      default: "#a2a2a2"
-    },
-    opacity: {
-      type: "number",
-      default: 1
-    },
-    width: {
-      type: "number",
-      default: 1.52
-    }
+    name: { type: "string", default: "" },
+    enabled: { type: "boolean", default: false },
+    disabled: { type: "boolean", default: false },
+    fillColor: { type: "color", default: "#bababa" },
+    knobColor: { type: "color", default: "#f5f5f5" },
+    fillColorEnabled: { type: "color", default: "#80a8ff" },
+    knobColorEnabled: { type: "color", default: "#4076fd" },
+    fillColorDisabled: { type: "color", default: "#939393" },
+    knobColorDisabled: { type: "color", default: "#a2a2a2" }
   },
-  init: function () {
+  init: function() {
     var that = this;
 
     // Assets
@@ -59,165 +24,97 @@ AFRAME.registerComponent('slider', {
     // SFX
     SFX.init(this.el);
 
-    this.percent = this.data.value / (this.data.max - this.data.min);
-    this.dragging = false;
-    this.dragger = null;
-
-    // BACKGROUND
-    this.background = document.createElement('a-plane');
-    this.background.setAttribute('width', this.data.width);
-    this.background.setAttribute('height', 0.216);
-    this.background.setAttribute('position', '0 0 -0.001');
-    this.background.setAttribute('material', 'opacity', 0);
-    this.el.appendChild(this.background);
-
-    // TRACK
-    this.track = document.createElement('a-plane');
-    this.track.setAttribute('width', this.data.width)
-    this.track.setAttribute('height', 0.02)
-    this.track.setAttribute('position', '0 0 0.001')
-    this.el.appendChild(this.track);
-
-    // HIGHLIGHT
-    this.highlight = document.createElement('a-plane');
-    this.highlight.setAttribute('width', this.percent * this.data.width);
-    this.highlight.setAttribute('height', 0.02);
-    this.highlight.setAttribute('position', `${(-this.data.width+this.percent * this.data.width)/2} 0 0.0011`);
-    this.highlight.setAttribute('visible', false);
-    this.el.appendChild(this.highlight);
+    // FILL
+    this.el.fill = document.createElement("a-rounded");
+    this.el.fill.setAttribute("width", 2);
+    this.el.fill.setAttribute("height", 0.16);
+    this.el.fill.setAttribute("radius", 0.08);
+    this.el.fill.setAttribute("side", "double");
+    this.el.fill.setAttribute("position", "0 0 0.01");
+    this.el.appendChild(this.el.fill);
 
     // KNOB
-    this.knob = document.createElement('a-circle');
-    this.knob.setAttribute('position', `${-this.data.width/2+this.percent * this.data.width} 0 0.002`);
-    this.knob.setAttribute('radius', 0.072)
-    this.el.appendChild(this.knob);
+    this.el.knob = document.createElement("a-circle");
+    this.el.knob.setAttribute("position", "0.06 0.08 0.02");
+    this.el.knob.setAttribute("radius", 0.12);
+    this.el.knob.setAttribute("side", "double");
+    this.el.appendChild(this.el.knob);
 
+    // SHADOW
+    this.el.shadow_el = document.createElement("a-image");
+    this.el.shadow_el.setAttribute("width", 0.24 * 1.25);
+    this.el.shadow_el.setAttribute("height", 0.24 * 1.25);
+    this.el.shadow_el.setAttribute("position", "0 0 -0.001");
+    this.el.shadow_el.setAttribute("src", "#aframeSwitchShadow");
+    this.el.knob.appendChild(this.el.shadow_el);
 
-    this.el.addEventListener('click', function (evt) {
-      if (this.components.slider.data.disabled) {
-        return;
-      }
-      var localCoordinates = this.object3D.worldToLocal(evt.detail.intersection.point);
-      var sliderBarWidth = that.data.width; // total width of slider bar
-      if (localCoordinates.x <= (-sliderBarWidth / 2)) {
-        that.percent = 0;
-      } else if (localCoordinates.x >= (sliderBarWidth / 2)) {
-        that.percent = 1.0;
+    this.el.addEventListener("click", function(evt) {
+      console.log("I was clicked at: ", evt.detail.intersection.point);
+      var localCoordinates = this.el.object3D.worldToLocal(
+        evt.detail.intersection.point
+      );
+      console.log("local coordinates: ", localCoordinates);
+      console.log("current percent: " + data.percent);
+      var sliderBarWidth = 2; // total width of slider bar
+      if (localCoordinates.x <= -sliderBarWidth / 2) {
+        data.percent = 0;
+      } else if (localCoordinates.x >= sliderBarWidth / 2) {
+        data.percent = 1.0;
       } else {
-        that.percent = (localCoordinates.x + (sliderBarWidth / 2)) / sliderBarWidth;
+        data.percent =
+          (localCoordinates.x + sliderBarWidth / 2) / sliderBarWidth;
       }
-      this.setAttribute('value', that.percent * (that.data.max - that.data.min) + that.data.min);
-      Event.emit(this, 'change', this.components.slider.data.value);
+      console.log("handle container: " + handleContainer);
+      Event.emit(this, "change", this.components.slider.data.enabled);
     });
 
-    this.knob.addEventListener('mousedown', function (evt) {
-      that.knob.setAttribute('radius', 0.108);
-      that.dragger = evt.detail.cursorEl;
-    });
-
-    this.knob.addEventListener('mouseup', function () {
-      that.knob.setAttribute('radius', 0.072);
-      that.dragger = null;
-    });
-
-    this.el.addEventListener('mousedown', function () {
-      if (this.components.slider && this.components.slider.data.disabled) {
-        return SFX.clickDisabled(this);
-      }
-      SFX.click(this);
-    });
-    this.el.addEventListener('mouseup', function () {
-      if (this.components.slider && this.components.slider.data.disabled) {
-        return;
-      }
-    });
-
-    Object.defineProperty(this.el, 'value', {
-      get: function () {
-        return this.getAttribute('value');
+    Object.defineProperty(this.el, "enabled", {
+      get: function() {
+        return this.getAttribute("enabled");
       },
-      set: function (value) {
-        this.setAttribute('value', value);
+      set: function(value) {
+        this.setAttribute("enabled", value);
       },
       enumerable: true,
       configurable: true
     });
   },
-
-  disable: function () {
-    this.track.setAttribute('color', this.data.trackColorDisabled);
-    this.highlight.setAttribute('color', this.data.trackColorDisabled);
-    this.knob.setAttribute('color', this.data.knobColorDisabled);
+  on: function() {
+    this.el.fill.setAttribute("color", this.data.fillColorEnabled);
+    this.el.knob.setAttribute("position", "0.32 0.08 0.02");
+    this.el.knob.setAttribute("color", this.data.knobColorEnabled);
   },
-  enable: function () {
-    this.track.setAttribute('color', this.data.trackColor);
-    this.highlight.setAttribute('color', this.data.knobColor);
-    this.knob.setAttribute('color', this.data.knobColor);
+  off: function() {
+    this.el.fill.setAttribute("color", this.data.fillColor);
+    this.el.knob.setAttribute("position", "0.06 0.08 0.02");
+    this.el.knob.setAttribute("color", this.data.knobColor);
   },
-  updateForegroundOpacity(opacity) {
-    this.track.setAttribute('opacity', opacity);
-    this.highlight.setAttribute('opacity', opacity);
-    this.knob.setAttribute('opacity', opacity);
+  disable: function() {
+    this.el.fill.setAttribute("color", this.data.fillColorDisabled);
+    this.el.knob.setAttribute("color", this.data.knobColorDisabled);
   },
-  update: function () {
-    if ((this.percent * this.data.width) <= this.data.min) {
-      this.highlight.setAttribute('visible', false);
-    } else {
-      this.highlight.setAttribute('visible', true);
-      this.highlight.setAttribute('geometry', 'width', this.percent * this.data.width);
-      this.highlight.setAttribute('position', `${(-this.data.width+this.percent * this.data.width)/2} 0 0.0011`);
-    }
-
-    this.knob.setAttribute('position', `${-this.data.width/2+this.percent*this.data.width} 0 0.002`);
-
-    if (this.data.disabled) {
-      this.disable();
-    } else {
-      this.enable();
-    }
-
-    this.updateForegroundOpacity(this.data.opacity);
+  update: function() {
+    //this.el.knob.getAttribute('position')
   },
-  tick: function () {
-    if (this.dragger && this.dragger.components.cursor.eventDetail.intersection) {
-      if (this.data.disabled) {
-        return;
-      }
-      var localCoordinates = this.el.object3D.worldToLocal(this.dragger.components.cursor.eventDetail.intersection.point);
-      var sliderBarWidth = this.data.width; // total width of slider bar
-      if (localCoordinates.x <= (-sliderBarWidth / 2)) {
-        this.percent = 0;
-      } else if (localCoordinates.x >= (sliderBarWidth / 2)) {
-        this.percent = 1.0;
-      } else {
-        this.percent = (localCoordinates.x + (sliderBarWidth / 2)) / sliderBarWidth;
-      }
-      this.el.setAttribute('value', this.percent * (this.data.max - this.data.min) + this.data.min);
-      Event.emit(this.el, 'change', this.data.value);
-    } else {
-      this.dragger = null;
-    }
-  },
-  remove: function () {},
-  pause: function () {},
-  play: function () {}
+  tick: function() {},
+  remove: function() {},
+  pause: function() {},
+  play: function() {}
 });
 
-AFRAME.registerPrimitive('a-slider', {
+AFRAME.registerPrimitive("a-slider", {
   defaultComponents: {
-    slider: {}
+    switch: {}
   },
   mappings: {
-    name: 'slider.name',
-    value: 'slider.value',
-    min: 'slider.min',
-    max: 'slider.max',
-    disabled: 'slider.disabled',
-    'track-color': 'slider.trackColor',
-    'knob-color': 'slider.knobColor',
-    'track-color-disabled': 'slider.trackColorDisabled',
-    'knob-color-disabled': 'slider.knobColorDisabled',
-    opacity: 'slider.opacity',
-    width: 'slider.width'
+    name: "slider.name",
+    enabled: "slider.enabled",
+    disabled: "slider.disabled",
+    "fill-color": "slider.fillColor",
+    "knob-color": "slider.knobColor",
+    "fill-color-enabled": "slider.fillColorEnabled",
+    "knob-color-enabled": "slider.knobColorEnabled",
+    "fill-color-disabled": "slider.fillColorDisabled",
+    "knob-color-disabled": "slider.knobColorDisabled"
   }
 });

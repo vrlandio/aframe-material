@@ -1,8 +1,8 @@
-const Assets = require('./assets');
-const Config = require('./config');
-const Utils = require('../utils');
-const Event = require('../core/event');
-const SFX = require('./sfx');
+const Assets = require("./assets");
+const Config = require("./config");
+const Utils = require("../utils");
+const Event = require("../core/event");
+//const SFX = require("./sfx");
 const Behaviors = {};
 
 Behaviors.el = null;
@@ -10,14 +10,14 @@ Behaviors.el = null;
 // -----------------------------------------------------------------------------
 // KEYBOARD METHODS
 
-Behaviors.showKeyboard = function (el) {
+Behaviors.showKeyboard = function(el) {
   if (el.o_position) {
     el.object3D.position.copy(el.o_position);
   }
   el.isOpen = true;
-  for (let item of el.querySelectorAll('[data-ui]')) {
+  for (let item of el.querySelectorAll("[data-ui]")) {
     for (let child of item.children) {
-      child.setAttribute('show', true);
+      child.setAttribute("show", true);
     }
   }
   let parent = el.parentNode;
@@ -27,7 +27,7 @@ Behaviors.showKeyboard = function (el) {
   el.sceneEl.appendChild(el);
 };
 
-Behaviors.hideKeyboard = function (el) {
+Behaviors.hideKeyboard = function(el) {
   let position = el.getAttribute("position");
   if (position.x !== -10000) {
     if (!el.o_position) {
@@ -37,12 +37,14 @@ Behaviors.hideKeyboard = function (el) {
   }
   el.isOpen = false;
   el.setAttribute("position", "-10000 -10000 -10000");
-  el.setAttribute('fadeout', {
-    duration: 1
-  });
-}
+};
 
-Behaviors.destroyKeyboard = function (el) {
+Behaviors.destroyKeyboard = function(el) {
+  //el.removeEventListener("click", Behaviors.keyClick);
+  el.removeEventListener("mousedown", Behaviors.keyClick);
+  el.removeEventListener("mouseup", Behaviors.keyOut);
+  el.removeEventListener("raycaster-intersected", Behaviors.keyIn);
+  el.removeEventListener("raycaster-intersected-cleared", Behaviors.keyOut);
   let parent = el.parentNode;
   if (!parent) {
     return;
@@ -50,7 +52,7 @@ Behaviors.destroyKeyboard = function (el) {
   parent.removeChild(el);
 };
 
-Behaviors.openKeyboard = function (el) {
+Behaviors.openKeyboard = function(el) {
   if (el.o_position) {
     el.object3D.position.copy(el.o_position);
   }
@@ -60,208 +62,163 @@ Behaviors.openKeyboard = function (el) {
   if (!parent) {
     el.sceneEl.appendChild(el);
   }
-  for (let item of el.querySelectorAll('[data-ui]')) {
+  for (let item of el.querySelectorAll("[data-ui]")) {
     for (let child of item.children) {
-      child.setAttribute('hide', true);
+      child.setAttribute("hide", true);
     }
-
-    function animationend() {
-      item.children[0].removeEventListener('animationend', animationend)
-      setTimeout(function () {
-        item.children[1].setAttribute('fadein', {
-          duration: 160
-        });
-        Event.emit(Behaviors.el, 'didopen');
-        el._transitioning = false;
-      }, 10)
-    }
-    item.children[0].setAttribute('fadein', {
-      duration: 160
-    });
-    item.children[0].addEventListener('animationend', animationend)
   }
 };
 
-Behaviors.dismissKeyboard = function (el) {
+Behaviors.dismissKeyboard = function(el) {
   el._transitioning = true;
-  for (let item of el.querySelectorAll('[data-ui]')) {
+  for (let item of el.querySelectorAll("[data-ui]")) {
     for (let child of item.children) {
-      child.setAttribute('show', true);
+      child.setAttribute("show", true);
     }
     el.isOpen = false;
-
-    function animationend() {
-      item.children[1].removeEventListener('animationend', animationend)
-      setTimeout(function () {
-        function animationend() {
-          item.children[0].removeEventListener('animationend', animationend);
-          Behaviors.hideKeyboard(el);
-          Event.emit(Behaviors.el, 'diddismiss');
-          el._transitioning = false;
-        }
-        item.children[0].setAttribute('fadeout', {
-          duration: 160
-        });
-        item.children[0].addEventListener('animationend', animationend);
-      }, 10)
-    }
-    item.children[1].setAttribute('fadeout', {
-      duration: 160
-    });
-    item.children[1].addEventListener('animationend', animationend)
   }
 };
 
 // -----------------------------------------------------------------------------
 // KEY EVENTS
 
-Behaviors.addKeyEvents = (el) => {
-  el.addEventListener('click', (e) => {
-    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
-      Behaviors.keyClick(el);
-    }
-  });
-  el.addEventListener('mousedown', (e) => {
-    if (e instanceof MouseEvent && Behaviors.el.isOpen) {
-      Behaviors.keyDown(el);
-    }
-  });
-  el.addEventListener('mouseup', (e) => {
-    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
-      Behaviors.keyOut(el);
-    }
-  });
-  el.addEventListener('raycaster-intersected', (e) => {
-    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
-      Behaviors.keyIn(el);
-    }
-  });
-  el.addEventListener('raycaster-intersected-cleared', (e) => {
-    if (e instanceof CustomEvent && Behaviors.el.isOpen) {
-      Behaviors.keyOut(el);
-    }
-  });
+Behaviors.addKeyEvents = el => {
+  //  el.addEventListener("click", Behaviors.keyClick);
+  el.addEventListener("mousedown", Behaviors.keyClick);
+  el.addEventListener("mouseup", Behaviors.keyOut);
+  el.addEventListener("raycaster-intersected", Behaviors.keyIn);
+  el.addEventListener("raycaster-intersected-cleared", Behaviors.keyOut);
+  //triggerdown
+  // https://aframe.io/docs/0.6.0/components/hand-controls.html
 };
 
 // -----------------------------------------------------------------------------
 // KEYCLICK
 
-Behaviors.keyClick = function (keyEl) {
-  SFX.keyDown(Behaviors.el);
+Behaviors.keyClick = function() {
+  // SFX.keyDown(Behaviors.el);
 
-  let type = keyEl.getAttribute('key-type');
-  let value = keyEl.getAttribute('key-value');
+  let type = this.getAttribute("key-type");
+  let value = this.getAttribute("key-value");
 
-  if (type === 'text' || type === 'spacebar') {
-    if (type === 'spacebar') {
-      value = ' ';
+  if (type === "text" || type === "spacebar") {
+    if (type === "spacebar") {
+      value = " ";
     }
     if (Behaviors.isShiftEnabled) {
       value = value.toUpperCase();
       Behaviors.shiftToggle();
+    } else if (Behaviors.isSymbols) {
+      Behaviors.symbolsToggle();
     }
-    // else if (Behaviors.isSymbols) {
-    //   Behaviors.symbolsToggle();
-    // }
-    Event.emit(Behaviors.el, 'input', value);
-  } else if (type === 'shift') {
+    Event.emit(Behaviors.el, "input", value);
+  } else if (type === "shift") {
     Behaviors.shiftToggle();
-  } else if (type === 'symbol') {
+  } else if (type === "symbol") {
     Behaviors.symbolsToggle();
-  } else if (type === 'backspace') {
-    Event.emit(Behaviors.el, 'backspace');
-  } else if (type === 'enter') {
-    Event.emit(Behaviors.el, 'input', '\n');
-    Event.emit(Behaviors.el, 'enter', '\n');
-  } else if (type === 'dismiss') {
-    Event.emit(Behaviors.el, 'dismiss');
+  } else if (type === "backspace") {
+    Event.emit(Behaviors.el, "backspace");
+  } else if (type === "enter") {
+    //Event.emit(Behaviors.el, 'input', '\n');
+    //Event.emit(Behaviors.el, 'enter', '\n');
+
+    Behaviors.destroyKeyboard(Behaviors.el);
+    // Event.emit(Behaviors.el, 'dismiss');
+  } else if (type === "dismiss") {
+    Event.emit(Behaviors.el, "dismiss");
   }
-}
+};
 
 // -----------------------------------------------------------------------------
 // KEYDOWN
 
-Behaviors.keyDown = function (keyEl) {
+Behaviors.keyDown = function() {
   if (Behaviors.el._transitioning) {
     return;
   }
-  keyEl.object3D.position.z = 0.003;
-  if (keyEl.getAttribute('key-type') === 'spacebar') {
-    keyEl.setAttribute('color', Config.SPACEBAR_COLOR_ACTIVE);
+  this.object3D.position.z = 0.003;
+  if (this.getAttribute("key-type") === "spacebar") {
+    this.setAttribute("color", Config.SPACEBAR_COLOR_ACTIVE);
   } else {
-    keyEl.setAttribute('color', Config.KEY_COLOR_ACTIVE);
+    this.setAttribute("color", Config.KEY_COLOR_ACTIVE);
   }
 };
 
 // -----------------------------------------------------------------------------
 // KEYIN
 
-Behaviors.keyIn = function (keyEl) {
+Behaviors.keyIn = function() {
   if (Behaviors.el._transitioning) {
     return;
   }
-  if (keyEl.object3D.children[2] && keyEl.object3D.children[2].material && !keyEl.object3D.children[2].material.opacity) {
-    return
+  if (this.object3D.children[2] && this.object3D.children[2].material && !this.object3D.children[2].material.opacity) {
+    return;
   }
   SFX.keyIn(Behaviors.el);
-  if (keyEl.getAttribute('key-type') === 'spacebar') {
-    keyEl.setAttribute('color', Config.SPACEBAR_COLOR_HIGHLIGHT);
+  if (this.getAttribute("key-type") === "spacebar") {
+    this.setAttribute("color", Config.SPACEBAR_COLOR_HIGHLIGHT);
   } else {
-    keyEl.setAttribute('color', Config.KEY_COLOR_HIGHLIGHT);
+    this.setAttribute("color", Config.KEY_COLOR_HIGHLIGHT);
   }
 };
 
 // -----------------------------------------------------------------------------
 // KEYOUT
 
-Behaviors.keyOut = function (keyEl) {
-  keyEl.object3D.position.z = 0;
-  if (keyEl.getAttribute('key-type') === 'spacebar') {
-    keyEl.setAttribute('color', Config.KEY_COLOR_ACTIVE);
+Behaviors.keyOut = function() {
+  this.object3D.position.z = 0;
+  if (this.getAttribute("key-type") === "spacebar") {
+    this.setAttribute("color", Config.KEY_COLOR_ACTIVE);
   } else {
-    keyEl.setAttribute('color', Config.KEYBOARD_COLOR);
+    this.setAttribute("color", Config.KEYBOARD_COLOR);
   }
-}
+};
 
 // -----------------------------------------------------------------------------
 // SHIFT
 
 Behaviors.isShiftEnabled = false;
-Behaviors.shiftToggle = function () {
+Behaviors.shiftToggle = function() {
   Behaviors.isShiftEnabled = !Behaviors.isShiftEnabled;
 
-  var icon_el = Behaviors.el.shiftKey.querySelector('[data-type]');
+  var icon_el = Behaviors.el.shiftKey.querySelector("[data-type]");
   if (Behaviors.isShiftEnabled) {
-    icon_el.setAttribute('src', Assets.aframeKeyboardShiftActive);
+    icon_el.setAttribute("src", Assets.aframeKeyboardShiftActive);
   } else {
-    icon_el.setAttribute('src', Assets.aframeKeyboardShift);
+    icon_el.setAttribute("src", Assets.aframeKeyboardShift);
   }
 
   for (let keyEl of document.querySelectorAll("[key-id]")) {
-    let key_id = keyEl.getAttribute('key-id'),
-      key_type = keyEl.getAttribute('key-type');
-    if (key_id.startsWith('main-') && key_type === "text") {
-      let textEl = keyEl.querySelector('a-text');
+    let key_id = keyEl.getAttribute("key-id"),
+      key_type = keyEl.getAttribute("key-type");
+    if (key_id.startsWith("main-") && key_type === "text") {
+      let textEl = keyEl.querySelector("a-text");
       if (textEl) {
-        let value = textEl.getAttribute('value').toLowerCase();
+        let value = textEl.getAttribute("value").toLowerCase();
         if (this.isShiftEnabled) {
           value = value.toUpperCase();
         }
-        textEl.setAttribute('value', value);
+        textEl.setAttribute("value", value);
       }
     }
   }
-}
+};
+
+// -----------------------------------------------------------------------------
+// SYMBOLS
 
 Behaviors.isSymbols = false;
-Behaviors.symbolsToggle = function () {
+Behaviors.symbolsToggle = function() {
   Behaviors.isSymbols = !Behaviors.isSymbols;
   if (!Behaviors.isSymbols) {
-    Behaviors.el.mainAlphaUI.object3D.position.set(0.312, 0, 0);
-    Behaviors.el.mainSymbolUI.object3D.position.set(-10000, -10000, -10000);
+    let parent = Behaviors.el.symbolsLayout.parentNode;
+    parent.removeChild(Behaviors.el.symbolsLayout);
+    parent.appendChild(Behaviors.el.alphabeticalLayout);
   } else {
-    Behaviors.el.mainSymbolUI.object3D.position.set(0.312, 0, 0);
-    Behaviors.el.mainAlphaUI.object3D.position.set(-10000, -10000, -10000);
+    let parent = Behaviors.el.alphabeticalLayout.parentNode;
+    parent.removeChild(Behaviors.el.alphabeticalLayout);
+    parent.appendChild(Behaviors.el.symbolsLayout);
   }
-}
+};
+
 module.exports = Behaviors;

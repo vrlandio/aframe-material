@@ -1,0 +1,16 @@
+diff --git a/src/keyboard/index.js b/src/keyboard/index.js
+index 6f7f10e..6fa7994 100755
+--- a/src/keyboard/index.js
++++ b/src/keyboard/index.js
+@@ -49,9 +49,9 @@ AFRAME.registerComponent('keyboard', {
+     this.el.destroy = function() { Behaviors.destroyKeyboard(that.el); }
+ 
+     // Set default value
+-    this.el.setAttribute("scale", "2 2 2");
++    this.el.setAttribute("scale", "1 1 1");
+     this.el.setAttribute("rotation", "-20 0 0");
+-    this.el.setAttribute("position", "-1.5 -0.3 -2");
++    this.el.setAttribute("position", "-0.5 -0.5 -1.5");
+ 
+     // Register keyboard events
+     this.el.addEventListener('input', this.inputEvent.bind(this));

@@ -7,7 +7,7 @@ const Config = {
   KEY_WIDTH: 0.08,
   SPACE_KEY_WIDTH: 0.368,
   SPACE_KEY_HEIGHT: 0.05,
-  ACTION_WIDTH: 0.140,
-}
+  ACTION_WIDTH: 0.14
+};
 
 module.exports = Config;

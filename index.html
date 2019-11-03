@@ -1,87 +1,61 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <title>aframe-material😲😆😛</title>
+    <meta name="description" content="Aframe-Material">
+    <script src="https://rawgit.com/aframevr/aframe/33c3232/dist/aframe-master.min.js"></script>
 
-<head>
-  <meta charset="utf-8">
-  <title>aframe-material😲😆😛</title>
-  <meta name="description" content="Aframe-Material">
-  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-  <script src="https://rawgit.com/wmurphyrd/aframe-super-hands-component/master/dist/super-hands.min.js"></script>
-  <script src="dist/aframe-material.js"></script>
-  <script type="text/javascript">
-    AFRAME.ASSETS_PATH = "./assets";
-  </script>
-</head>
+    <script src="https://cdn.rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+    <script src="dist/aframe-material.js"></script>
+    <script type="text/javascript">
+      AFRAME.ASSETS_PATH = "./assets";
+    </script>
+  </head>
+  <body>
+    <a-scene cursor="rayOrigin: mouse">
+      <a-entity laser-controls="hand: right"></a-entity>
 
-<body>
-  <a-scene>
-    <a-assets>
-      <img id="boxTexture" src="https://i.imgur.com/mYmmbrp.jpg" crossorigin="anonymous">
-      <img id="skyTexture" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg" crossorigin="anonymous">
-      <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="anonymous">
-      <img id="buttonIcon" src="./assets/images/hockey-puck.png" crossorigin="anonymous">
-      <img id="inputIcon" src="./assets/images/login-variant.png" crossorigin="anonymous">
-      <img id="radioIcon" src="./assets/images/radiobox-marked.png" crossorigin="anonymous">
-      <img id="toggleIcon" src="./assets/images/toggle-switch.png" crossorigin="anonymous">
-      <img id="checkboxIcon" src="./assets/images/checkbox-marked.png" crossorigin="anonymous">
-      <img id="eventIcon" src="./assets/images/calendar-edit.png" crossorigin="anonymous">
-      <img id="targetIcon" src="./assets/images/target-variant.png" crossorigin="anonymous">
-    </a-assets>
+      <a-entity> <a-camera look-controls wasd-controls></a-camera></a-entity>
 
-    <a-sky src="#skyTexture"></a-sky>
-    <a-camera>
-      <a-entity cursor="rayOrigin: mouse" super-hands="colliderEvent:raycaster-intersection; colliderEventProperty:els; colliderEndEvent:raycaster-intersection-cleared; colliderEndEventProperty:clearedEls;"
-        static-body="shape: sphere; sphereRadius: 0.02">
-      </a-entity>
-    </a-camera>
+      <!-- BEGIN INPUTS/KEYBOARD -->
+      <a-keyboard physical-keyboard="true"></a-keyboard>
+      <a-input position="-0.7 1 -2.5" placeholder="Username" color="black" width="1"></a-input>
+      <a-input position="-0.7 0.8 -2.5" type="password" placeholder="Password" color="black" width="1"></a-input>
+      <!-- END INPUTS/KEYBOARD -->
 
-    <!-- BEGIN INPUTS/KEYBOARD -->
-    <a-keyboard physical-keyboard=true></a-keyboard>
-    <a-input position="-0.7 1 -2.5" placeholder="Username" color="black" width="1"></a-input>
-    <a-input id="inp" position="-0.7 0.8 -2.5" type="password" placeholder="Password" color="black" width="1"></a-input>
-    <!-- END INPUTS/KEYBOARD -->
+      <!-- BEGIN FORM -->
+      <a-rounded position="0.5 0.5 -2.5" width="4" height="3.1" radius="0.05" rotation="0 -20 0" scale="0.3 0.3 0.3">
+        <a-form>
+          <a-switch position="0.2 2.7 0" enabled="true"></a-switch>
+          <a-radio position="0.2 2.4 0" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
+          <a-radio position="0.2 2.1 0" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
+          <a-radio position="0.2 1.8 0" width="3" name="food" label="Ice cream"></a-radio>
+          <a-checkbox position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
+          <a-checkbox position="0.2 1.2 0" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
+          <a-button position="0.2 0.8 0" name="stuff" value="Click me" type="raised"></a-button>
+          <a-button position="0.2 0.35 0" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
+        </a-form>
+      </a-rounded>
+      <!-- END FORM -->
 
-    <!-- BEGIN FORM -->
-    <a-card position="0.5 0.5 -2.5" width="4" height="3.3" rotation="0 -20 0" scale="0.3 0.3 0.3" type="flat">
-      <a-form>
-        <a-slider width=3 position="1.7 3.1 0.001" value=0></a-slider>
-        <a-switch position="0.2 2.7 0.001" enabled="true"></a-switch>
-        <a-radio position="0.2 2.4 0.001" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
-        <a-radio position="0.2 2.1 0.001" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
-        <a-radio position="0.2 1.8 0.001" width="3" name="food" label="Ice cream"></a-radio>
-        <a-checkbox id="check2" position="0.2 1.5 0.001" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
-        <a-checkbox position="0.2 1.2 0.001" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
-        <a-button position="0.2 0.8 0.001" name="stuff" value="Click me" type="raised"></a-button>
-        <a-button position="0.2 0.35 0.001" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
-      </a-form>
-    </a-card>
-    <!-- END FORM -->
+      <!-- BEGIN TOAST -->
+      <a-toast message="This is a toast" action="Got it"></a-toast>
+      <!-- END TOAST -->
 
-    <!-- BEGIN TOAST -->
-    <a-toast message="This is a toast" action="Got it"></a-toast>
-    <!-- END TOAST -->
-
-    <!-- BEGIN ENVIRONEMENT -->
-    <a-gradient-sky material="shader: gradient; topColor: 255 0 0; bottomColor: 0 121 255;"></a-gradient-sky>
-    <!-- Lighting -->
-    <a-light type="ambient" color="#ccc"></a-light>
-    <a-entity light="type:directional; castShadow:true; color: #EEE; intensity: 0.5" position="1 1 1 "></a-entity>
-    <!-- END ENVIRONEMENT -->
-  </a-scene>
-  <script type="text/javascript">
-    let button = document.querySelector('a-button');
-    let toast = document.querySelector('a-toast');
-    if (toast) {
-      toast.addEventListener('actionclick', () => {
+      <!-- BEGIN ENVIRONEMENT -->
+      <a-gradient-sky material="shader: gradient; topColor: 255 0 0; bottomColor: 0 121 255;"></a-gradient-sky>
+      <!-- END ENVIRONEMENT -->
+    </a-scene>
+    <script type="text/javascript">
+      let button = document.querySelector('a-button');
+      let toast = document.querySelector('a-toast');
+      toast.addEventListener('actionclick', ()=>{
         toast.hide();
       });
-    }
-    if (button) {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', ()=> {
         toast.show();
       });
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
