@@ -1,7 +1,7 @@
 const Utils = require("../utils");
 const Event = require("../core/event");
 const Assets = require("./assets");
-const SFX = require("./sfx");
+
 
 AFRAME.registerComponent("checkbox", {
   schema: {
@@ -25,13 +25,13 @@ AFRAME.registerComponent("checkbox", {
     // Assets
     Utils.preloadAssets(Assets);
 
-    // SFX
-    SFX.init(this.el);
+    
 
     // HITBOX
     this.hitbox = document.createElement("a-plane");
     this.hitbox.setAttribute("height", 0.2);
     this.hitbox.setAttribute("opacity", 0);
+    this.hitbox.setAttribute("class", "ui");
     this.el.appendChild(this.hitbox);
 
     // OUTLINE
@@ -64,20 +64,21 @@ AFRAME.registerComponent("checkbox", {
     this.el.appendChild(this.label);
 
     // EVENTS
-    this.el.addEventListener("click", function() {
-      if (this.components.checkbox.data.disabled) {
+    this.hitbox.addEventListener("mousedown", function() {
+      console.error("mousedown")
+   /*   if (this.data.disabled) {
         return;
       }
-      this.components.checkbox.data.checked = !this.components.checkbox.data
+      this.data.checked = !this.components.checkbox.data
         .checked;
-      this.setAttribute("checked", this.components.checkbox.data.checked);
+     */
+   
+        this.setAttribute("checked", "true");
+     
       that.onClick();
     });
     this.el.addEventListener("mousedown", function() {
-      if (this.components.checkbox.data.disabled) {
-        return SFX.clickDisabled(this);
-      }
-      SFX.click(this);
+     
     });
 
     Object.defineProperty(this.el, "value", {
@@ -92,6 +93,7 @@ AFRAME.registerComponent("checkbox", {
     });
   },
   onClick: function(noemit) {
+    this.check();
     if (this.data.checked) {
       this.check();
     } else {
