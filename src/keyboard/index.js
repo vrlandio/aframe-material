@@ -181,7 +181,7 @@ AFRAME.registerComponent( "keyboard", {
 		console.error( "keydown" + e );
 		console.error( "keydown" + e.key );
 		console.error( "keydown" + this.currentInput );
-		if ( this.data.physicalKeyboard ) {
+		if ( this.data.physicalKeyboard) {
 
 			// this.currentInput = e.detail
 

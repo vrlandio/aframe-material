@@ -60,15 +60,11 @@ module.exports = {
     publicPath: '/dist/'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel',
-        query: {
-          plugins: ['transform-class-properties'],
-          presets: ['es2015']
-        }
+        use: { loader: 'babel-loader',},
       }
     ]
   },
