@@ -33,11 +33,13 @@ AFRAME.registerComponent( "input", {
 
 	init: function () {
 
+	
 		let that = this;
 
-		this.background = document.createElement( "a-rounded" );
-		this.background.setAttribute( "radius", 0.01 );
+		this.background = document.createElement( "a-plane" );
+	
 		this.background.setAttribute( "height", 0.18 );
+		this.background.setAttribute( "position", "0.5 0 0" );
 		this.background.setAttribute( "side", "double" );
 		this.background.setAttribute( "class", "ui" );
 		this.el.appendChild( this.background );
@@ -435,7 +437,7 @@ AFRAME.registerComponent( "input", {
     }*/
 		this.background.setAttribute( "width", this.data.width );
 		//this.background.setAttribute('position', this.data.width/2+' 0 0');
-		this.background.setAttribute( "position", "0 -0.09 0.001" );
+		//this.background.setAttribute( "position", "0 -0.09 0.001" );
 		this.text.setAttribute( "position", padding.left - 0.001 + this.data.width / 2 + " 0 0.002" );
 		this.placeholder.setAttribute( "position", padding.left - 0.001 + this.data.width / 2 + " 0 0.002" );
 
@@ -460,7 +462,27 @@ AFRAME.registerComponent( "input", {
 
 	},
 	tick: function () {},
-	remove: function () {},
+	remove: function () {
+
+console.error("input remove")
+this.el.removeObject3D( "mesh" );
+console.error(this)
+//this.background.geometry.dispose();
+//this.background.material.dispose();
+
+this.el.object3D.remove(this.background)
+this.el.remove(this.background)
+this.el.object3D.remove(this.cursor)
+this.el.remove(this.cursor)
+this.el.object3D.remove(this.placeholder)
+this.el.remove(this.placeholder)
+this.el.object3D.remove(this.text)
+this.el.remove(this.text)
+
+console.error(this.placeholder.object3D)
+console.error(this.el.object3D)
+
+	},
 	pause: function () {},
 	play: function () {}
 } );
