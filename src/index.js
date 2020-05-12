@@ -10,7 +10,7 @@
 		AFRAME.ASSETS_PATH = "./assets";
 
 	}
-	require( "aframe-rounded" );
+	//require( "aframe-rounded" );
 	//require("./fade");
 	//require("./alert"); @TODO ;)
 	require( "./keyboard" );
