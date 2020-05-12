@@ -43,8 +43,5 @@
     "aframe-component",
     "webvr",
     "vr"
-  ],
-  "dependencies": {
-    "aframe-rounded": "^1.0.3"
-  }
+  ]
 }
