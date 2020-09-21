@@ -66,12 +66,12 @@ AFRAME.registerComponent( "keyboard", {
 			Behaviors.dismissKeyboard( that.el );
 
 		};
-		this.el.destroy = function () {
+	/*	this.el.destroy = function () {
 
 			Behaviors.destroyKeyboard( that.el );
 
 		};
-
+*/
 		// Set default value
 		this.el.setAttribute( "scale", "1 1 1" );
 		this.el.setAttribute( "rotation", "0 0 0" );
@@ -233,7 +233,7 @@ AFRAME.registerComponent( "keyboard", {
 
 	// Fired when an input has been deselected
 	didBlurInputEvent: function ( e ) {
-
+console.error("didBlurInputEvent")
 		this.currentInput = null;
 		Behaviors.dismissKeyboard( this.el );
 

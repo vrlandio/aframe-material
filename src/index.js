@@ -15,6 +15,7 @@
 	//require("./alert"); @TODO ;)
 	require( "./keyboard" );
 	require( "./input" );
+	require( "./input/indextroika" );
 	//require("./switch");
 	//require("./slider");
 	//require("./form");

@@ -1,20 +1,21 @@
 const Utils = require( "../utils" );
 const Event = require( "../core/event" );
-
+import { getCaretAtPoint, getSelectionRects } from 'troika-three-text'
 /*
 @BUG: Space has not effect when no letter comes after.
 @TODO: <progress value="70" max="100">70 %</progress>
 */
 
-AFRAME.registerComponent( "input", {
+AFRAME.registerComponent( "inputtroika", {
 	schema: {
 		value: { type: "string", default: "" },
 		name: { type: "string", default: "" },
 		disabled: { type: "boolean", default: false },
 		color: { type: "color", default: "#fff" },
 		align: { type: "string", default: "left" },
-		baseline: { type: "string", default: "top" },
 		font: { type: "string", default: "" },
+		fontSize: { type: "number", default: 0.01 },
+		maxWidth: { type: "number", default: 0.3 },
 		letterSpacing: { type: "int", default: 0 },
 		lineHeight: { type: "string", default: "" },
 		opacity: { type: "number", default: 0 },
@@ -22,12 +23,12 @@ AFRAME.registerComponent( "input", {
 		tabSize: { type: "int", default: 4 },
 		placeholder: { type: "string", default: "" },
 		placeholderColor: { type: "color", default: "#AAA" },
-		maxLength: { type: "int", default: 0 },
+		maxLength: { type: "int", default: 25 },
 		type: { type: "string", default: "text" },
 		width: { type: "number", default: 1 },
-		height: { type: "number", default: 0.2 },
-		cursorWidth: { type: "number", default: 0.01 },
-		cursorHeight: { type: "number", default: 0.08 },
+		height: { type: "number", default: 0.18 },
+		cursorWidth: { type: "number", default: 0.005 },
+		cursorHeight: { type: "number", default: 0.015 },
 		cursorColor: { type: "color", default: "#007AFF" },
 		backgroundColor: { type: "color", default: "#fff" },
 		backgroundOpacity: { type: "number", default: 0 }
@@ -47,13 +48,19 @@ AFRAME.registerComponent( "input", {
 		this.el.appendChild( this.background );
 
 		this.cursor = document.createElement( "a-plane" );
-		this.cursor.setAttribute( "position", "0 0 0.003" );
+		this.cursor.setAttribute( "position", "0 0 0" );
 		this.cursor.setAttribute( "visible", false );
 		this.cursor.setAttribute( "class", "ui" );
 		this.el.appendChild( this.cursor );
 
-		this.text = document.createElement( "a-entity" );
-		this.text.setAttribute("text", "baseline", "top")
+		this.text = document.createElement( "a-troika-text" );
+		this.text.setAttribute("troika-text","maxWidth", this.data.maxWidth)
+		this.text.setAttribute("troika-text","align", "left")
+		this.text.setAttribute("troika-text","fontSize", this.data.fontSize)
+		this.text.setAttribute("troika-text","color", "#ffffff")
+		this.text.setAttribute("troika-text","baseline", "top")
+		this.text.setAttribute("troika-text","anchor", "align")
+		
 		this.el.appendChild( this.text );
 
 		this.placeholder = document.createElement( "a-entity" );
@@ -66,13 +73,41 @@ AFRAME.registerComponent( "input", {
 		this.el.setString = this.setString.bind( this );
 		this.el.deleteLast = this.deleteLast.bind( this );
 
-		//setTimeout(function() { that.updateText(); }, 0);
+	
+		
+		this.text.addEventListener("object3dset", e => {
+			this.text.object3D.children[0].addEventListener('synccomplete', (e) => {
+				let padding = {
+					left: 0.01,
+					right: 0.01,
+					top: 0.001
+				};
+
+				let v = e.target._textRenderInfo.totalBlockSize 
+
+				const catBox = getSelectionRects(e.target._textRenderInfo, 0 , this.data.value.length )
+				console.error(catBox.length)
+				console.error(catBox[catBox.length-1])
+
+				let right = 0
+				 if (catBox[catBox.length-1]) 
+				   right = catBox[catBox.length-1].right
+				
+				this.cursor.setAttribute("position", ((right - this.data.width / 2) + padding.left)   + " "  + ((this.data.height / 2 - v[1]) - padding.top +this.data.cursorHeight/2)   + " 0.0004");
+			  })
+		})
+
+
+		
 		this.blink();
 		this.background.addEventListener( "mousedown", e => {
 
 			e.stopPropagation();
 			e.preventDefault();
-			console.error( this.data );
+
+			
+			  
+		
 			if ( this.data.disabled ) {
 
 				this.blur();
@@ -84,24 +119,29 @@ AFRAME.registerComponent( "input", {
 
 		} );
 
-		/* this.text.addEventListener("mousedown", function() {
-      console.error(this.data);
-      if (this.data.disabled) {
-        this.blur();
-        return;
-      }
-      that.focus();
-    });
 
-    this.placeholder.addEventListener("mousedown", function() {
-      console.error(this.data);
-      if (this.data.disabled) {
-        this.blur();
-        return;
-      }
-      that.focus();
-    });
-*/
+
+
+		this.background.addEventListener( "mouseout", e => {
+
+			e.stopPropagation();
+			e.preventDefault();
+
+			
+			  
+		
+			if ( this.data.disabled ) {
+
+				this.blur();
+				return;
+
+			}
+
+			that.blur();
+
+		} );
+
+	
 		Object.defineProperty( this.el, "value", {
 			get: function () {
 
@@ -168,6 +208,16 @@ AFRAME.registerComponent( "input", {
 
 		}
 
+		
+		let playerRig = document.querySelector( "#player-rig" );
+		playerRig.setAttribute( "character-controller", "enabled", false );
+		playerRig.setAttribute( "jump-component", "enabled", false );
+		playerRig.setAttribute( "thirdpersionview-component-toggle", "enabled", false );
+		playerRig.setAttribute( "reposition-component", "enabled", false );
+		if (this.el.getAttribute( "gun"))
+		this.el.setAttribute( "gun", "enabled", false );
+		this.el.sceneEl.setAttribute( "preventDefaultKeys", "enabled", false );
+
 		// noemit = false;
 
 	},
@@ -194,6 +244,16 @@ AFRAME.registerComponent( "input", {
 
 		}
 
+		
+		let playerRig = document.querySelector( "#player-rig" );
+		playerRig.setAttribute( "character-controller", "enabled", true );
+		playerRig.setAttribute( "jump-component", "enabled", true );
+		playerRig.setAttribute( "thirdpersionview-component-toggle", "enabled", true );
+		playerRig.setAttribute( "reposition-component", "enabled", true );
+		if (this.el.getAttribute( "gun"))
+		this.el.setAttribute( "gun", "enabled", true );
+		this.el.sceneEl.setAttribute( "preventDefaultKeys", "enabled", true );
+
 	},
 	appendString: function ( data ) {
 
@@ -210,6 +270,7 @@ AFRAME.registerComponent( "input", {
 		}
 		str = str + data;
 		this.el.setAttribute( "value", str );
+	
 		Event.emit( this.el, "change", str );
 
 	},
@@ -243,49 +304,21 @@ AFRAME.registerComponent( "input", {
 
 		let that = this;
 		let padding = {
-			left: 0,
-			right: 0
+			left: 0.01,
+			right: 0.01,
+			top: 0.001
 		};
 
 		let props = {
 			color: this.data.color,
 			align: this.data.align,
-			baseline: this.data.baseline,
 			side: this.data.side,
 			tabSize: this.data.tabSize,
-			wrapCount: 24,
+			wrapCount: 24 * this.data.width,
 			width: this.data.width
 		};
 
-		// Make cursor stop blinking when typing..
-		// (and blinking again after typing stop).
-		let attr = this.text.getAttribute( "text" );
-		if ( attr ) {
-
-			if ( this.data.value !== attr.value ) {
-
-				if ( this.cursorInterval ) {
-
-					clearInterval( this.cursorInterval );
-					this.cursorInterval = null;
-
-				}
-				if ( this.cursorTimer ) {
-
-					clearTimeout( this.cursorTimer );
-					this.cursorTimer = null;
-
-				}
-				this.cursor.setAttribute( "visible", true );
-				this.cursorTimer = setTimeout( function () {
-
-					that.blink();
-
-				}, 50 );
-
-			}
-
-		}
+	
 
 		// Max length
 		if ( this.data.maxLength ) {
@@ -320,72 +353,11 @@ AFRAME.registerComponent( "input", {
 			props.lineHeight = this.data.lineHeight;
 
 		}
-		this.text.setAttribute( "visible", false );
-		this.text.setAttribute( "text", props );
+		console.error(props)
+	//	this.text.setAttribute( "visible", false );
+		this.text.setAttribute( "troika-text", props );
 
-		function getTextWidth( el, data, trimFirst, _widthFactor ) {
-
-			if ( ! el.object3D || ! el.object3D.children || ! el.object3D.children[ 0 ] ) {
-
-				return 0;
-
-			}
-			let v = el.object3D.children[ 0 ].geometry.visibleGlyphs;
-			if ( ! v ) {
-
-				return 0;
-
-			}
-			v = v[ v.length - 1 ];
-			if ( ! v ) {
-
-				return 0;
-
-			}
-			if ( v.line ) {
-
-				if ( trimFirst ) {
-
-					data.value = data.value.substr( 1 );
-
-				} else {
-
-					data.value = data.value.slice( 0, - 1 );
-
-				}
-				el.setAttribute( "text", data );
-				return getTextWidth( el, data, trimFirst );
-
-			} else {
-
-				if ( ! _widthFactor ) {
-
-					_widthFactor = Utils.getWidthFactor( el, data.wrapCount );
-
-				}
-				v = ( v.position[ 0 ] + v.data.width ) / ( _widthFactor / that.data.width );
-				let textRatio = ( v + padding.left + padding.right ) / that.data.width;
-
-				if ( textRatio > 1 ) {
-
-					if ( trimFirst ) {
-
-						data.value = data.value.substr( 1 );
-
-					} else {
-
-						data.value = data.value.slice( 0, - 1 );
-
-					}
-					el.setAttribute( "text", data );
-					return getTextWidth( el, data, trimFirst, _widthFactor );
-
-				}
-
-			}
-			return v;
-
-		}
+	
 
 		if ( props.value.length ) {
 
@@ -400,38 +372,10 @@ AFRAME.registerComponent( "input", {
 		let placeholder_props = Utils.clone( props );
 		placeholder_props.value = this.data.placeholder;
 		placeholder_props.color = this.data.placeholderColor;
-		this.placeholder.setAttribute( "text", placeholder_props );
-padding.left = padding.left - this.data.width/2
-		setTimeout( function () {
+		//placeholder_props.fontSize = 0.01;
+		this.placeholder.setAttribute( "troika-text", placeholder_props );
+	
 
-			if ( that.text.object3D ) {
-
-				let children = that.text.object3D.children;
-				if ( children[ 0 ] && children[ 0 ].geometry && children[ 0 ].geometry.visibleGlyphs ) {
-
-					let v = 0;
-					if ( children[ 0 ].geometry.visibleGlyphs.length ) {
-
-						v = getTextWidth( that.text, props, true );
-						that.text.setAttribute( "visible", true );
-
-					}
-					that.cursor.setAttribute( "position", v + padding.left + " -0.01 0.001" );
-
-				} else {
-
-					that.cursor.setAttribute( "position", padding.left + " -0.01 0.001" );
-
-				}
-
-			} else {
-
-				that.cursor.setAttribute( "position", padding.left + " -0.01 0.001" );
-
-			}
-			getTextWidth( that.placeholder, placeholder_props );
-
-		}, 0 );
 
 		this.background.setAttribute( "color", this.data.backgroundColor );
 		/*if (this.data.backgroundOpacity) {
@@ -440,13 +384,11 @@ padding.left = padding.left - this.data.width/2
       }, 0);
     }*/
 		this.background.setAttribute( "width", this.data.width );
-		this.background.setAttribute( "height", this.data.height );
 		//this.background.setAttribute('position', this.data.width/2+' 0 0');
 		//this.background.setAttribute( "position", "0 -0.09 0.001" );
-		
-		//this.text.setAttribute( "position", padding.left - 0.001 + this.data.width / 2 + " 0 0.002" );
-	//	this.text.setAttribute( "position",  -this.data.width / 2 + " " +  this.data.height / 2 + " 0" );
+		//this.text.setAttribute( "position", -this.data.width / 2 + " 0 0.002" );
 		//this.placeholder.setAttribute( "position", padding.left - 0.001 + this.data.width / 2 + " 0 0.002" );
+		this.text.setAttribute( "position",  ((-this.data.width / 2) + padding.left) + " " +  ((this.data.height / 2) - padding.top) + " 0" );
 
 	},
 	updateCursor: function () {
@@ -459,10 +401,8 @@ padding.left = padding.left - this.data.width/2
 	},
 	update: function () {
 
-		let that = this;
-		setTimeout( function () {
-			//  Utils.updateOpacity(that.el, that.data.opacity);
-		}, 0 );
+
+	
 
 		this.updateCursor();
 		this.updateText();
@@ -494,32 +434,33 @@ console.error(this.el.object3D)
 	play: function () {}
 } );
 
-AFRAME.registerPrimitive( "a-input", {
+AFRAME.registerPrimitive( "a-inputtroika", {
 	defaultComponents: {
-		input: {}
+		inputtroika: {}
 	},
 	mappings: {
-		value: "input.value",
-		name: "input.name",
-		disabled: "input.disabled",
-		color: "input.color",
-		align: "input.align",
-		font: "input.font",
-		"letter-spacing": "input.letterSpacing",
-		"line-height": "input.lineHeight",
-		opacity: "input.opacity",
-		side: "input.side",
-		"tab-size": "input.tabSize",
-		placeholder: "input.placeholder",
-		"placeholder-color": "input.placeholderColor",
-		"max-length": "input.maxLength",
-		type: "input.type",
-		width: "input.width",
-		height: "input.height",
-		"cursor-width": "input.cursorWidth",
-		"cursor-height": "input.cursorHeight",
-		"cursor-color": "input.cursorColor",
-		"background-color": "input.backgroundColor",
-		"background-opacity": "input.backgroundOpacity"
+		value: "inputtroika.value",
+		name: "inputtroika.name",
+		disabled: "inputtroika.disabled",
+		color: "inputtroika.color",
+		align: "inputtroika.align",
+		font: "inputtroika.font",
+		"letter-spacing": "inputtroika.letterSpacing",
+		"line-height": "inputtroika.lineHeight",
+		opacity: "inputtroika.opacity",
+		side: "inputtroika.side",
+		"tab-size": "inputtroika.tabSize",
+		placeholder: "inputtroika.placeholder",
+		"placeholder-color": "inputtroika.placeholderColor",
+		"max-length": "inputtroika.maxLength",
+		type: "inputtroika.type",
+		width: "inputtroika.width",
+		height: "inputtroika.height",
+		"font-size": "inputtroika.fontSize",
+		"cursor-width": "inputtroika.cursorWidth",
+		"cursor-height": "inputtroika.cursorHeight",
+		"cursor-color": "inputtroika.cursorColor",
+		"background-color": "inputtroika.backgroundColor",
+		"background-opacity": "inputtroika.backgroundOpacity"
 	}
 } );
