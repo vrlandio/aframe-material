@@ -61,6 +61,7 @@ AFRAME.registerComponent( "inputtroika", {
 		this.text.setAttribute("troika-text","baseline", "top")
 		this.text.setAttribute("troika-text","anchor", "align")
 		
+		
 		this.el.appendChild( this.text );
 
 		this.placeholder = document.createElement( "a-entity" );
@@ -86,8 +87,7 @@ AFRAME.registerComponent( "inputtroika", {
 				let v = e.target._textRenderInfo.totalBlockSize 
 
 				const catBox = getSelectionRects(e.target._textRenderInfo, 0 , this.data.value.length )
-				console.error(catBox.length)
-				console.error(catBox[catBox.length-1])
+			
 
 				let right = 0
 				 if (catBox[catBox.length-1]) 
@@ -374,6 +374,7 @@ AFRAME.registerComponent( "inputtroika", {
 		placeholder_props.color = this.data.placeholderColor;
 		//placeholder_props.fontSize = 0.01;
 		this.placeholder.setAttribute( "troika-text", placeholder_props );
+		this.placeholder.setAttribute( "position", "0 0 0.0001" );
 	
 
 
@@ -388,7 +389,7 @@ AFRAME.registerComponent( "inputtroika", {
 		//this.background.setAttribute( "position", "0 -0.09 0.001" );
 		//this.text.setAttribute( "position", -this.data.width / 2 + " 0 0.002" );
 		//this.placeholder.setAttribute( "position", padding.left - 0.001 + this.data.width / 2 + " 0 0.002" );
-		this.text.setAttribute( "position",  ((-this.data.width / 2) + padding.left) + " " +  ((this.data.height / 2) - padding.top) + " 0" );
+		this.text.setAttribute( "position",  ((-this.data.width / 2) + padding.left) + " " +  ((this.data.height / 2) - padding.top) + " 0.0001" );
 
 	},
 	updateCursor: function () {
