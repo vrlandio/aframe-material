@@ -50,7 +50,7 @@ AFRAME.registerComponent( "inputtroika", {
 		this.cursor = document.createElement( "a-plane" );
 		this.cursor.setAttribute( "position", "0 0 0" );
 		this.cursor.setAttribute( "visible", false );
-		this.cursor.setAttribute( "class", "ui" );
+	//	this.cursor.setAttribute( "class", "ui" );
 		this.el.appendChild( this.cursor );
 
 		this.text = document.createElement( "a-troika-text" );
@@ -81,18 +81,16 @@ AFRAME.registerComponent( "inputtroika", {
 				let padding = {
 					left: 0.01,
 					right: 0.01,
-					top: 0.001
+					top: 0.002
 				};
 
 				let v = e.target._textRenderInfo.totalBlockSize 
 
 				const catBox = getSelectionRects(e.target._textRenderInfo, 0 , this.data.value.length )
-			
 
 				let right = 0
 				 if (catBox[catBox.length-1]) 
 				   right = catBox[catBox.length-1].right
-				
 				this.cursor.setAttribute("position", ((right - this.data.width / 2) + padding.left)   + " "  + ((this.data.height / 2 - v[1]) - padding.top +this.data.cursorHeight/2)   + " 0.0004");
 			  })
 		})
@@ -122,7 +120,7 @@ AFRAME.registerComponent( "inputtroika", {
 
 
 
-		this.background.addEventListener( "mouseout", e => {
+		/*this.background.addEventListener( "mouseout", e => {
 
 			e.stopPropagation();
 			e.preventDefault();
@@ -140,7 +138,7 @@ AFRAME.registerComponent( "inputtroika", {
 			that.blur();
 
 		} );
-
+*/
 	
 		Object.defineProperty( this.el, "value", {
 			get: function () {
@@ -263,11 +261,12 @@ AFRAME.registerComponent( "inputtroika", {
 
 		}
 		let str = this.el.getAttribute( "value" );
-		if ( ! str ) {
+	/*	if ( ! str ) {
 
 			str = "";
 
 		}
+	*/
 		str = str + data;
 		this.el.setAttribute( "value", str );
 	
@@ -277,11 +276,12 @@ AFRAME.registerComponent( "inputtroika", {
 	setString: function ( data ) {
 
 		let str = this.el.getAttribute( "value" );
-		if ( ! str ) {
+	/*	if ( ! str ) {
 
 			str = "";
 
 		}
+	*/
 		str = data;
 		this.el.setAttribute( "value", str );
 		Event.emit( this.el, "change", str );
@@ -290,11 +290,12 @@ AFRAME.registerComponent( "inputtroika", {
 	deleteLast: function () {
 
 		let str = this.el.getAttribute( "value" );
-		if ( ! str ) {
+	/*	if ( ! str ) {
 
 			str = "";
 
 		}
+	*/
 		str = str.slice( 0, - 1 );
 		this.el.setAttribute( "value", str );
 		Event.emit( this.el, "change", str );
@@ -316,6 +317,7 @@ AFRAME.registerComponent( "inputtroika", {
 			tabSize: this.data.tabSize,
 			wrapCount: 24 * this.data.width,
 			width: this.data.width
+	
 		};
 
 	
@@ -357,7 +359,7 @@ AFRAME.registerComponent( "inputtroika", {
 	//	this.text.setAttribute( "visible", false );
 		this.text.setAttribute( "troika-text", props );
 
-	
+	console.error(this.text.object3D)
 
 		if ( props.value.length ) {
 
@@ -413,8 +415,9 @@ AFRAME.registerComponent( "inputtroika", {
 	remove: function () {
 
 console.error("input remove")
+this.blur();
 this.el.removeObject3D( "mesh" );
-console.error(this)
+
 //this.background.geometry.dispose();
 //this.background.material.dispose();
 
