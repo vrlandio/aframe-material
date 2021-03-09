@@ -27,8 +27,10 @@ AFRAME.registerComponent( "inputtroika", {
 		type: { type: "string", default: "text" },
 		width: { type: "number", default: 1 },
 		height: { type: "number", default: 0.18 },
-		cursorWidth: { type: "number", default: 0.005 },
+		cursorWidth: { type: "number", default: 0.002 },
 		cursorHeight: { type: "number", default: 0.015 },
+		cursorPaddingTop: { type: "number", default: 0.005 },
+		textPaddingTop: { type: "number", default: 0.0001 },
 		cursorColor: { type: "color", default: "#007AFF" },
 		backgroundColor: { type: "color", default: "#fff" },
 		backgroundOpacity: { type: "number", default: 0 }
@@ -81,7 +83,6 @@ AFRAME.registerComponent( "inputtroika", {
 				let padding = {
 					left: 0.01,
 					right: 0.01,
-					top: 0.002
 				};
 
 				let v = e.target._textRenderInfo.totalBlockSize 
@@ -91,7 +92,7 @@ AFRAME.registerComponent( "inputtroika", {
 				let right = 0
 				 if (catBox[catBox.length-1]) 
 				   right = catBox[catBox.length-1].right
-				this.cursor.setAttribute("position", ((right - this.data.width / 2) + padding.left)   + " "  + ((this.data.height / 2 - v[1]) - padding.top +this.data.cursorHeight/2)   + " 0.0004");
+				this.cursor.setAttribute("position", ((right - this.data.width / 2) + padding.left)   + " "  + ((this.data.height / 2 - v[1]) - this.data.cursorPaddingTop +this.data.cursorHeight/2)   + " 0.0004");
 			  })
 		})
 
@@ -307,7 +308,6 @@ AFRAME.registerComponent( "inputtroika", {
 		let padding = {
 			left: 0.01,
 			right: 0.01,
-			top: 0.001
 		};
 
 		let props = {
@@ -359,7 +359,6 @@ AFRAME.registerComponent( "inputtroika", {
 	//	this.text.setAttribute( "visible", false );
 		this.text.setAttribute( "troika-text", props );
 
-	console.error(this.text.object3D)
 
 		if ( props.value.length ) {
 
@@ -391,13 +390,13 @@ AFRAME.registerComponent( "inputtroika", {
 		//this.background.setAttribute( "position", "0 -0.09 0.001" );
 		//this.text.setAttribute( "position", -this.data.width / 2 + " 0 0.002" );
 		//this.placeholder.setAttribute( "position", padding.left - 0.001 + this.data.width / 2 + " 0 0.002" );
-		this.text.setAttribute( "position",  ((-this.data.width / 2) + padding.left) + " " +  ((this.data.height / 2) - padding.top) + " 0.0001" );
+		this.text.setAttribute( "position",  ((-this.data.width / 2) + padding.left) + " " +  ((this.data.height / 2) - this.data.textPaddingTop) + " 0.0001" );
 
 	},
 	updateCursor: function () {
 
 		this.cursor.setAttribute( "width", this.data.cursorWidth );
-		this.cursor.setAttribute( "height", this.data.cursorHeight );
+		this.cursor.setAttribute( "height", this.data.cursorHeight * this.data.fontSize *50);
 		this.cursor.setAttribute( "color", this.data.cursorColor );
 		this.cursor.setAttribute( "emissive", this.data.cursorColor );
 
@@ -461,10 +460,12 @@ AFRAME.registerPrimitive( "a-inputtroika", {
 		width: "inputtroika.width",
 		height: "inputtroika.height",
 		"font-size": "inputtroika.fontSize",
+		"max-width": "inputtroika.maxWidth",
 		"cursor-width": "inputtroika.cursorWidth",
 		"cursor-height": "inputtroika.cursorHeight",
 		"cursor-color": "inputtroika.cursorColor",
 		"background-color": "inputtroika.backgroundColor",
-		"background-opacity": "inputtroika.backgroundOpacity"
+		"background-opacity": "inputtroika.backgroundOpacity",
+		"text-padding-top": "inputtroika.textPaddingTop"
 	}
 } );
