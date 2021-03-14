@@ -73,9 +73,9 @@ AFRAME.registerComponent( "keyboard", {
 		};
 */
 		// Set default value
-		this.el.setAttribute( "scale", "1 1 1" );
-		this.el.setAttribute( "rotation", "0 0 0" );
-		this.el.setAttribute( "position", "-0.5 0.3 -1.5" );
+	//	this.el.setAttribute( "scale", "1 1 1" );
+	//	this.el.setAttribute( "rotation", "0 0 0" );
+	//	this.el.setAttribute( "position", "-0.5 0.3 -1.5" );
 		this.el.setAttribute( "class", "ui" );
 		// Register keyboard events
 		this.el.addEventListener( "input", this.inputEvent );
