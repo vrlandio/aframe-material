@@ -7,12 +7,12 @@ const Event = require( "../core/event" );
 AFRAME.registerComponent( "keyboard", {
 	schema: {
 		isOpen: { type: "boolean", default: false },
-		physicalKeyboard: { type: "boolean", default: false }
+		physicalKeyboard: { type: "boolean", default: false },
 	},
 	currentInput: null,
 	init: function () {
 
-		let that = this;
+		const that = this;
 		console.error( "keyboardInit" );
 		// SFX
 		//SFX.init(this.el);
@@ -28,7 +28,7 @@ AFRAME.registerComponent( "keyboard", {
 		Draw.init( this.el );
 
 		// Init keyboard UI
-		let numericalUI = Draw.numericalUI(),
+		const numericalUI = Draw.numericalUI(),
 			mainUI = Draw.mainUI(),
 			actionsUI = Draw.actionsUI();
 
@@ -37,11 +37,13 @@ AFRAME.registerComponent( "keyboard", {
 		this.el.symbolsLayout = Draw.symbolsLayout();
 
 		// Append layouts to UI
-		//numericalUI.appendChild( Draw.numericalLayout() );
+		numericalUI.appendChild( Draw.numericalLayout() );
+		numericalUI.setAttribute("visible", "false")
+		numericalUI.id = "numericalUI"
 		mainUI.appendChild( this.el.alphabeticalLayout );
 		actionsUI.appendChild( Draw.actionsLayout() );
-
-		//this.el.appendChild( numericalUI );
+    
+		this.el.appendChild( numericalUI );
 		this.el.appendChild( mainUI );
 		this.el.appendChild( actionsUI );
 
@@ -51,31 +53,35 @@ AFRAME.registerComponent( "keyboard", {
 			Behaviors.showKeyboard( that.el );
 
 		};
+
 		this.el.hide = function () {
 
 			Behaviors.hideKeyboard( that.el );
 
 		};
+
 		this.el.open = function () {
 
 			Behaviors.openKeyboard( that.el );
 
 		};
+
 		this.el.dismiss = function () {
 
 			Behaviors.dismissKeyboard( that.el );
 
 		};
-	/*	this.el.destroy = function () {
+
+		/*	this.el.destroy = function () {
 
 			Behaviors.destroyKeyboard( that.el );
 
 		};
 */
 		// Set default value
-	//	this.el.setAttribute( "scale", "1 1 1" );
-	//	this.el.setAttribute( "rotation", "0 0 0" );
-	//	this.el.setAttribute( "position", "-0.5 0.3 -1.5" );
+		//	this.el.setAttribute( "scale", "1 1 1" );
+		//	this.el.setAttribute( "rotation", "0 0 0" );
+		//	this.el.setAttribute( "position", "-0.5 0.3 -1.5" );
 		this.el.setAttribute( "class", "ui" );
 		// Register keyboard events
 		this.el.addEventListener( "input", this.inputEvent );
@@ -90,7 +96,6 @@ AFRAME.registerComponent( "keyboard", {
 	},
 	update: function () {
 
-		// document.removeEventListener("keydown", this.keydownEventKey.bind(this));
 		if ( this.data.isOpen ) {
 
 			Behaviors.showKeyboard( this.el );
@@ -164,13 +169,14 @@ AFRAME.registerComponent( "keyboard", {
 	onTabNextInput: function ( e ) {
 
 		console.error( this.currentInput );
-		let inputs = document.querySelectorAll( "a-input" );
+		const inputs = document.querySelectorAll( "a-input" );
 		console.error( inputs );
 		if ( this.currentInput ) {
 
 			this.currentInput.blur();
 
 		}
+
 		if ( inputs[ 1 ] ) inputs[ 1 ].focus();
 
 	},
@@ -181,7 +187,7 @@ AFRAME.registerComponent( "keyboard", {
 		console.error( "keydown" + e );
 		console.error( "keydown" + e.key );
 		console.error( "keydown" + this.currentInput );
-		if ( this.data.physicalKeyboard) {
+		if ( this.data.physicalKeyboard ) {
 
 			// this.currentInput = e.detail
 
@@ -205,6 +211,7 @@ AFRAME.registerComponent( "keyboard", {
 				Event.emit( Behaviors.el, "input", e.key );
 
 			}
+
 			e = null;
 
 		}
@@ -223,29 +230,32 @@ AFRAME.registerComponent( "keyboard", {
 			this.currentInput.blur( true );
 
 		}
+
 		this.currentInput = e.detail;
 		if ( ! this.el.isOpen ) {
 			//Behaviors.openKeyboard(this.el);
 		}
+
 		e = null;
 
 	},
 
 	// Fired when an input has been deselected
 	didBlurInputEvent: function ( e ) {
-console.error("didBlurInputEvent")
+
+		console.error( "didBlurInputEvent" );
 		this.currentInput = null;
 		Behaviors.dismissKeyboard( this.el );
 
-	}
+	},
 } );
 
 AFRAME.registerPrimitive( "a-keyboard", {
 	defaultComponents: {
-		keyboard: {}
+		keyboard: {},
 	},
 	mappings: {
 		"is-open": "keyboard.isOpen",
-		"physical-keyboard": "keyboard.physicalKeyboard"
-	}
+		"physical-keyboard": "keyboard.physicalKeyboard",
+	},
 } );

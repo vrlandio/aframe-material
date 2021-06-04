@@ -33,7 +33,8 @@ AFRAME.registerComponent( "inputtroika", {
 		textPaddingTop: { type: "number", default: 0.0001 },
 		cursorColor: { type: "color", default: "#007AFF" },
 		backgroundColor: { type: "color", default: "#fff" },
-		backgroundOpacity: { type: "number", default: 0 }
+		backgroundOpacity: { type: "number", default: 0 },
+		numeric: { type: "boolean", default: false}
 	},
 
 	init: function () {
@@ -201,11 +202,11 @@ AFRAME.registerComponent( "inputtroika", {
 		this.blink();
 
 		Event.emit( this.el, "focus" );
-		if ( ! noemit ) {
+		//if ( ! noemit ) {
 
 			Event.emit( document, "didfocusinput", this.el );
 
-		}
+		//}
 
 		
 		let playerRig = document.querySelector( "#player-rig" );
@@ -261,13 +262,18 @@ AFRAME.registerComponent( "inputtroika", {
 			return this.blur();
 
 		}
+
+		if (this.data.numeric)
+		 {
+
+			if (isNaN(data)  && data !== ".")
+			 return;
+		 } 
 		let str = this.el.getAttribute( "value" );
-	/*	if ( ! str ) {
+	
 
-			str = "";
 
-		}
-	*/
+
 		str = str + data;
 		this.el.setAttribute( "value", str );
 	
@@ -277,12 +283,15 @@ AFRAME.registerComponent( "inputtroika", {
 	setString: function ( data ) {
 
 		let str = this.el.getAttribute( "value" );
-	/*	if ( ! str ) {
+	
 
-			str = "";
 
-		}
-	*/
+	if (this.data.numeric)
+	{
+
+	   if (isNaN(data) && data !== ".")
+		return;
+	} 
 		str = data;
 		this.el.setAttribute( "value", str );
 		Event.emit( this.el, "change", str );
@@ -444,6 +453,7 @@ AFRAME.registerPrimitive( "a-inputtroika", {
 	mappings: {
 		value: "inputtroika.value",
 		name: "inputtroika.name",
+		numeric: "inputtroika.numeric",
 		disabled: "inputtroika.disabled",
 		color: "inputtroika.color",
 		align: "inputtroika.align",
@@ -464,6 +474,7 @@ AFRAME.registerPrimitive( "a-inputtroika", {
 		"cursor-width": "inputtroika.cursorWidth",
 		"cursor-height": "inputtroika.cursorHeight",
 		"cursor-color": "inputtroika.cursorColor",
+		"cursor-padding-top": "inputtroika.cursorPaddingTop",
 		"background-color": "inputtroika.backgroundColor",
 		"background-opacity": "inputtroika.backgroundOpacity",
 		"text-padding-top": "inputtroika.textPaddingTop"

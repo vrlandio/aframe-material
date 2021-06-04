@@ -11,7 +11,7 @@ Behaviors.el = null;
 // KEYBOARD METHODS
 
 Behaviors.showKeyboard = function ( el ) {
-
+console.error("showKeyboard")
 	if ( el.o_position ) {
 
 		el.object3D.position.copy( el.o_position );
@@ -176,7 +176,7 @@ Behaviors.keyClick = function () {
 		//Event.emit(Behaviors.el, 'input', '\n');
 		//Event.emit(Behaviors.el, 'enter', '\n');
 
-		Behaviors.destroyKeyboard( Behaviors.el );
+		Behaviors.hideKeyboard( Behaviors.el );
 		// Event.emit(Behaviors.el, 'dismiss');
 
 	} else if ( type === "dismiss" ) {

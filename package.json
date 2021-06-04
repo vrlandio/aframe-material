@@ -1,17 +1,31 @@
 {
-  "name": "Aframe-Material",
-  "main": "dist/aframe-material.min.js",
-  "description": "Material design (inputs, keyboards, checkbox, radio button) for A-Frame (https://aframe.io).",
-  "version": "0.1.1",
-  "license": "MIT",
-  "scripts": {
-    "watch": "cross-env webpack --progress --colors --watch",
-    "build": "cross-env webpack --progress --colors",
-    "start": "cross-env NODE_ENV=dev webpack-dev-server --progress --colors --hot -d --host 0.0.0.0",
-    "dist": "npm run dist:max && npm run dist:min",
-    "dist:max": "cross-env npm run build",
-    "dist:min": "cross-env NODE_ENV=production npm run build"
+  "_args": [
+    [
+      "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+      "/home/arpu/Work/projects/vland_app/vland_app"
+    ]
+  ],
+  "_from": "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+  "_id": "aframe-material@github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/aframe-material",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+    "rawSpec": "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+    "saveSpec": "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+    "fetchSpec": null,
+    "gitCommittish": "ccf347eea10aa7f5de58dcc100046d4ec31302f0"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+  "_spec": "github:vrlandio/aframe-Material#ccf347eea10aa7f5de58dcc100046d4ec31302f0",
+  "_where": "/home/arpu/Work/projects/vland_app/vland_app",
+  "description": "Material design (inputs, keyboards, checkbox, radio button) for A-Frame (https://aframe.io).",
   "devDependencies": {
     "babel-core": "^6.10.4",
     "babel-eslint": "^10.1.0",
@@ -43,5 +57,17 @@
     "aframe-component",
     "webvr",
     "vr"
-  ]
+  ],
+  "license": "MIT",
+  "main": "dist/aframe-material.min.js",
+  "name": "aframe-material",
+  "scripts": {
+    "build": "cross-env webpack --progress --colors",
+    "dist": "npm run dist:max && npm run dist:min",
+    "dist:max": "cross-env npm run build",
+    "dist:min": "cross-env NODE_ENV=production npm run build",
+    "start": "cross-env NODE_ENV=dev webpack-dev-server --progress --colors --hot -d --host 0.0.0.0",
+    "watch": "cross-env webpack --progress --colors --watch"
+  },
+  "version": "0.1.1"
 }

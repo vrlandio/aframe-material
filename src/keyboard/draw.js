@@ -291,12 +291,12 @@ Draw.key = ( id, type, value ) => {
 	// ---------------------------------------------------------------------------
 	// SHADOW
 
-	el.shadow_el = document.createElement( "a-image" );
-	el.shadow_el.setAttribute( "width", Config.KEY_WIDTH * 1.25 );
-	el.shadow_el.setAttribute( "height", Config.KEY_WIDTH * 1.25 );
-	el.shadow_el.setAttribute( "position", Config.KEY_WIDTH / 2 + " " + Config.KEY_WIDTH / 2 + " -0.002" );
-	el.shadow_el.setAttribute( "src", Assets.aframeKeyboardShadow );
-	el.appendChild( el.shadow_el );
+	el.shadow_el = document.createElement( "a-entity" );
+	//el.shadow_el.setAttribute( "width", Config.KEY_WIDTH * 1.25 );
+	//el.shadow_el.setAttribute( "height", Config.KEY_WIDTH * 1.25 );
+	//el.shadow_el.setAttribute( "position", Config.KEY_WIDTH / 2 + " " + Config.KEY_WIDTH / 2 + " -0.002" );
+	//el.shadow_el.setAttribute( "src", Assets.aframeKeyboardShadow );
+//	el.appendChild( el.shadow_el );
 
 	// ---------------------------------------------------------------------------
 	// TEXT KEY
