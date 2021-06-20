@@ -38,7 +38,8 @@ AFRAME.registerComponent( "keyboard", {
 
 		// Append layouts to UI
 		numericalUI.appendChild( Draw.numericalLayout() );
-		numericalUI.setAttribute("visible", "false")
+		numericalUI.setAttribute("visible", "false");
+		numericalUI.setAttribute("position", "0 0 -1000");
 		numericalUI.id = "numericalUI"
 		mainUI.appendChild( this.el.alphabeticalLayout );
 		actionsUI.appendChild( Draw.actionsLayout() );

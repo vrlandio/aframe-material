@@ -67,13 +67,7 @@ Draw.actionsUI = () => {
 	wrapper.setAttribute( "rotation", "0 0 0" );
 	wrapper.setAttribute( "data-ui", true );
 	wrapper.setAttribute( "class", "ui" );
-	var el = document.createElement( "a-rounded" );
-	el.setAttribute( "width", "0.180" );
-	el.setAttribute( "height", "0.360" );
-	el.setAttribute( "radius", "0.02" );
-	el.setAttribute( "color", Config.KEYBOARD_COLOR );
-	el.setAttribute( "class", "ui" );
-	//wrapper.appendChild(el);
+	
 
 	return wrapper;
 
