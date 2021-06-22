@@ -214,9 +214,11 @@ AFRAME.registerComponent( "inputtroika", {
 		playerRig.setAttribute( "jump-component", "enabled", false );
 		playerRig.setAttribute( "thirdpersionview-component-toggle", "enabled", false );
 		playerRig.setAttribute( "reposition-component", "enabled", false );
+		playerRig.setAttribute( "lookatme-component", "enabled", false );
+		playerRig.setAttribute( "flyme-component", "enabled", false );
 		if (this.el.getAttribute( "gun"))
 		this.el.setAttribute( "gun", "enabled", false );
-		this.el.sceneEl.setAttribute( "preventDefaultKeys", "enabled", false );
+		this.el.sceneEl.setAttribute( "preventdefaultkeys", "enabled", false );
 
 		// noemit = false;
 
@@ -250,9 +252,11 @@ AFRAME.registerComponent( "inputtroika", {
 		playerRig.setAttribute( "jump-component", "enabled", true );
 		playerRig.setAttribute( "thirdpersionview-component-toggle", "enabled", true );
 		playerRig.setAttribute( "reposition-component", "enabled", true );
+		playerRig.setAttribute( "lookatme-component", "enabled", true );
+		playerRig.setAttribute( "flyme-component", "enabled", true );
 		if (this.el.getAttribute( "gun"))
 		this.el.setAttribute( "gun", "enabled", true );
-		this.el.sceneEl.setAttribute( "preventDefaultKeys", "enabled", true );
+		this.el.sceneEl.setAttribute( "preventdefaultkeys", "enabled", true );
 
 	},
 	appendString: function ( data ) {
